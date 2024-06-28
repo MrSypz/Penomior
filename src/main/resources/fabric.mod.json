@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "penomior",
+  "version": "${version}",
+  "name": "Penomior",
+  "description": "The Pride order you to commit to be slave.",
+  "authors": [
+    "Sypztep"
+  ],
+  "contact": {
+    "repo": "https://github.com/Mrsypz/Penomior"
+  },
+  "license": "All-Rights-Reserved",
+  "icon": "assets/penomior/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "sypztep.penomior.client.PenomiorClient"
+    ],
+    "main": [
+      "sypztep.penomior.Penomior"
+    ],
+    "cardinal-components-entity": [
+      "sypztep.penomior.common.init.ModEntityComponents"
+    ]
+  },
+  "mixins": [
+    "penomior.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  },
+  "custom": {
+    "cardinal-components": [
+      "penomior:stats"
+    ]
+  }
+}
