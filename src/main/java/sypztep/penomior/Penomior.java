@@ -2,6 +2,7 @@ package sypztep.penomior;
 
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
+import sypztep.penomior.common.init.ModParticles;
 
 import java.util.logging.Logger;
 
@@ -13,6 +14,6 @@ public class Penomior implements ModInitializer {
     }
     @Override
     public void onInitialize() {
-
+        ModParticles.init();
     }
 }

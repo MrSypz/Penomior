@@ -1,22 +1,21 @@
 package sypztep.penomior.common.component;
 
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import org.ladysnake.cca.api.v3.component.tick.CommonTickingComponent;
-import sypztep.penomior.Penomior;
 import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.penomior.common.util.CombatUtils;
 
 public class StatsComponent implements AutoSyncedComponent, CommonTickingComponent {
-    private final PlayerEntity obj;
+    private final LivingEntity obj;
     int accuracy, evasion;
     boolean debug;
 
-    public StatsComponent(PlayerEntity obj) {
+    public StatsComponent(LivingEntity obj) {
         this.obj = obj;
     }
 
@@ -64,12 +63,5 @@ public class StatsComponent implements AutoSyncedComponent, CommonTickingCompone
     public void setAccuracy(int accuracy) {
         this.accuracy = accuracy;
         ModEntityComponents.STATS.sync(this.obj);
-    }
-    public double getHitRate() {
-        return CombatUtils.calculateHitRate(accuracy);
-    }
-
-    public double getEvasionRate() {
-        return CombatUtils.calculateEvasionRate(evasion);
     }
 }
