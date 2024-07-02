@@ -6,12 +6,10 @@ import net.minecraft.client.particle.*;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import sypztep.penomior.client.particle.util.Easing;
 
 import java.awt.*;
 
@@ -31,7 +29,7 @@ public class TextParticle extends Particle {
     @Override
     public void buildGeometry(VertexConsumer vertexConsumer, Camera camera, float tickDelta) {
         Vec3d cameraPos = camera.getPos();
-        float textSizeScale = -0.045F; // Change this value to adjust text size
+        float textSizeScale = -0.045F;
         float particleX = (float) (prevPosX + (x - prevPosX) * (double) tickDelta - cameraPos.x);
         float particleY = (float) (prevPosY + (y - prevPosY) * (double) tickDelta - cameraPos.y);
         float particleZ = (float) (prevPosZ + (z - prevPosZ) * (double) tickDelta - cameraPos.z);
@@ -43,7 +41,7 @@ public class TextParticle extends Particle {
         matrix = matrix.scale(textSizeScale, textSizeScale, textSizeScale);
 
         MinecraftClient client = MinecraftClient.getInstance();
-        var textRenderer = client.textRenderer;
+        TextRenderer textRenderer = client.textRenderer;
         var vertexConsumers = client.getBufferBuilders().getEntityVertexConsumers();
 
         float textX = textRenderer.getWidth(text) / -2.0F;
