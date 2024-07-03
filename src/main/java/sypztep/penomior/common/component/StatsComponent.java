@@ -2,9 +2,7 @@ package sypztep.penomior.common.component;
 
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -17,7 +15,6 @@ import sypztep.tyrannus.common.util.ItemStackHelper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class StatsComponent implements AutoSyncedComponent, CommonTickingComponent {
     private final LivingEntity obj;
@@ -42,18 +39,21 @@ public class StatsComponent implements AutoSyncedComponent, CommonTickingCompone
 
     @Override
     public void tick() {
-        debug = obj.getEquippedStack(EquipmentSlot.HEAD).isOf(Items.IRON_HELMET);
     }
 
     @Override
     public void serverTick() {
         tick();
         if (!obj.getWorld().isClient()) {
-            if (debug) {
-                setEvasion(10);
-            } else
-                setEvasion(0);
+            this.setAccuracy(this.getTotalAccuracy());
+
+            this.setEvasion(this.getTotalEvasion());
         }
+    }
+
+    @Override
+    public void clientTick() {
+        tick();
     }
 
     public int getAccuracy() {
@@ -83,17 +83,26 @@ public class StatsComponent implements AutoSyncedComponent, CommonTickingCompone
         }
         return nbtList;
     }
+
     public int getAccuracyfromEquipment() {
         MutableInt accuracyPoint = new MutableInt();
         for (NbtCompound compounds : getNbtFromAllEquippedSlots())
-            accuracyPoint.add(compounds.getInt(PenomiorData.REFINE));
+            accuracyPoint.add(compounds.getInt(PenomiorData.ACCURACY));
         return accuracyPoint.getValue();
     }
 
     public int getEvasionfromEquipment() {
         MutableInt evasionPoint = new MutableInt();
         for (NbtCompound compounds : getNbtFromAllEquippedSlots())
-            evasionPoint.add(compounds.getInt(PenomiorData.REFINE));
+            evasionPoint.add(compounds.getInt(PenomiorData.EVASION));
         return evasionPoint.getValue();
+    }
+
+    public int getTotalAccuracy() {
+        return this.getAccuracyfromEquipment();
+    }
+
+    public int getTotalEvasion() {
+        return this.getEvasionfromEquipment();
     }
 }
