@@ -30,15 +30,10 @@ import java.util.Random;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
     @Shadow
-    public abstract float getHealth();
-
-    @Shadow
     public abstract boolean damage(DamageSource source, float amount);
 
-    private final Deque<TextParticle> particles = new ArrayDeque<>();
-
     @Unique
-    private float prevHealth = 0.0F;
+    private final Deque<TextParticle> particles = new ArrayDeque<>();
 
     protected LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);

@@ -1,7 +1,5 @@
 package test;
 
-import sypztep.penomior.common.util.RomanUtil;
-
 public class formula {
 
     public static void main(String[] args) {
@@ -14,8 +12,11 @@ public class formula {
 //        System.out.println("Do " + time);
 //        System.out.println("Hit " + j + " Times");
 
-        for (int i = 15; i <= 20; i++) {
-            System.out.println("Custom Roman numeral for " + i + " is: " + RomanUtil.customMap.get(i));
-        }
+//        for (int i = 15; i <= 20; i++) {
+//            System.out.println("Custom Roman numeral for " + i + " is: " + RomanUtil.customMap.get(i));
+//        }
+        System.out.println("22/7 = " + 22 / 7);
+        System.out.println("22.0/7.0 = " + 22.0 / 7.0);
+
     }
 }
