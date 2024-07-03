@@ -19,7 +19,7 @@ public class ItemMixin  {
         if (!stack.isEmpty() && !player.getWorld().isClient()) {
             if (stack.getItem() instanceof SwordItem) {
                 stack.apply(ModDataComponents.PENOMIOR, NbtComponent.DEFAULT, comp -> comp.apply(itemnbt -> {
-                    itemnbt.putInt(PenomiorData.LVL, 0);
+                    itemnbt.putInt(PenomiorData.LVL, 18);
                 }));
             }
         }

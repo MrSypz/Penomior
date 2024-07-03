@@ -8,6 +8,8 @@
     "LivingEntityMixin"
   ],
   "client": [
+    "HandledScreenMixin",
+    "InGameHudMixin"
   ],
   "injectors": {
     "defaultRequire": 1

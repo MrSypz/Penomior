@@ -17,5 +17,6 @@ public class Penomior implements ModInitializer {
     public void onInitialize() {
         ModDataComponents.init();
         ModParticles.init();
+
     }
 }
