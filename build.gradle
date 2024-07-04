@@ -15,6 +15,10 @@ repositories {
         name = "TyrannusAPI"
         url = "https://jitpack.io"
     }
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+    }
     //CCA | Satom
     maven {
         name = 'Ladysnake Mods'
@@ -40,6 +44,8 @@ dependencies {
     modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-entity:${cardinal_components_version}"
     modImplementation "com.github.MrSypz:Tyrannus:${project.tyrannus_version}"
     modRuntimeOnly "maven.modrinth:sodium:${sodium_version}"
+    modRuntimeOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
+
 
 }
 
