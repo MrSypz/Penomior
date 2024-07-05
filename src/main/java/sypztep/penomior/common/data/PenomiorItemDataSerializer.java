@@ -11,33 +11,45 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PenomiorItemDataSerializer {
+    private static Map<String, PenomiorItemData> configCache;
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private static final Path CONFIG_FILE_PATH = FabricLoader.getInstance().getConfigDir().resolve("penomior/penomior_item_data.json");
     public static PenomiorItemDataSerializer serializer = new PenomiorItemDataSerializer();
-    public PenomiorItemDataSerializer(){}
-    public Map<String, PenomiorItemData> loadConfig() {
-        try {
-            createDirectoriesIfNeeded();
-            Path configFilePath = CONFIG_FILE_PATH;
-            if (Files.exists(configFilePath)) {
-                try (Reader reader = new FileReader(configFilePath.toFile())) {
-                    JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
-                    PenomiorItemDataMap dataMap = gson.fromJson(jsonObject, PenomiorItemDataMap.class);
-                    Penomior.LOGGER.info("Loaded configuration from file: {}", configFilePath);
-                    return dataMap.getItemDataMap();
+
+    public PenomiorItemDataSerializer() {
+    }
+    public void loadConfig() {
+        if (configCache == null) {
+            try {
+                createDirectoriesIfNeeded();
+                Path configFilePath = CONFIG_FILE_PATH;
+                if (Files.exists(configFilePath)) {
+                    try (Reader reader = new FileReader(configFilePath.toFile())) {
+                        JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
+                        PenomiorItemDataMap dataMap = gson.fromJson(jsonObject, PenomiorItemDataMap.class);
+                        int itemCount = dataMap.itemDataMap().size(); // Count items for informative message
+                        if (itemCount > 0) {
+                            Penomior.LOGGER.info(String.format("Found %d RefineItem Data items!", itemCount));
+                        } else {
+                            Penomior.LOGGER.warn("No RefineItem Data found. (Recommend delete this file {} )", CONFIG_FILE_PATH);
+                        }
+                        configCache = dataMap.itemDataMap();
+                    }
+                } else {
+                    Penomior.LOGGER.warn("Configuration file does not exist. Creating new file with default data.");
+                    saveConfig(new PenomiorItemDataMap(getDefaultData().itemDataMap()));
+                    configCache = new HashMap<>(getDefaultData().itemDataMap());
                 }
-            } else {
-                Penomior.LOGGER.warn("Configuration file does not exist. Creating new file with default data.");
-                saveConfig(new PenomiorItemDataMap(getDefaultData().getItemDataMap()));
-                return new HashMap<>();
+            } catch (IOException e) {
+                Penomior.LOGGER.error("Error loading configuration from file: {}", CONFIG_FILE_PATH, e);
+                configCache = new HashMap<>();
             }
-        } catch (IOException e) {
-            Penomior.LOGGER.error("Error loading configuration from file: {}", CONFIG_FILE_PATH, e);
-            e.printStackTrace();
-            return new HashMap<>();
         }
     }
 
+    public static Map<String, PenomiorItemData> getConfigCache() {
+        return configCache;
+    }
     // Save the configuration to JSON file
     public void saveConfig(PenomiorItemDataMap newData) {
         try {
@@ -60,20 +72,50 @@ public class PenomiorItemDataSerializer {
     // Define your default data here
     private PenomiorItemDataMap getDefaultData() {
         Map<String, PenomiorItemData> defaultData = new HashMap<>();
-        defaultData.put("minecraft:iron_sword", new PenomiorItemData("minecraft:iron_sword", 20, 0, 75));
-        defaultData.put("minecraft:diamond_sword", new PenomiorItemData("minecraft:diamond_sword", 20, 15, 180));
+        // Swords
+        defaultData.put("minecraft:wooden_sword", new PenomiorItemData("minecraft:wooden_sword", 20, 0, 182, 0, 0));
+        defaultData.put("minecraft:stone_sword", new PenomiorItemData("minecraft:stone_sword", 20, 0, 182, 0, 0));
+        defaultData.put("minecraft:golden_sword", new PenomiorItemData("minecraft:golden_sword", 20, 0, 182, 0, 0));
+        defaultData.put("minecraft:iron_sword", new PenomiorItemData("minecraft:iron_sword", 20, 0, 182, 0, 0));
+        defaultData.put("minecraft:diamond_sword", new PenomiorItemData("minecraft:diamond_sword", 20, 0, 182, 0, 0));
+        defaultData.put("minecraft:netherite_sword", new PenomiorItemData("minecraft:netherite_sword", 20, 0, 182, 0, 0));
+
+        // Helmets
+        defaultData.put("minecraft:leather_helmet", new PenomiorItemData("minecraft:leather_helmet", 20, 0, 0, 0, 82));
+        defaultData.put("minecraft:chainmail_helmet", new PenomiorItemData("minecraft:chainmail_helmet", 20, 0, 0, 0, 82));
+        defaultData.put("minecraft:iron_helmet", new PenomiorItemData("minecraft:iron_helmet", 20, 0, 0, 0, 82));
+        defaultData.put("minecraft:golden_helmet", new PenomiorItemData("minecraft:golden_helmet", 20, 0, 0, 0, 82));
+        defaultData.put("minecraft:diamond_helmet", new PenomiorItemData("minecraft:diamond_helmet", 20, 0, 0, 0, 82));
+        defaultData.put("minecraft:netherite_helmet", new PenomiorItemData("minecraft:netherite_helmet", 20, 0, 0, 0, 82));
+
+        // Chestplates
+        defaultData.put("minecraft:leather_chestplate", new PenomiorItemData("minecraft:leather_chestplate", 20, 0, 0, 0, 152));
+        defaultData.put("minecraft:chainmail_chestplate", new PenomiorItemData("minecraft:chainmail_chestplate", 20, 0, 0, 0, 152));
+        defaultData.put("minecraft:iron_chestplate", new PenomiorItemData("minecraft:iron_chestplate", 20, 0, 0, 0, 152));
+        defaultData.put("minecraft:golden_chestplate", new PenomiorItemData("minecraft:golden_chestplate", 20, 0, 0, 0, 152));
+        defaultData.put("minecraft:diamond_chestplate", new PenomiorItemData("minecraft:diamond_chestplate", 20, 0, 0, 0, 152));
+        defaultData.put("minecraft:netherite_chestplate", new PenomiorItemData("minecraft:netherite_chestplate", 20, 0, 0, 0, 152));
+
+        // Boots
+        defaultData.put("minecraft:leather_boots", new PenomiorItemData("minecraft:leather_boots", 20, 0, 0, 0, 129));
+        defaultData.put("minecraft:chainmail_boots", new PenomiorItemData("minecraft:chainmail_boots", 20, 0, 0, 0, 129));
+        defaultData.put("minecraft:iron_boots", new PenomiorItemData("minecraft:iron_boots", 20, 0, 0, 0, 129));
+        defaultData.put("minecraft:golden_boots", new PenomiorItemData("minecraft:golden_boots", 20, 0, 0, 0, 129));
+        defaultData.put("minecraft:diamond_boots", new PenomiorItemData("minecraft:diamond_boots", 20, 0, 0, 0, 129));
+        defaultData.put("minecraft:netherite_boots", new PenomiorItemData("minecraft:netherite_boots", 20, 0, 0, 0, 129));
+
+        // Leggings
+        defaultData.put("minecraft:leather_leggings", new PenomiorItemData("minecraft:leather_leggings", 20, 0, 48, 0, 96));
+        defaultData.put("minecraft:chainmail_leggings", new PenomiorItemData("minecraft:chainmail_leggings", 20, 0, 48, 0, 96));
+        defaultData.put("minecraft:iron_leggings", new PenomiorItemData("minecraft:iron_leggings", 20, 0, 48, 0, 96));
+        defaultData.put("minecraft:golden_leggings", new PenomiorItemData("minecraft:golden_leggings", 20, 0, 48, 0, 96));
+        defaultData.put("minecraft:diamond_leggings", new PenomiorItemData("minecraft:diamond_leggings", 20, 0, 48, 0, 96));
+        defaultData.put("minecraft:netherite_leggings", new PenomiorItemData("minecraft:netherite_leggings", 20, 0, 48, 0, 96));
+
         return new PenomiorItemDataMap(defaultData);
     }
 
-    public static class PenomiorItemDataMap {
-        private Map<String, PenomiorItemData> itemDataMap;
 
-        public PenomiorItemDataMap(Map<String, PenomiorItemData> itemDataMap) {
-            this.itemDataMap = itemDataMap;
-        }
-
-        public Map<String, PenomiorItemData> getItemDataMap() {
-            return itemDataMap;
-        }
+    public record PenomiorItemDataMap(Map<String, PenomiorItemData> itemDataMap) {
     }
 }
