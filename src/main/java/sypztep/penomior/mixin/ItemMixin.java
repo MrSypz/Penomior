@@ -1,6 +1,5 @@
 package sypztep.penomior.mixin;
 
-import net.minecraft.component.ComponentHolder;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.registry.Registries;
@@ -15,37 +14,25 @@ import sypztep.penomior.common.util.RefineUtil;
 
 
 @Mixin(Item.class)
-public abstract class ItemMixin implements ComponentHolder {
+public abstract class ItemMixin {
     @Inject(method = "onCraftByPlayer", at = @At("HEAD"))
     public void onCraft(ItemStack stack, World world, PlayerEntity player, CallbackInfo ci) {
         if (!stack.isEmpty() && !player.getWorld().isClient()) {
-            // Instantiate or get the PenomiorItemDataSerializer
-            PenomiorItemDataSerializer serializer = new PenomiorItemDataSerializer();
-
-            // Get the item ID from the crafted item
             String itemID = Registries.ITEM.getId(stack.getItem()).toString();
-
-            // Retrieve the PenomiorItemData for the item
-            PenomiorItemData itemData = serializer.loadConfig().get(itemID);
+            PenomiorItemData itemData = PenomiorItemDataSerializer.getConfigCache().get(itemID);
 
             if (itemData != null) {
-                // Apply the refine level and other stats based on the item type
-                if (stack.getItem() instanceof SwordItem) {
-                    int refineLvl = 0;
-                    int maxLvl = itemData.maxLvl();
-                    int startAccuracy = itemData.startAccuracy();
-                    int endAccuracy = itemData.endAccuracy();
-
+                int refineLvl = 0;
+                int maxLvl = itemData.maxLvl();
+                int startAccuracy = itemData.startAccuracy();
+                int endAccuracy = itemData.endAccuracy();
+                int startEvasion = itemData.startEvasion();
+                int endEvasion = itemData.endEvasion();
+                //---write data----//
+                if (itemID.equals(itemData.itemID())) {
                     RefineUtil.setRefineLvl(stack, refineLvl);
                     RefineUtil.setAccuracy(stack, refineLvl, maxLvl, startAccuracy, endAccuracy);
-                } else if (stack.getItem() instanceof ArmorItem) {
-                    int refineLvl = 0;
-                    int maxLvl = itemData.maxLvl();
-                    int startAccuracy = itemData.startAccuracy();
-                    int endAccuracy = itemData.endAccuracy();
-
-                    RefineUtil.setRefineLvl(stack, refineLvl);
-                    RefineUtil.setEvasion(stack, refineLvl, maxLvl, startAccuracy, endAccuracy);
+                    RefineUtil.setEvasion(stack, refineLvl, maxLvl, startEvasion, endEvasion);
                 }
             }
         }
