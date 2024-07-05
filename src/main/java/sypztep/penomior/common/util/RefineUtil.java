@@ -18,13 +18,13 @@ public class RefineUtil {
         stack.apply(ModDataComponents.PENOMIOR, NbtComponent.DEFAULT, applied -> applied.apply(compound -> compound.putInt(PenomiorData.REFINE, refinelvl)));
     }
 
-    public static void setAccuracy(ItemStack stack, int refinelvl) {
-        int refine = refineValue(refinelvl, 20, 0, 170);
+    public static void setAccuracy(ItemStack stack, int refinelvl, int maxLvl, int startAccuracy, int endAccuracy) {
+        int refine = refineValue(refinelvl, maxLvl, startAccuracy, endAccuracy);
         stack.apply(ModDataComponents.PENOMIOR, NbtComponent.DEFAULT, applied -> applied.apply(compound -> compound.putInt(PenomiorData.ACCURACY, refine)));
     }
 
-    public static void setEvasion(ItemStack stack, int refinelvl) {
-        int refine = refineValue(refinelvl, 20, 0, 210);
+    public static void setEvasion(ItemStack stack, int refinelvl, int maxLvl, int startAccuracy, int endAccuracy) {
+        int refine = refineValue(refinelvl, maxLvl, startAccuracy, endAccuracy);
         stack.apply(ModDataComponents.PENOMIOR, NbtComponent.DEFAULT, applied -> applied.apply(compound -> compound.putInt(PenomiorData.EVASION, refine)));
     }
 
