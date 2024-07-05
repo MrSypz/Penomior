@@ -32,17 +32,17 @@ public abstract class ItemMixin implements ComponentHolder {
                 // Apply the refine level and other stats based on the item type
                 if (stack.getItem() instanceof SwordItem) {
                     int refineLvl = 0;
-                    int maxLvl = itemData.getMaxLvl();
-                    int startAccuracy = itemData.getStartAccuracy();
-                    int endAccuracy = itemData.getEndAccuracy();
+                    int maxLvl = itemData.maxLvl();
+                    int startAccuracy = itemData.startAccuracy();
+                    int endAccuracy = itemData.endAccuracy();
 
                     RefineUtil.setRefineLvl(stack, refineLvl);
                     RefineUtil.setAccuracy(stack, refineLvl, maxLvl, startAccuracy, endAccuracy);
                 } else if (stack.getItem() instanceof ArmorItem) {
                     int refineLvl = 0;
-                    int maxLvl = itemData.getMaxLvl();
-                    int startAccuracy = itemData.getStartAccuracy();
-                    int endAccuracy = itemData.getEndAccuracy();
+                    int maxLvl = itemData.maxLvl();
+                    int startAccuracy = itemData.startAccuracy();
+                    int endAccuracy = itemData.endAccuracy();
 
                     RefineUtil.setRefineLvl(stack, refineLvl);
                     RefineUtil.setEvasion(stack, refineLvl, maxLvl, startAccuracy, endAccuracy);
