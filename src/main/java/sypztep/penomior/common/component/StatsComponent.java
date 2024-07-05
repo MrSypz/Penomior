@@ -19,7 +19,6 @@ import java.util.List;
 public class StatsComponent implements AutoSyncedComponent, CommonTickingComponent {
     private final LivingEntity obj;
     int accuracy, evasion;
-    boolean debug;
 
     public StatsComponent(LivingEntity obj) {
         this.obj = obj;
@@ -45,9 +44,7 @@ public class StatsComponent implements AutoSyncedComponent, CommonTickingCompone
     public void serverTick() {
         tick();
         if (!obj.getWorld().isClient()) {
-            this.setAccuracy(this.getTotalAccuracy());
-
-            this.setEvasion(this.getTotalEvasion());
+//            this.setAccuracy(this.getTotalAccuracy());
         }
     }
 
@@ -90,7 +87,6 @@ public class StatsComponent implements AutoSyncedComponent, CommonTickingCompone
             accuracyPoint.add(compounds.getInt(PenomiorData.ACCURACY));
         return accuracyPoint.getValue();
     }
-
     public int getEvasionfromEquipment() {
         MutableInt evasionPoint = new MutableInt();
         for (NbtCompound compounds : getNbtFromAllEquippedSlots())
