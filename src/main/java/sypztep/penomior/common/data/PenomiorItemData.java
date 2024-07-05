@@ -1,10 +1,18 @@
 package sypztep.penomior.common.data;
 
-import com.google.gson.annotations.SerializedName;
+import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 
 public record PenomiorItemData(
         String itemID,
         int maxLvl,
-        @SerializedName("startAccuracy") int startAccuracy,
-        @SerializedName("endAccuracy") int endAccuracy
-) {}
+        int startAccuracy,
+        int endAccuracy,
+        int startEvasion,
+        int endEvasion
+) {
+    public static PenomiorItemData getPenomiroItemData(ItemStack stack) {
+        String itemID = Registries.ITEM.getId(stack.getItem()).toString();
+        return PenomiorItemDataSerializer.getConfigCache().get(itemID);
+    }
+}
