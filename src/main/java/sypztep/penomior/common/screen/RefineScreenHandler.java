@@ -5,12 +5,21 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.*;
+import net.minecraft.registry.Registries;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.WorldEvents;
+import sypztep.penomior.client.payload.RefinePayloadS2C;
+import sypztep.penomior.common.data.PenomiorItemData;
+import sypztep.penomior.common.data.PenomiorItemDataSerializer;
+import sypztep.penomior.common.init.ModDataComponents;
+import sypztep.penomior.common.init.ModItem;
 import sypztep.penomior.common.init.ModScreenHandler;
-
+import sypztep.penomior.common.util.RefineUtil;
+//TODO : make a failstacks system and pri duo tet enchant
 public class RefineScreenHandler extends ScreenHandler {
     private final Inventory inventory = new SimpleInventory(3) {
         @Override
@@ -21,8 +30,7 @@ public class RefineScreenHandler extends ScreenHandler {
     };
     private final ScreenHandlerContext context;
     private final PlayerEntity player;
-    private boolean canGrind;
-    private boolean canQuality;
+    private boolean canRefine;
     private BlockPos pos;
 
     public RefineScreenHandler(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
@@ -31,21 +39,21 @@ public class RefineScreenHandler extends ScreenHandler {
         this.context = context;
         this.player = playerInventory.player;
         addSlot(new Slot(this.inventory, 0, 9, 34) {
-//            @Override
-//            public boolean canInsert(ItemStack stack) {
-//                return isGrinderMaterial(stack);
-//            }
+            @Override
+            public boolean canInsert(ItemStack stack) {
+                return isRefineMaterial(stack);
+            }
         });
         addSlot(new Slot(this.inventory, 1, 151, 34) {
-//            @Override
-//            public boolean canInsert(ItemStack stack) {
-//                return isGrindableItem(stack);
-//            }
+            @Override
+            public boolean canInsert(ItemStack stack) {
+                return matchesItemData(stack);
+            }
         });
         addSlot(new Slot(this.inventory, 2, 29, 53) {
             @Override
             public boolean canInsert(ItemStack stack) {
-                return stack.isOf(Items.COPPER_INGOT);
+                return false;
             }
         });
         int i;
@@ -63,48 +71,33 @@ public class RefineScreenHandler extends ScreenHandler {
     public void onContentChanged(Inventory inventory) {
         super.onContentChanged(inventory);
         if (!player.getWorld().isClient() && inventory == this.inventory) {
-//            this.updateResult();
+            this.doRefineTask();
         }
     }
 
-//    private void updateResult() {
-//        ItemStack slotOutput = this.getSlot(1).getStack();
-//        if (this.getSlot(0).hasStack() && this.getSlot(1).hasStack() && this.getSlot(2).hasStack()) {
-//            Item GrindItem = slotOutput.getItem();
-//
-//            ItemStack material = this.getSlot(0).getStack();
-//            ItemStack additionmaterial = this.getSlot(2).getStack();
-//            if ((GrindItem instanceof ToolItem || GrindItem instanceof RangedWeaponItem || GrindItem instanceof TridentItem || GrindItem instanceof ShieldItem) && slotOutput.get(DataComponentTypes.CUSTOM_DATA) == null) {
-//                this.canGrind = material.isIn(ModTag.Items.WEAPON_GRINDER_MATERIAL) && additionmaterial.isOf(Items.COPPER_INGOT);
-//                this.canQuality = false;
-//            } else if (GrindItem instanceof ArmorItem && slotOutput.get(DataComponentTypes.CUSTOM_DATA) == null) {
-//                this.canGrind = material.isIn(ModTag.Items.ARMOR_GRINDER_MATERIAL) && additionmaterial.isOf(Items.COPPER_INGOT);
-//                this.canQuality = false;
-//            } else if (GrindItem instanceof ToolItem || GrindItem instanceof RangedWeaponItem || GrindItem instanceof TridentItem || GrindItem instanceof ShieldItem) {
-//                this.canGrind = material.isIn(ModTag.Items.WEAPON_GRINDER_MATERIAL) && additionmaterial.isOf(Items.COPPER_INGOT);
-//                this.canQuality = material.isIn(ModTag.Items.WEAPON_GRINDER_MATERIAL) && additionmaterial.isOf(Items.COPPER_INGOT);
-//            } else if (GrindItem instanceof ArmorItem) {
-//                this.canGrind = material.isIn(ModTag.Items.ARMOR_GRINDER_MATERIAL) && additionmaterial.isOf(Items.COPPER_INGOT);
-//                this.canQuality = material.isIn(ModTag.Items.ARMOR_GRINDER_MATERIAL) && additionmaterial.isOf(Items.COPPER_INGOT);
-//            }
-//            if (slotOutput.get(DataComponentTypes.CUSTOM_DATA) == null) {
-//                GrinderPayloadS2C.send((ServerPlayerEntity) player, !this.canGrind);
-//                QualityGrinderPayloadS2C.send((ServerPlayerEntity) player, !this.canQuality);
-//                return;
-//            }
-//            String tier = ItemStackHelper.getNbtCompound(slotOutput).getString(CritData.TIER_FLAG);
-//            if (this.canGrind && this.canQuality && CritTier.CELESTIAL == CritTier.fromName(tier)) {
-//                this.canGrind = false;
-//                this.canQuality = true;
-//            }
-//
-//        } else {
-//            this.canGrind = false;
-//            this.canQuality = false;
-//        }
-//        GrinderPayloadS2C.send((ServerPlayerEntity) player, !this.canGrind);
-//        QualityGrinderPayloadS2C.send((ServerPlayerEntity) player, !this.canQuality);
-//    }
+    private void doRefineTask() {
+        ItemStack slotOutput = this.getSlot(1).getStack();
+
+        if (RefineUtil.getRefineLvl(slotOutput) < 20) {
+            this.canRefine = false;
+        }
+        if (this.getSlot(0).hasStack() && this.getSlot(1).hasStack()) {
+            ItemStack material = this.getSlot(0).getStack();
+            if (matchesItemData(slotOutput)) {
+                boolean isArmor = slotOutput.getItem() instanceof ArmorItem;
+                boolean isRefined = slotOutput.get(ModDataComponents.PENOMIOR) != null;
+
+                if (isRefined && !isArmor) {
+                    this.canRefine = material.isOf(ModItem.REFINE_WEAPON_STONE);
+                } else if (isRefined) {
+                    this.canRefine = material.isOf(ModItem.REFINE_ARMOR_STONE);
+                }
+            }
+        } else {
+            this.canRefine = false;
+        }
+        RefinePayloadS2C.send((ServerPlayerEntity) player, !this.canRefine);
+    }
 
 
     @Override
@@ -122,12 +115,12 @@ public class RefineScreenHandler extends ScreenHandler {
     public ItemStack quickMove(PlayerEntity player, int index) {
         ItemStack stack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
-
+        //TODO : make it quick moveble
 //        if (slot != null && slot.hasStack()) {
 //            ItemStack slotStack = slot.getStack();
 //            stack = slotStack.copy();
-
-            // If the slot clicked is one of the container's slots
+//
+//         If the slot clicked is one of the container's slots
 //            if (index < 3) { // 0, 1, 2 are container slots
 //                if (!insertItem(slotStack, 3, 39, true)) { // Player inventory slots: 3 to 38 (hotbar included)
 //                    return ItemStack.EMPTY;
@@ -161,7 +154,7 @@ public class RefineScreenHandler extends ScreenHandler {
 //                    }
 //                }
 //            }
-
+//
 //            if (slotStack.isEmpty()) {
 //                slot.setStack(ItemStack.EMPTY);
 //            } else {
@@ -176,49 +169,44 @@ public class RefineScreenHandler extends ScreenHandler {
         return stack;
     }
 
+    private boolean matchesItemData(ItemStack stack) {
+        String itemID = Registries.ITEM.getId(stack.getItem()).toString();
+        PenomiorItemData itemData = PenomiorItemDataSerializer.getConfigCache().get(itemID);
+        return itemData != null && itemID.equals(itemData.itemID());
+    }
 
-//    private boolean isGrindableItem(ItemStack stack) {
-//        return stack.isIn(ModTag.Items.GRINDABLE_ITEM);
-//    }
-
-//    private boolean isGrinderMaterial(ItemStack stack) {
-//        return stack.isIn(ModTag.Items.WEAPON_GRINDER_MATERIAL) || stack.isIn(ModTag.Items.ARMOR_GRINDER_MATERIAL);
-//    }
+    private boolean isRefineMaterial(ItemStack stack) {
+        return stack.isOf(ModItem.REFINE_WEAPON_STONE) || stack.isOf(ModItem.REFINE_ARMOR_STONE);
+    }
 
     public void refine() {
-//        ItemStack grindItem = this.getSlot(1).getStack();
-//
-//        if (grindItem.getItem() instanceof ToolItem toolItem) {
-//            ToolMaterial material = toolItem.getMaterial();
-//            CritalDataUtil.applyCritData(grindItem, material, CritData::getToolCritChance);
-//        } else if (grindItem.getItem() instanceof RangedWeaponItem || grindItem.getItem() instanceof TridentItem || grindItem.getItem() instanceof ShieldItem) {
-//            CritalDataUtil.applyCritData(grindItem, ToolMaterials.GOLD, CritData::getToolCritChance);
-//        } else if (grindItem.getItem() instanceof ArmorItem armorItem) {
-//            RegistryEntry<ArmorMaterial> material = armorItem.getMaterial();
-//            CritalDataUtil.applyCritData(grindItem, material, CritData::getArmorCritChance);
-//        }
-//        this.decrementStack(0);
-//        this.decrementStack(2);
-//        this.context.run((world, pos) -> world.syncWorldEvent(WorldEvents.SMITHING_TABLE_USED, pos, 0));
-//    }
+        ItemStack slotOutput = this.getSlot(1).getStack();
+        if (matchesItemData(slotOutput) && RefineUtil.getRefineLvl(slotOutput) < 20) {
+            boolean isArmor = slotOutput.getItem() instanceof ArmorItem;
+            boolean isRefined = slotOutput.get(ModDataComponents.PENOMIOR) != null;
+            PenomiorItemData itemData = PenomiorItemData.getPenomiroItemData(slotOutput);
+            int maxLvl = itemData.maxLvl();
+            int startAccuracy = itemData.startAccuracy();
+            int endAccuracy = itemData.endAccuracy();
+            int startEvasion = itemData.startEvasion();
+            int endEvasion = itemData.endEvasion();
 
-//    public void quality_grinder() {
-//        ItemStack grindItem = this.getSlot(1).getStack();
-//
-//        CritTier tier = CritalDataUtil.getCritTierFromStack(grindItem);
-//
-//        if (grindItem.getItem() instanceof ToolItem toolItem) {
-//            ToolMaterial material = toolItem.getMaterial();
-//            CritalDataUtil.applyCritData(grindItem, material, CritData::getToolCritChance, tier);
-//        } else if (grindItem.getItem() instanceof RangedWeaponItem || grindItem.getItem() instanceof TridentItem || grindItem.getItem() instanceof ShieldItem) {
-//            CritalDataUtil.applyCritData(grindItem, ToolMaterials.GOLD, CritData::getToolCritChance, tier);
-//        } else if (grindItem.getItem() instanceof ArmorItem armorItem) {
-//            RegistryEntry<ArmorMaterial> material = armorItem.getMaterial();
-//            CritalDataUtil.applyCritData(grindItem, material, CritData::getArmorCritChance, tier);
-//        }
-//        this.decrementStack(0);
-//        this.decrementStack(2);
-//        this.context.run((world, pos) -> world.syncWorldEvent(WorldEvents.SMITHING_TABLE_USED, pos, 0));
+
+            if (isRefined && !isArmor) {
+                int currentRefineLvl = RefineUtil.getRefineLvl(slotOutput);
+                RefineUtil.setRefineLvl(slotOutput, currentRefineLvl + 1);
+
+                RefineUtil.setAccuracy(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startAccuracy, endAccuracy);
+            } else if (isRefined) {
+                int currentRefineLvl = RefineUtil.getRefineLvl(slotOutput);
+                RefineUtil.setRefineLvl(slotOutput, currentRefineLvl + 1);
+
+                RefineUtil.setEvasion(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startEvasion, endEvasion);
+                RefineUtil.setAccuracy(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startAccuracy, endAccuracy);
+            }
+            this.decrementStack(0);
+            this.context.run((world, pos) -> world.syncWorldEvent(WorldEvents.SMITHING_TABLE_USED, pos, 0));
+        }
     }
 
     public void setPos(BlockPos pos) {
