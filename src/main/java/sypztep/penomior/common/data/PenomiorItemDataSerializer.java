@@ -58,7 +58,7 @@ public class PenomiorItemDataSerializer {
                 gson.toJson(newData, writer);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Penomior.LOGGER.error("Write fail : {}", CONFIG_FILE_PATH, e);
         }
     }
 
