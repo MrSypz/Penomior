@@ -8,8 +8,7 @@
     "LivingEntityMixin"
   ],
   "client": [
-    "client.HandledScreenMixin",
-    "client.InGameHudMixin",
+    "client.DrawContextMixin",
     "client.InventoryScreenMixin"
   ],
   "injectors": {
