@@ -37,8 +37,8 @@ public class InGameHudMixin {
             int anInt = nbt.getInt(PenomiorData.REFINE);
             context.getMatrices().translate(0.0f, 0.0f, 200.0f);
             if (anInt < 16)
-                context.drawText(textRenderer, String.valueOf(anInt), x + 8 , y + 9 , 0xFFFFFF, true);
-            else context.drawText(textRenderer, RefineUtil.refineMap.get(anInt), x+8,y+9,0xFFFFFF, true);
+                context.drawText(textRenderer, String.valueOf(anInt), x + 10 - textRenderer.getWidth(String.valueOf(anInt)), y + 5 , 0xFFFFFF, true);
+            else context.drawText(textRenderer, RefineUtil.romanRefineMap.get(anInt), x + textRenderer.getWidth(String.valueOf(anInt)) - 7,y + 5,0xFFFFFF, true);
         }
         context.getMatrices().pop();
     }

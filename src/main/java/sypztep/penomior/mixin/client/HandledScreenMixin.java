@@ -39,7 +39,7 @@ public class HandledScreenMixin {
             context.getMatrices().translate(0.0f, 0.0f, 260.0f);
             if (anInt < 16 && anInt > 0)
                 context.drawText(textRenderer, String.valueOf(anInt), x + 10 - textRenderer.getWidth(String.valueOf(anInt)), y + 5 , 0xFFFFFF, true);
-            else context.drawText(textRenderer, RefineUtil.refineMap.get(anInt), x + textRenderer.getWidth(String.valueOf(anInt)) - 7,y + 5,0xFFFFFF, true);
+            else context.drawText(textRenderer, RefineUtil.romanRefineMap.get(anInt), x + textRenderer.getWidth(String.valueOf(anInt)) - 7,y + 5,0xFFFFFF, true);
         }
         context.getMatrices().pop();
     }

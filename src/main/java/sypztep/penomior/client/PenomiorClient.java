@@ -20,6 +20,7 @@ public class PenomiorClient implements ClientModInitializer {
         ItemTooltipCallback.EVENT.register((stack, tooltipContext, tooltipType, lines) -> {
                 lines.add(Text.of( "Accuracy"+ RefineUtil.getAccuracy(stack)));
                 lines.add(Text.of("Evasion"+ RefineUtil.getEvasion(stack)));
+                lines.add(Text.of("Durability"+ RefineUtil.getDurability(stack)));
         });
     }
 }
