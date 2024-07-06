@@ -1,4 +1,4 @@
-package sypztep.penomior.mixin;
+package sypztep.penomior.mixin.client;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
