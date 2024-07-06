@@ -1,4 +1,4 @@
-package sypztep.penomior.mixin.client;
+package sypztep.penomior.mixin;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -35,7 +35,7 @@ public abstract class DrawContextMixin {
     public abstract int drawText(TextRenderer textRenderer, @Nullable String text, int x, int y, int color, boolean shadow);
     @Inject(at = @At("RETURN"), method = "drawItemInSlot(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V")
     public void drawItemInSlot(TextRenderer textRenderer, ItemStack itemStack, int x, int y, String countOverride, CallbackInfo ci) {
-        drawtextInSlow(textRenderer, itemStack, x, y, 1.5F); // For double scale
+        drawtextInSlow(textRenderer, itemStack, x, y, 1F); // For double scale
     }
 
     @Unique
@@ -44,29 +44,27 @@ public abstract class DrawContextMixin {
         if (world == null || stack.isEmpty()) return;
 
         NbtCompound nbt = ItemStackHelper.getNbtCompound(stack, ModDataComponents.PENOMIOR);
-        int anInt = nbt.getInt(PenomiorData.REFINE);
-        String string = String.valueOf(anInt);
+        int lvl = nbt.getInt(PenomiorData.REFINE);
+        String string = "+" + lvl;
         int stringWidth = renderer.getWidth(string);
 
-        int x = (int) ((i + 10) / scale) - stringWidth / 2;
+        int x = (int) ((i + 9) / scale) - stringWidth / 2;
         int y = (int) ((j + 4) / scale);
         int color = 0xFF4F00;
 
         this.matrices.push();
         this.matrices.scale(scale, scale, scale);
-        this.matrices.translate(0.0F, 0.0F, 120.0F);
-
+        this.matrices.translate(0.0F, 0.0F, 180.0F);
         if (stack.contains(ModDataComponents.PENOMIOR)) {
-            if (anInt < 16 && anInt > 0)
+            if (lvl < 16 && lvl > 0)
                 drawBoldText(renderer, string, x, y, color);
-            else {
-                String romanString = RefineUtil.romanRefineMap.get(anInt);
+             else {
+                String romanString = RefineUtil.romanRefineMap.getOrDefault(lvl, "");
                 int romanStringWidth = renderer.getWidth(romanString);
                 int romanX = (int) ((i + 9) / scale) - romanStringWidth / 2;
                 drawBoldText(renderer, romanString, romanX, y, color);
             }
         }
-
         this.matrices.pop();
     }
     @Unique
