@@ -18,11 +18,11 @@ public class RefineSetCommand implements CommandRegistrationCallback {
     public void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(CommandManager.literal("refine")
                 .then(CommandManager.literal("set")
-                        .then(CommandManager.argument("lvl", IntegerArgumentType.integer())
-                                .executes(context -> execute(context, IntegerArgumentType.getInteger(context, "refineLevel"))))));
+                        .then(CommandManager.argument("refinelevel", IntegerArgumentType.integer())
+                                .executes(context -> execute(context, IntegerArgumentType.getInteger(context, "refinelevel"))))));
     }
 
-    private static int execute(CommandContext<ServerCommandSource> context, int lvl) {
+    private static int execute(CommandContext<ServerCommandSource> context, int refinelevel) {
         ServerPlayerEntity player = context.getSource().getPlayer();
 
         if (player != null) {
@@ -33,24 +33,19 @@ public class RefineSetCommand implements CommandRegistrationCallback {
 
             int maxLvl = itemData.maxLvl();
 
-            // Validate the provided refine level
-            if (lvl < 0 || lvl > maxLvl) {
+            if (refinelevel < 0 || refinelevel > maxLvl) {
                 player.sendMessage(Text.literal("Invalid refine level. Must be between 0 and " + maxLvl), false);
                 return 0;
             }
-            // Set the refine level
-            RefineUtil.setRefineLvl(slotOutput, lvl);
+            RefineUtil.setRefineLvl(slotOutput, refinelevel);
 
-            // Update other attributes based on the new refine level
             int startAccuracy = itemData.startAccuracy();
             int endAccuracy = itemData.endAccuracy();
             int startEvasion = itemData.startEvasion();
             int endEvasion = itemData.endEvasion();
-
-            RefineUtil.setEvasion(slotOutput, lvl, maxLvl, startEvasion, endEvasion);
-            RefineUtil.setAccuracy(slotOutput, lvl, maxLvl, startAccuracy, endAccuracy);
-
-            player.sendMessage(Text.literal("Refine level set to " + lvl), false);
+            RefineUtil.setEvasion(slotOutput, refinelevel, maxLvl, startEvasion, endEvasion);
+            RefineUtil.setAccuracy(slotOutput, refinelevel, maxLvl, startAccuracy, endAccuracy);
+            player.sendMessage(Text.literal("Refine level set to " + refinelevel), false);
         }
 
         return 1;
