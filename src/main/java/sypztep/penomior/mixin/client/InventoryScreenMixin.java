@@ -67,9 +67,8 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
      */
     @Unique
     private void drawPlayerInfo(DrawContext context, ClientPlayerEntity player, int mouseX, int mouseY) {
-        assert ModEntityComponents.STATS.getNullable(player) != null;
-        int a = ModEntityComponents.STATS.getNullable(player).getAccuracyfromEquipment();
-        int b = ModEntityComponents.STATS.getNullable(player).getEvasionfromEquipment();
+        int a = ModEntityComponents.STATS.get(player).getAccuracy();
+        int b = ModEntityComponents.STATS.get(player).getEvasion();
         MutableText[] information = new MutableText[]{
                 Text.translatable(PLAYER_INFO_KEY + "header"),
                 Text.translatable(PLAYER_INFO_KEY + "accuracy").append(String.format(": %d", a)),
