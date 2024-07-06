@@ -113,10 +113,14 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Inject(method = "getEquipmentChanges", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;applyAttributeModifiers(Lnet/minecraft/entity/EquipmentSlot;Ljava/util/function/BiConsumer;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
     private void LivingEntityOnEquipmentChange(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> cir) {
-        MutableInt extraHealth = new MutableInt();
+        MutableInt evasion = new MutableInt();
+        MutableInt accuracy = new MutableInt();
         List<NbtCompound> equippedNbt = getNbtFromAllEquippedSlots();
-        for (NbtCompound nbt : equippedNbt)
-            extraHealth.add(nbt.getFloat(PenomiorData.EVASION));
-        ModEntityComponents.STATS.get(this).setEvasion(extraHealth.intValue());
+        for (NbtCompound nbt : equippedNbt) {
+            evasion.add(nbt.getInt(PenomiorData.EVASION));
+            accuracy.add(nbt.getInt(PenomiorData.ACCURACY));
+        }
+        ModEntityComponents.STATS.get(this).setEvasion(evasion.intValue());
+        ModEntityComponents.STATS.get(this).setAccuracy(accuracy.intValue());
     }
 }
