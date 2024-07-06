@@ -78,9 +78,7 @@ public class RefineScreenHandler extends ScreenHandler {
         boolean hasMaterial = this.getSlot(0).hasStack() && this.getSlot(1).hasStack();
         boolean canRefine = false;
 
-        if (RefineUtil.getRefineLvl(slotOutput) >= 20) {
-            canRefine = true;
-        } else if (hasMaterial && matchesItemData(slotOutput)) {
+        if (hasMaterial && matchesItemData(slotOutput) && RefineUtil.getRefineLvl(slotOutput) < 20) {
             ItemStack material = this.getSlot(0).getStack();
             boolean isArmor = slotOutput.getItem() instanceof ArmorItem;
             boolean isRefined = slotOutput.get(ModDataComponents.PENOMIOR) != null;
