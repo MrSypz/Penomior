@@ -14,13 +14,13 @@ import sypztep.penomior.common.util.RefineUtil;
 public class PenomiorClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        HandledScreens.register(ModScreenHandler.GRINDER_SCREEN_HANDLER_TYPE, RefineScreen::new);
+        HandledScreens.register(ModScreenHandler.REFINE_SCREEN_HANDLER_TYPE, RefineScreen::new);
         ClientPlayNetworking.registerGlobalReceiver(RefinePayloadS2C.ID, new RefinePayloadS2C.Receiver());
 
         ItemTooltipCallback.EVENT.register((stack, tooltipContext, tooltipType, lines) -> {
-                lines.add(Text.of( "Accuracy"+ RefineUtil.getAccuracy(stack)));
-                lines.add(Text.of("Evasion"+ RefineUtil.getEvasion(stack)));
-                lines.add(Text.of("Durability"+ RefineUtil.getDurability(stack)));
+            lines.add(Text.of("Accuracy" + RefineUtil.getAccuracy(stack)));
+            lines.add(Text.of("Evasion" + RefineUtil.getEvasion(stack)));
+            lines.add(Text.of("Durability" + RefineUtil.getDurability(stack)));
         });
     }
 }
