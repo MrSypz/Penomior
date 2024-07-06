@@ -23,7 +23,7 @@ import sypztep.penomior.common.screen.RefineScreenHandler;
 public class RefineScreen
         extends HandledScreen<RefineScreenHandler>
         implements ScreenHandlerListener {
-    public static final Identifier TEXTURE = Penomior.id("textures/gui/container/refine_screen.png");
+    public static final Identifier TEXTURE = Penomior.id("gui/container/refine_screen.png");
     public GrindButton grindButton;
     public RefineScreen(RefineScreenHandler handler, PlayerInventory playerInventory, Text title) {
         super(handler, playerInventory, Text.translatable(Penomior.MODID + ".refine_screen"));
@@ -36,7 +36,7 @@ public class RefineScreen
         this.handler.addListener(this);
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
-        this.grindButton = this.addDrawableChild(new GrindButton(i + 74, j + 56, (button)-> {
+        this.grindButton = this.addDrawableChild(new GrindButton(i + 80, j + 56, (button)-> {
             if (button instanceof GrindButton && !((GrindButton) button).disabled)
                 RefinePayloadC2S.send();
         }));
@@ -84,7 +84,7 @@ public class RefineScreen
         }
 
         public GrindButton(int x, int y, PressAction onPress) {
-            super(x, y, 36, 18,Text.literal("Refine"), onPress, DEFAULT_NARRATION_SUPPLIER);
+            super(x, y, 18, 18,Text.literal("Refine"), onPress, DEFAULT_NARRATION_SUPPLIER);
             this.disabled = true;
             this.setTooltip(getTooltip());
         }
@@ -103,7 +103,7 @@ public class RefineScreen
             }
 
             context.drawTexture(TEXTURE, this.getX(), this.getY(), 176, v, this.width, this.height);
-            context.drawTextWithShadow(MinecraftClient.getInstance().textRenderer, Text.literal("Refine"),getX() + 4 ,getY() + 5,0xFFFFFF);
+            context.drawTextWithShadow(MinecraftClient.getInstance().textRenderer, Text.literal(""),getX() + 4 ,getY() + 5,0xFFFFFF);
         }
 
         public void setDisabled(boolean disable) {
