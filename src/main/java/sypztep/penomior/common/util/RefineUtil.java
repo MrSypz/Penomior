@@ -17,7 +17,6 @@ public class RefineUtil {
             100.0, 90.0, 80.0, 70.0, 60.0, 50.0, 40.0, 30.0, 20.0, 10.0,
             9.0, 8.0, 7.0, 6.0, 5.0
     };
-    public static Map<Integer, Integer> normalItemRates = new HashMap<>();
 
     //------------set-----------//
 
@@ -92,7 +91,5 @@ public class RefineUtil {
         romanRefineMap.put(18, "III");
         romanRefineMap.put(19, "IV");
         romanRefineMap.put(20, "V");
-
-        normalItemRates.put(0,1);
     }
 }
