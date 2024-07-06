@@ -1,10 +1,12 @@
 package sypztep.penomior;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sypztep.penomior.common.command.RefineCommand;
 import sypztep.penomior.common.data.PenomiorItemDataSerializer;
 import sypztep.penomior.common.init.*;
 import sypztep.penomior.common.payload.RefinePayloadC2S;
@@ -21,8 +23,8 @@ public class Penomior implements ModInitializer {
         ModParticles.init();
         ModPayload.init();
         ModItem.init();
-        ModBlockItem.init();
         ModScreenHandler.init();
+        CommandRegistrationCallback.EVENT.register(new RefineCommand());
 
         ServerPlayNetworking.registerGlobalReceiver(RefinePayloadC2S.ID, new RefinePayloadC2S.Receiver());
         // Initialize the serializer
