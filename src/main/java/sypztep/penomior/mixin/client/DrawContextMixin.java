@@ -48,7 +48,7 @@ public abstract class DrawContextMixin {
         String string = String.valueOf(anInt);
         int stringWidth = renderer.getWidth(string);
 
-        int x = (int) ((i + 14) / scale) - stringWidth / 2;
+        int x = (int) ((i + 10) / scale) - stringWidth / 2;
         int y = (int) ((j + 4) / scale);
         int color = 0xFF4F00;
 
@@ -59,7 +59,12 @@ public abstract class DrawContextMixin {
         if (stack.contains(ModDataComponents.PENOMIOR)) {
             if (anInt < 16 && anInt > 0)
                 drawBoldText(renderer, string, x, y, color);
-            else drawBoldText(renderer, RefineUtil.romanRefineMap.get(anInt), x, y, color);
+            else {
+                String romanString = RefineUtil.romanRefineMap.get(anInt);
+                int romanStringWidth = renderer.getWidth(romanString);
+                int romanX = (int) ((i + 9) / scale) - romanStringWidth / 2;
+                drawBoldText(renderer, romanString, romanX, y, color);
+            }
         }
 
         this.matrices.pop();
