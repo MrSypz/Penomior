@@ -35,7 +35,8 @@ public abstract class LivingEntityMixin extends Entity {
     @Shadow
     public abstract boolean damage(DamageSource source, float amount);
 
-    @Shadow public abstract ItemStack getEquippedStack(EquipmentSlot var1);
+    @Shadow
+    public abstract ItemStack getEquippedStack(EquipmentSlot var1);
 
     @Unique
     private final Deque<TextParticle> particles = new ArrayDeque<>();
@@ -97,6 +98,7 @@ public abstract class LivingEntityMixin extends Entity {
             client.particleManager.addParticle(particle);
         }
     }
+
     @Unique
     public List<NbtCompound> getNbtFromAllEquippedSlots() {
         List<NbtCompound> nbtList = new ArrayList<>();
@@ -115,7 +117,6 @@ public abstract class LivingEntityMixin extends Entity {
         List<NbtCompound> equippedNbt = getNbtFromAllEquippedSlots();
         for (NbtCompound nbt : equippedNbt)
             extraHealth.add(nbt.getFloat(PenomiorData.EVASION));
-        assert ModEntityComponents.STATS.getNullable(this) != null;
-        ModEntityComponents.STATS.getNullable(this).setEvasion(extraHealth.intValue());
+        ModEntityComponents.STATS.get(this).setEvasion(extraHealth.intValue());
     }
 }

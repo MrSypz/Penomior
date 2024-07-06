@@ -7,7 +7,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
-import org.ladysnake.cca.api.v3.component.tick.CommonTickingComponent;
 import sypztep.penomior.common.data.PenomiorData;
 import sypztep.penomior.common.init.ModDataComponents;
 import sypztep.penomior.common.init.ModEntityComponents;
@@ -16,9 +15,9 @@ import sypztep.tyrannus.common.util.ItemStackHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StatsComponent implements AutoSyncedComponent, CommonTickingComponent {
+public class StatsComponent implements AutoSyncedComponent {
     private final LivingEntity obj;
-    int accuracy, evasion;
+    int accuracy, evasion, failstack;
 
     public StatsComponent(LivingEntity obj) {
         this.obj = obj;
@@ -28,29 +27,14 @@ public class StatsComponent implements AutoSyncedComponent, CommonTickingCompone
     public void readFromNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         accuracy = tag.getInt("Accuracy");
         evasion = tag.getInt("Evasion");
+        failstack = tag.getInt("Failstack");
     }
 
     @Override
     public void writeToNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         tag.putInt("Accuracy", accuracy);
         tag.putInt("Evasion", evasion);
-    }
-
-    @Override
-    public void tick() {
-    }
-
-    @Override
-    public void serverTick() {
-        tick();
-        if (!obj.getWorld().isClient()) {
-//            this.setAccuracy(this.getTotalAccuracy());
-        }
-    }
-
-    @Override
-    public void clientTick() {
-        tick();
+        tag.putInt("Failstack", failstack);
     }
 
     public int getAccuracy() {
@@ -61,14 +45,23 @@ public class StatsComponent implements AutoSyncedComponent, CommonTickingCompone
         return this.evasion;
     }
 
+    public int getFailstack() {
+        return failstack;
+    }
+
+    public void setFailstack(int failstack) {
+        this.failstack = failstack;
+        sync();
+    }
+
     public void setEvasion(int evasion) {
         this.evasion = evasion;
-        ModEntityComponents.STATS.sync(this.obj); // Sync the component
+        sync();
     }
 
     public void setAccuracy(int accuracy) {
         this.accuracy = accuracy;
-        ModEntityComponents.STATS.sync(this.obj);
+        sync();
     }
 
     public List<NbtCompound> getNbtFromAllEquippedSlots() {
@@ -87,6 +80,7 @@ public class StatsComponent implements AutoSyncedComponent, CommonTickingCompone
             accuracyPoint.add(compounds.getInt(PenomiorData.ACCURACY));
         return accuracyPoint.getValue();
     }
+
     public int getEvasionfromEquipment() {
         MutableInt evasionPoint = new MutableInt();
         for (NbtCompound compounds : getNbtFromAllEquippedSlots())
@@ -94,11 +88,8 @@ public class StatsComponent implements AutoSyncedComponent, CommonTickingCompone
         return evasionPoint.getValue();
     }
 
-    public int getTotalAccuracy() {
-        return this.getAccuracyfromEquipment();
-    }
-
-    public int getTotalEvasion() {
-        return this.getEvasionfromEquipment();
+    //----------------utility---------------//
+    private void sync() {
+        ModEntityComponents.STATS.sync(this.obj);
     }
 }
