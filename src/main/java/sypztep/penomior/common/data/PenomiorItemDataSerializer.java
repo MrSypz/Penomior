@@ -2,6 +2,8 @@ package sypztep.penomior.common.data;
 
 import com.google.gson.*;
 import net.fabricmc.loader.api.FabricLoader;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import sypztep.penomior.Penomior;
 
 import java.io.*;
@@ -69,8 +71,8 @@ public class PenomiorItemDataSerializer {
         }
     }
 
-    // Define your default data here
-    private PenomiorItemDataMap getDefaultData() {
+    @Contract(" -> new")
+    private @NotNull PenomiorItemDataMap getDefaultData() {
         Map<String, PenomiorItemData> defaultData = new HashMap<>();
         // Swords
         defaultData.put("minecraft:wooden_sword", new PenomiorItemData("minecraft:wooden_sword", 20, 0, 182, 0, 0,100));
