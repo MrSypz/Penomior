@@ -7,6 +7,7 @@ import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sypztep.penomior.common.command.RefineCommand;
+import sypztep.penomior.common.command.RefineSetCommand;
 import sypztep.penomior.common.data.PenomiorItemDataSerializer;
 import sypztep.penomior.common.init.*;
 import sypztep.penomior.common.payload.RefinePayloadC2S;
@@ -25,6 +26,7 @@ public class Penomior implements ModInitializer {
         ModItem.init();
         ModScreenHandler.init();
         CommandRegistrationCallback.EVENT.register(new RefineCommand());
+        CommandRegistrationCallback.EVENT.register(new RefineSetCommand());
 
         ServerPlayNetworking.registerGlobalReceiver(RefinePayloadC2S.ID, new RefinePayloadC2S.Receiver());
         // Initialize the serializer
