@@ -25,5 +25,4 @@ public record RefinePayloadC2S() implements CustomPayload {
                 ((RefineScreenHandler) context.player().currentScreenHandler).refine();
         }
     }
-
 }

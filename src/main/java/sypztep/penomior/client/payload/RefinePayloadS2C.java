@@ -29,7 +29,7 @@ public record RefinePayloadS2C(boolean flag) implements CustomPayload {
         @Override
         public void receive(RefinePayloadS2C payload, ClientPlayNetworking.Context context) {
             if (context.client().currentScreen instanceof RefineScreen)
-                ((RefineScreen) context.client().currentScreen).grindButton.setDisabled(payload.flag());
+                ((RefineScreen) context.client().currentScreen).refineButton.setDisabled(payload.flag());
         }
     }
 }
