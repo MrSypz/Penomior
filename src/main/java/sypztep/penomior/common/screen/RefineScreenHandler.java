@@ -31,20 +31,19 @@ public class RefineScreenHandler extends ScreenHandler {
     private final ScreenHandlerContext context;
     private final PlayerEntity player;
     private boolean canRefine;
-    private BlockPos pos;
 
     public RefineScreenHandler(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
-        super(ModScreenHandler.GRINDER_SCREEN_HANDLER_TYPE, syncId);
+        super(ModScreenHandler.REFINE_SCREEN_HANDLER_TYPE, syncId);
 
         this.context = context;
         this.player = playerInventory.player;
-        addSlot(new Slot(this.inventory, 0, 9, 34) {
+        addSlot(new Slot(this.inventory, 0, 31, 34) {
             @Override
             public boolean canInsert(ItemStack stack) {
                 return isRefineMaterial(stack);
             }
         });
-        addSlot(new Slot(this.inventory, 1, 151, 34) {
+        addSlot(new Slot(this.inventory, 1, 125, 34) {
             @Override
             public boolean canInsert(ItemStack stack) {
                 return matchesItemData(stack);
@@ -63,8 +62,6 @@ public class RefineScreenHandler extends ScreenHandler {
 
         for (i = 0; i < 9; ++i)
             this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
-
-        this.context.run((world, pos) -> RefineScreenHandler.this.setPos(pos));
     }
 
     @Override
@@ -163,10 +160,6 @@ public class RefineScreenHandler extends ScreenHandler {
             this.decrementStack(0);
             this.context.run((world, pos) -> world.syncWorldEvent(WorldEvents.GRINDSTONE_USED, pos, 0));
         }
-    }
-
-    public void setPos(BlockPos pos) {
-        this.pos = pos;
     }
 
     private void decrementStack(int slot) {
