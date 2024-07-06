@@ -10,8 +10,13 @@ public record PenomiorItemData(
         int endAccuracy,
         int startEvasion,
         int endEvasion,
-        int maxDurability
-) {
+        int maxDurability,
+        int starDamage,
+        int endDamage,
+        int startProtection,
+        int endProtection
+)
+{
     public static PenomiorItemData getPenomiroItemData(ItemStack stack) {
         String itemID = Registries.ITEM.getId(stack.getItem()).toString();
         return PenomiorItemDataSerializer.getConfigCache().get(itemID);
