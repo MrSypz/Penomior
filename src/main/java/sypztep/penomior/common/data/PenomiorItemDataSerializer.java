@@ -73,44 +73,44 @@ public class PenomiorItemDataSerializer {
     private PenomiorItemDataMap getDefaultData() {
         Map<String, PenomiorItemData> defaultData = new HashMap<>();
         // Swords
-        defaultData.put("minecraft:wooden_sword", new PenomiorItemData("minecraft:wooden_sword", 20, 0, 182, 0, 0));
-        defaultData.put("minecraft:stone_sword", new PenomiorItemData("minecraft:stone_sword", 20, 0, 182, 0, 0));
-        defaultData.put("minecraft:golden_sword", new PenomiorItemData("minecraft:golden_sword", 20, 0, 182, 0, 0));
-        defaultData.put("minecraft:iron_sword", new PenomiorItemData("minecraft:iron_sword", 20, 0, 182, 0, 0));
-        defaultData.put("minecraft:diamond_sword", new PenomiorItemData("minecraft:diamond_sword", 20, 0, 182, 0, 0));
-        defaultData.put("minecraft:netherite_sword", new PenomiorItemData("minecraft:netherite_sword", 20, 0, 182, 0, 0));
+        defaultData.put("minecraft:wooden_sword", new PenomiorItemData("minecraft:wooden_sword", 20, 0, 182, 0, 0,100));
+        defaultData.put("minecraft:stone_sword", new PenomiorItemData("minecraft:stone_sword", 20, 0, 182, 0, 0,100));
+        defaultData.put("minecraft:golden_sword", new PenomiorItemData("minecraft:golden_sword", 20, 0, 182, 0, 0,100));
+        defaultData.put("minecraft:iron_sword", new PenomiorItemData("minecraft:iron_sword", 20, 0, 182, 0, 0,100));
+        defaultData.put("minecraft:diamond_sword", new PenomiorItemData("minecraft:diamond_sword", 20, 0, 182, 0, 0,100));
+        defaultData.put("minecraft:netherite_sword", new PenomiorItemData("minecraft:netherite_sword", 20, 0, 182, 0, 0,100));
 
         // Helmets
-        defaultData.put("minecraft:leather_helmet", new PenomiorItemData("minecraft:leather_helmet", 20, 0, 0, 0, 82));
-        defaultData.put("minecraft:chainmail_helmet", new PenomiorItemData("minecraft:chainmail_helmet", 20, 0, 0, 0, 82));
-        defaultData.put("minecraft:iron_helmet", new PenomiorItemData("minecraft:iron_helmet", 20, 0, 0, 0, 82));
-        defaultData.put("minecraft:golden_helmet", new PenomiorItemData("minecraft:golden_helmet", 20, 0, 0, 0, 82));
-        defaultData.put("minecraft:diamond_helmet", new PenomiorItemData("minecraft:diamond_helmet", 20, 0, 0, 0, 82));
-        defaultData.put("minecraft:netherite_helmet", new PenomiorItemData("minecraft:netherite_helmet", 20, 0, 0, 0, 82));
+        defaultData.put("minecraft:leather_helmet", new PenomiorItemData("minecraft:leather_helmet", 20, 0, 0, 0, 82,100));
+        defaultData.put("minecraft:chainmail_helmet", new PenomiorItemData("minecraft:chainmail_helmet", 20, 0, 0, 0, 82,100));
+        defaultData.put("minecraft:iron_helmet", new PenomiorItemData("minecraft:iron_helmet", 20, 0, 0, 0, 82,100));
+        defaultData.put("minecraft:golden_helmet", new PenomiorItemData("minecraft:golden_helmet", 20, 0, 0, 0, 82,100));
+        defaultData.put("minecraft:diamond_helmet", new PenomiorItemData("minecraft:diamond_helmet", 20, 0, 0, 0, 82,100));
+        defaultData.put("minecraft:netherite_helmet", new PenomiorItemData("minecraft:netherite_helmet", 20, 0, 0, 0, 82,100));
 
         // Chestplates
-        defaultData.put("minecraft:leather_chestplate", new PenomiorItemData("minecraft:leather_chestplate", 20, 0, 0, 0, 152));
-        defaultData.put("minecraft:chainmail_chestplate", new PenomiorItemData("minecraft:chainmail_chestplate", 20, 0, 0, 0, 152));
-        defaultData.put("minecraft:iron_chestplate", new PenomiorItemData("minecraft:iron_chestplate", 20, 0, 0, 0, 152));
-        defaultData.put("minecraft:golden_chestplate", new PenomiorItemData("minecraft:golden_chestplate", 20, 0, 0, 0, 152));
-        defaultData.put("minecraft:diamond_chestplate", new PenomiorItemData("minecraft:diamond_chestplate", 20, 0, 0, 0, 152));
-        defaultData.put("minecraft:netherite_chestplate", new PenomiorItemData("minecraft:netherite_chestplate", 20, 0, 0, 0, 152));
+        defaultData.put("minecraft:leather_chestplate", new PenomiorItemData("minecraft:leather_chestplate", 20, 0, 0, 0, 152,100));
+        defaultData.put("minecraft:chainmail_chestplate", new PenomiorItemData("minecraft:chainmail_chestplate", 20, 0, 0, 0, 152,100));
+        defaultData.put("minecraft:iron_chestplate", new PenomiorItemData("minecraft:iron_chestplate", 20, 0, 0, 0, 152,100));
+        defaultData.put("minecraft:golden_chestplate", new PenomiorItemData("minecraft:golden_chestplate", 20, 0, 0, 0, 152,100));
+        defaultData.put("minecraft:diamond_chestplate", new PenomiorItemData("minecraft:diamond_chestplate", 20, 0, 0, 0, 152,100));
+        defaultData.put("minecraft:netherite_chestplate", new PenomiorItemData("minecraft:netherite_chestplate", 20, 0, 0, 0, 152,100));
 
         // Boots
-        defaultData.put("minecraft:leather_boots", new PenomiorItemData("minecraft:leather_boots", 20, 0, 0, 0, 129));
-        defaultData.put("minecraft:chainmail_boots", new PenomiorItemData("minecraft:chainmail_boots", 20, 0, 0, 0, 129));
-        defaultData.put("minecraft:iron_boots", new PenomiorItemData("minecraft:iron_boots", 20, 0, 0, 0, 129));
-        defaultData.put("minecraft:golden_boots", new PenomiorItemData("minecraft:golden_boots", 20, 0, 0, 0, 129));
-        defaultData.put("minecraft:diamond_boots", new PenomiorItemData("minecraft:diamond_boots", 20, 0, 0, 0, 129));
-        defaultData.put("minecraft:netherite_boots", new PenomiorItemData("minecraft:netherite_boots", 20, 0, 0, 0, 129));
+        defaultData.put("minecraft:leather_boots", new PenomiorItemData("minecraft:leather_boots", 20, 0, 0, 0, 129,100));
+        defaultData.put("minecraft:chainmail_boots", new PenomiorItemData("minecraft:chainmail_boots", 20, 0, 0, 0, 129,100));
+        defaultData.put("minecraft:iron_boots", new PenomiorItemData("minecraft:iron_boots", 20, 0, 0, 0, 129,100));
+        defaultData.put("minecraft:golden_boots", new PenomiorItemData("minecraft:golden_boots", 20, 0, 0, 0, 129,100));
+        defaultData.put("minecraft:diamond_boots", new PenomiorItemData("minecraft:diamond_boots", 20, 0, 0, 0, 129,100));
+        defaultData.put("minecraft:netherite_boots", new PenomiorItemData("minecraft:netherite_boots", 20, 0, 0, 0, 129,100));
 
         // Leggings
-        defaultData.put("minecraft:leather_leggings", new PenomiorItemData("minecraft:leather_leggings", 20, 0, 48, 0, 96));
-        defaultData.put("minecraft:chainmail_leggings", new PenomiorItemData("minecraft:chainmail_leggings", 20, 0, 48, 0, 96));
-        defaultData.put("minecraft:iron_leggings", new PenomiorItemData("minecraft:iron_leggings", 20, 0, 48, 0, 96));
-        defaultData.put("minecraft:golden_leggings", new PenomiorItemData("minecraft:golden_leggings", 20, 0, 48, 0, 96));
-        defaultData.put("minecraft:diamond_leggings", new PenomiorItemData("minecraft:diamond_leggings", 20, 0, 48, 0, 96));
-        defaultData.put("minecraft:netherite_leggings", new PenomiorItemData("minecraft:netherite_leggings", 20, 0, 48, 0, 96));
+        defaultData.put("minecraft:leather_leggings", new PenomiorItemData("minecraft:leather_leggings", 20, 0, 48, 0, 96,100));
+        defaultData.put("minecraft:chainmail_leggings", new PenomiorItemData("minecraft:chainmail_leggings", 20, 0, 48, 0, 96,100));
+        defaultData.put("minecraft:iron_leggings", new PenomiorItemData("minecraft:iron_leggings", 20, 0, 48, 0, 96,100));
+        defaultData.put("minecraft:golden_leggings", new PenomiorItemData("minecraft:golden_leggings", 20, 0, 48, 0, 96,100));
+        defaultData.put("minecraft:diamond_leggings", new PenomiorItemData("minecraft:diamond_leggings", 20, 0, 48, 0, 96,100));
+        defaultData.put("minecraft:netherite_leggings", new PenomiorItemData("minecraft:netherite_leggings", 20, 0, 48, 0, 96,100));
 
         return new PenomiorItemDataMap(defaultData);
     }
