@@ -9,17 +9,15 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldEvents;
 import sypztep.penomior.client.payload.RefinePayloadS2C;
 import sypztep.penomior.common.data.PenomiorItemData;
 import sypztep.penomior.common.data.PenomiorItemDataSerializer;
 import sypztep.penomior.common.init.ModDataComponents;
+import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.penomior.common.init.ModItem;
 import sypztep.penomior.common.init.ModScreenHandler;
 import sypztep.penomior.common.util.RefineUtil;
 
-//TODO : make a failstacks system and pri duo tet enchant
 public class RefineScreenHandler extends ScreenHandler {
     private final Inventory inventory = new SimpleInventory(3) {
         @Override
@@ -30,7 +28,9 @@ public class RefineScreenHandler extends ScreenHandler {
     };
     private final ScreenHandlerContext context;
     private final PlayerEntity player;
-    private boolean canRefine;
+    public PlayerEntity getPlayer() {
+        return player;
+    }
 
     public RefineScreenHandler(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
         super(ModScreenHandler.REFINE_SCREEN_HANDLER_TYPE, syncId);
@@ -75,29 +75,32 @@ public class RefineScreenHandler extends ScreenHandler {
     private void doRefineTask() {
         ItemStack slotOutput = this.getSlot(1).getStack();
 
-        if (RefineUtil.getRefineLvl(slotOutput) < 20)
-            this.canRefine = false;
-        if (this.getSlot(0).hasStack() && this.getSlot(1).hasStack()) {
+        boolean hasMaterial = this.getSlot(0).hasStack() && this.getSlot(1).hasStack();
+        boolean canRefine = false;
+
+        if (RefineUtil.getRefineLvl(slotOutput) >= 20) {
+            canRefine = true;
+        } else if (hasMaterial && matchesItemData(slotOutput)) {
             ItemStack material = this.getSlot(0).getStack();
-            if (matchesItemData(slotOutput)) {
-                boolean isArmor = slotOutput.getItem() instanceof ArmorItem;
-                boolean isRefined = slotOutput.get(ModDataComponents.PENOMIOR) != null;
+            boolean isArmor = slotOutput.getItem() instanceof ArmorItem;
+            boolean isRefined = slotOutput.get(ModDataComponents.PENOMIOR) != null;
 
-                if (!isRefined && !isArmor)  //handle a null data
-                    this.canRefine = material.isOf(ModItem.REFINE_WEAPON_STONE);
-                 else if (!isRefined)
-                    this.canRefine = material.isOf(ModItem.REFINE_ARMOR_STONE);
-
-                if (isRefined && !isArmor)
-                    this.canRefine = material.isOf(ModItem.REFINE_WEAPON_STONE);
-                 else if (isRefined)
-                    this.canRefine = material.isOf(ModItem.REFINE_ARMOR_STONE);
-
+            // Determine if refinement is possible based on item type and material
+            if (!isRefined && !isArmor) {
+                canRefine = material.isOf(ModItem.REFINE_WEAPON_STONE);
+            } else if (!isRefined) {
+                canRefine = material.isOf(ModItem.REFINE_ARMOR_STONE);
+            } else if (!isArmor) {
+                canRefine = material.isOf(ModItem.REFINE_WEAPON_STONE);
+            } else {
+                canRefine = material.isOf(ModItem.REFINE_ARMOR_STONE);
             }
-        } else
-            this.canRefine = false;
-        RefinePayloadS2C.send((ServerPlayerEntity) player, !this.canRefine);
+        }
+        int failStack = ModEntityComponents.STATS.get(this.player).getFailstack();
+        RefineUtil.getCalculateSuccessRate(slotOutput, failStack);
+        RefinePayloadS2C.send((ServerPlayerEntity) this.player, !canRefine);
     }
+
 
     @Override
     public void onClosed(PlayerEntity player) {
@@ -110,7 +113,7 @@ public class RefineScreenHandler extends ScreenHandler {
         return this.context.get((world, pos) -> player.squaredDistanceTo((double) pos.getX() + 0.5, (double) pos.getY() + 0.5, (double) pos.getZ() + 0.5) <= 64.0, true);
     }
 
-    private boolean matchesItemData(ItemStack stack) {
+    public boolean matchesItemData(ItemStack stack) {
         String itemID = PenomiorItemData.getItemId(stack);
         PenomiorItemData itemData = PenomiorItemDataSerializer.getConfigCache().get(itemID);
         return itemData != null && itemID.equals(itemData.itemID());
@@ -122,43 +125,33 @@ public class RefineScreenHandler extends ScreenHandler {
 
     public void refine() {
         ItemStack slotOutput = this.getSlot(1).getStack();
-        if (matchesItemData(slotOutput) && RefineUtil.getRefineLvl(slotOutput) < 20) {
-            boolean isArmor = slotOutput.getItem() instanceof ArmorItem;
-            boolean isRefined = slotOutput.get(ModDataComponents.PENOMIOR) != null;
-            PenomiorItemData itemData = PenomiorItemData.getPenomiroItemData(slotOutput);
+        PenomiorItemData itemData = PenomiorItemData.getPenomiroItemData(slotOutput);
+
+        RefineUtil.initializeItemData(slotOutput, itemData); // this one will excute when data is null
+
+        if (matchesItemData(slotOutput) && RefineUtil.getRefineLvl(slotOutput) < itemData.maxLvl() && RefineUtil.getDurability(slotOutput) > 0) {
             int currentRefineLvl = RefineUtil.getRefineLvl(slotOutput);
             int maxLvl = itemData.maxLvl();
             int startAccuracy = itemData.startAccuracy();
             int endAccuracy = itemData.endAccuracy();
             int startEvasion = itemData.startEvasion();
             int endEvasion = itemData.endEvasion();
-            //-------------Handle null item---------------//
-            if (!isRefined && !isArmor) {
-                RefineUtil.setRefineLvl(slotOutput, 0);
-                RefineUtil.setRefineLvl(slotOutput, currentRefineLvl + 1);
+            int failStack = ModEntityComponents.STATS.get(this.player).getFailstack();
 
-                RefineUtil.setAccuracy(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startAccuracy, endAccuracy);
-            } else if (!isRefined) {
-                RefineUtil.setRefineLvl(slotOutput, 0);
+            // Check if refinement is successful
+            if (RefineUtil.handleRefine(slotOutput, failStack)) {
                 RefineUtil.setRefineLvl(slotOutput, currentRefineLvl + 1);
-
                 RefineUtil.setEvasion(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startEvasion, endEvasion);
                 RefineUtil.setAccuracy(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startAccuracy, endAccuracy);
-            }
-
-            //-------------Handle not null item---------------//
-            if (isRefined && !isArmor) {
-                RefineUtil.setRefineLvl(slotOutput, currentRefineLvl + 1);
-
-                RefineUtil.setAccuracy(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startAccuracy, endAccuracy);
-            } else if (isRefined) {
-                RefineUtil.setRefineLvl(slotOutput, currentRefineLvl + 1);
-
+                RefineUtil.successRefine(this.player);
+            } else { // Fail to refine
+                RefineUtil.setRefineLvl(slotOutput, Math.max(currentRefineLvl - 1, 0));
                 RefineUtil.setEvasion(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startEvasion, endEvasion);
                 RefineUtil.setAccuracy(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startAccuracy, endAccuracy);
+                RefineUtil.setDurability(slotOutput, Math.max(RefineUtil.getDurability(slotOutput) - 10, 0));
+                ModEntityComponents.STATS.get(this.player).setFailstack(failStack + 1);
             }
             this.decrementStack(0);
-            this.context.run((world, pos) -> world.syncWorldEvent(WorldEvents.GRINDSTONE_USED, pos, 0));
         }
     }
 
