@@ -6,5 +6,13 @@
   "penomior.gui.player_info.tooltip.evasion":"Evasion points",
   "item.penomior.refine_weapon_stone": "Refine Weapon stone",
   "item.penomior.refine_armor_stone": "Refine Armor stone",
-  "item.penomior.moonlight_crescent": "Moonlight Crescent"
+  "item.penomior.moonlight_crescent": "Moonlight Crescent",
+
+  "penomior.midnightconfig.title": "Penomior Mod Config",
+  "penomior.midnightconfig.iFrameDuration": "IFrame Duration",
+  "penomior.midnightconfig.iFrameDuration.tooltip": "How many ticks of i-frames does an entity get when damaged, from 10 (default) 0.5 sec, to 2^31-1 (nothing can take damage)",
+  "penomior.midnightconfig.attackCancelThreshold": "Attack Cancel Threshold",
+  "penomior.midnightconfig.attackCancelThreshold.tooltip": "How weak a player's attack can be before it gets nullified, from 0 (0%, cancels multiple attacks on the same tick) to 1 (100%, players cannot attack), or -0.1 (disables this feature)",
+  "penomior.midnightconfig.knockbackCancelThreshold": "Knockback Cancel Threshold",
+  "penomior.midnightconfig.knockbackCancelThreshold.tooltip": "How weak a player's attack can be before the knockback gets nullified, from 0 (0%, cancels multiple attacks on the same tick) to 1 (100%, no knockback), or -0.1 (disables this feature)"
 }
