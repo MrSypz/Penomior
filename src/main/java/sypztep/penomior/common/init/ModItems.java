@@ -6,7 +6,7 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Rarity;
 import sypztep.penomior.Penomior;
 
-public class ModItem {
+public class ModItems {
     public static Item REFINE_WEAPON_STONE;
     public static Item REFINE_ARMOR_STONE;
     public static Item MOONLIGHT_CRESCENT;

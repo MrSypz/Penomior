@@ -16,7 +16,7 @@ import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import sypztep.penomior.Penomior;
 import sypztep.penomior.common.init.ModEntityComponents;
-import sypztep.penomior.common.init.ModItem;
+import sypztep.penomior.common.init.ModItems;
 import sypztep.penomior.common.payload.RefinePayloadC2S;
 import sypztep.penomior.common.screen.RefineScreenHandler;
 import sypztep.penomior.common.util.CyclingItemSlotIcon;
@@ -33,12 +33,12 @@ public class RefineScreen
     private final CyclingItemSlotIcon weaponSlotIcon = new CyclingItemSlotIcon(0);
     private final CyclingItemSlotIcon armorSlotIcon = new CyclingItemSlotIcon(0);
     private static final List<ItemStack> WEAPON_STONE = List.of(
-            ModItem.REFINE_WEAPON_STONE.getDefaultStack(),
-            ModItem.MOONLIGHT_CRESCENT.getDefaultStack()
+            ModItems.REFINE_WEAPON_STONE.getDefaultStack(),
+            ModItems.MOONLIGHT_CRESCENT.getDefaultStack()
             );
     private static final List<ItemStack> ARMOR_STONE = List.of(
-            ModItem.REFINE_ARMOR_STONE.getDefaultStack(),
-            ModItem.MOONLIGHT_CRESCENT.getDefaultStack()
+            ModItems.REFINE_ARMOR_STONE.getDefaultStack(),
+            ModItems.MOONLIGHT_CRESCENT.getDefaultStack()
     );
 
     public RefineScreen(RefineScreenHandler handler, PlayerInventory playerInventory, Text title) {

@@ -14,7 +14,7 @@ import sypztep.penomior.common.data.PenomiorItemData;
 import sypztep.penomior.common.data.PenomiorItemDataSerializer;
 import sypztep.penomior.common.init.ModDataComponents;
 import sypztep.penomior.common.init.ModEntityComponents;
-import sypztep.penomior.common.init.ModItem;
+import sypztep.penomior.common.init.ModItems;
 import sypztep.penomior.common.init.ModScreenHandler;
 import sypztep.penomior.common.payload.RefineSoundPayloadC2S;
 import sypztep.penomior.common.util.RefineUtil;
@@ -92,15 +92,15 @@ public class RefineScreenHandler extends ScreenHandler {
 
             // Determine if refinement is possible based on item type and material
             if (!isRefined && !isArmor) {
-                canRefine = material.isOf(ModItem.REFINE_WEAPON_STONE);
+                canRefine = material.isOf(ModItems.REFINE_WEAPON_STONE);
             } else if (!isRefined) {
-                canRefine = material.isOf(ModItem.REFINE_ARMOR_STONE);
+                canRefine = material.isOf(ModItems.REFINE_ARMOR_STONE);
             } else if (!isArmor) {
-                canRefine = material.isOf(ModItem.REFINE_WEAPON_STONE);
+                canRefine = material.isOf(ModItems.REFINE_WEAPON_STONE);
             } else {
-                canRefine = material.isOf(ModItem.REFINE_ARMOR_STONE);
+                canRefine = material.isOf(ModItems.REFINE_ARMOR_STONE);
             }
-            if (material.isOf(ModItem.MOONLIGHT_CRESCENT)) {
+            if (material.isOf(ModItems.MOONLIGHT_CRESCENT)) {
                 canRefine = true;
             }
         }
@@ -128,7 +128,7 @@ public class RefineScreenHandler extends ScreenHandler {
     }
 
     private boolean isRefineMaterial(ItemStack stack) {
-        return stack.isOf(ModItem.REFINE_WEAPON_STONE) || stack.isOf(ModItem.REFINE_ARMOR_STONE) || stack.isOf(ModItem.MOONLIGHT_CRESCENT);
+        return stack.isOf(ModItems.REFINE_WEAPON_STONE) || stack.isOf(ModItems.REFINE_ARMOR_STONE) || stack.isOf(ModItems.MOONLIGHT_CRESCENT);
     }
 
     public void refine() {
@@ -147,7 +147,7 @@ public class RefineScreenHandler extends ScreenHandler {
         int failStack = ModEntityComponents.STATS.get(this.player).getFailstack();
         int repairPoint = itemData.repairpoint();
         ItemStack material = this.getSlot(0).getStack();
-        if (matchesItemData(slotOutput) && RefineUtil.getRefineLvl(slotOutput) < itemData.maxLvl() && durability > 0 && !material.isOf(ModItem.MOONLIGHT_CRESCENT)) {
+        if (matchesItemData(slotOutput) && RefineUtil.getRefineLvl(slotOutput) < itemData.maxLvl() && durability > 0 && !material.isOf(ModItems.MOONLIGHT_CRESCENT)) {
             // Refinement process
             if (RefineUtil.handleRefine(slotOutput, failStack)) {
                 RefineUtil.setRefineLvl(slotOutput, currentRefineLvl + 1);
@@ -165,7 +165,7 @@ public class RefineScreenHandler extends ScreenHandler {
             }
             this.decrementStack(0);
             //Repair process
-        } else if (material.isOf(ModItem.MOONLIGHT_CRESCENT) && durability < 100) {
+        } else if (material.isOf(ModItems.MOONLIGHT_CRESCENT) && durability < 100) {
             RefineUtil.setDurability(slotOutput, durability + repairPoint);
             RefineSoundPayloadC2S.send(RefineUtil.RefineSound.REPAIR.select());
             this.decrementStack(0);
