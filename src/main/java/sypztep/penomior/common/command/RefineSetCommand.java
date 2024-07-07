@@ -17,6 +17,7 @@ public class RefineSetCommand implements CommandRegistrationCallback {
     @Override
     public void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(CommandManager.literal("refine")
+                .requires(source -> source.hasPermissionLevel(2))  // Requires permission level 2
                 .then(CommandManager.literal("set")
                         .then(CommandManager.argument("refinelevel", IntegerArgumentType.integer())
                                 .executes(context -> execute(context, IntegerArgumentType.getInteger(context, "refinelevel"))))));

@@ -14,7 +14,8 @@ public record PenomiorItemData(
         int starDamage,
         int endDamage,
         int startProtection,
-        int endProtection
+        int endProtection,
+        int repairpoint
 )
 {
     public static PenomiorItemData getPenomiroItemData(ItemStack stack) {

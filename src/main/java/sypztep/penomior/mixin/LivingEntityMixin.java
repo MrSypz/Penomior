@@ -1,6 +1,7 @@
 package sypztep.penomior.mixin;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -24,6 +25,7 @@ import sypztep.penomior.common.data.PenomiorData;
 import sypztep.penomior.common.init.ModDataComponents;
 import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.penomior.common.util.CombatUtils;
+import sypztep.penomior.common.util.RefineUtil;
 import sypztep.tyrannus.common.util.ItemStackHelper;
 
 import java.util.*;
@@ -48,29 +50,18 @@ public abstract class LivingEntityMixin extends Entity {
     @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;wakeUp()V", shift = At.Shift.BY, by = 2), cancellable = true)
     private void applyDamageFirst(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         Entity attacker = source.getAttacker();
-        var client = MinecraftClient.getInstance();
-        var world = client.world;
+        MinecraftClient client = MinecraftClient.getInstance();
+        ClientWorld world = client.world;
         if (world == null || !world.isClient()) return;
 
         // this in this method is target
         if (attacker instanceof LivingEntity living) {
-            StatsComponent targetStats = ModEntityComponents.STATS.getNullable(this);
-            StatsComponent attackerStats = ModEntityComponents.STATS.getNullable(living);
+            StatsComponent targetStats = ModEntityComponents.STATS.getNullable(this); // who take damage
+            StatsComponent attackerStats = ModEntityComponents.STATS.getNullable(living); // who attack?
 
             if (targetStats == null || attackerStats == null) return;
 
-            int attackerAccuracy = attackerStats.getAccuracy();
-            int targetEvasion = targetStats.getEvasion();
-            double hitrate = CombatUtils.calculateHitRate(attackerAccuracy, targetEvasion);
-
-            System.out.println("Attacker Accuracy: " + attackerAccuracy);
-            System.out.println("Target Evasion: " + targetEvasion);
-            System.out.println("Hit chance: " + hitrate);
-
-            // Here you can decide how to use these rates to determine the outcome of an attack
-            // For example, you might roll a random number to see if the attack hits
-            Random random = new Random();
-            boolean attackHits = random.nextDouble() < hitrate * 0.01f; // Dividing by 100 to convert percentage to a decimal
+            boolean attackHits = isAttackHits(attackerStats, targetStats);
             Vec3d particlePos = this.getPos().add(0.0, this.getHeight() + 0.25, 0.0);
             Vec3d particleVelocity = this.getVelocity();
             Vec3d particleVelocityForward = this.getPos();
@@ -82,11 +73,11 @@ public abstract class LivingEntityMixin extends Entity {
 
 
             if (attackHits) {
-                var text = String.format("%.1f", amount);
-                if (text.endsWith(".0")) {
-                    text = text.substring(0, text.length() - 2);
-                }
-                particle.setText(text);
+//                var text = String.format("%.1f", amount);
+//                if (text.endsWith(".0")) {
+//                    text = text.substring(0, text.length() - 2);
+//                }
+//                particle.setText(text);
                 System.out.println("Attack hits!");
             } else {
                 System.out.println("Attack misses!");
@@ -100,22 +91,25 @@ public abstract class LivingEntityMixin extends Entity {
     }
 
     @Unique
-    public List<NbtCompound> getNbtFromAllEquippedSlots() {
-        List<NbtCompound> nbtList = new ArrayList<>();
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
-            ItemStack itemStack = this.getEquippedStack(slot);
-            if (!itemStack.isEmpty())
-                nbtList.add(ItemStackHelper.getNbtCompound(itemStack, ModDataComponents.PENOMIOR));
-        }
-
-        return nbtList;
+    private static boolean isAttackHits(StatsComponent attackerStats, StatsComponent targetStats) {
+        int attackerAccuracy = attackerStats.getAccuracy();
+        int targetEvasion = targetStats.getEvasion();
+        double hitrate = CombatUtils.calculateHitRate(attackerAccuracy, targetEvasion);
+//            System.out.println("Attacker Accuracy: " + attackerAccuracy);
+//            System.out.println("Target Evasion: " + targetEvasion);
+//            System.out.println("Hit chance: " + hitrate);
+        Random random = new Random();
+        return random.nextDouble() < hitrate * 0.01f;
     }
+
+    @Unique
+
 
     @Inject(method = "getEquipmentChanges", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;applyAttributeModifiers(Lnet/minecraft/entity/EquipmentSlot;Ljava/util/function/BiConsumer;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
     private void LivingEntityOnEquipmentChange(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> cir) {
         MutableInt evasion = new MutableInt();
         MutableInt accuracy = new MutableInt();
-        List<NbtCompound> equippedNbt = getNbtFromAllEquippedSlots();
+        List<NbtCompound> equippedNbt = RefineUtil.getNbtFromAllEquippedSlots((LivingEntity) (Object) this);
         for (NbtCompound nbt : equippedNbt) {
             evasion.add(nbt.getInt(PenomiorData.EVASION));
             accuracy.add(nbt.getInt(PenomiorData.ACCURACY));

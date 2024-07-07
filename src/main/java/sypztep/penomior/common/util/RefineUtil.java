@@ -1,8 +1,15 @@
 package sypztep.penomior.common.util;
 
+import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.component.type.NbtComponent;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
+import org.apache.commons.lang3.mutable.MutableBoolean;
 import sypztep.penomior.common.data.PenomiorData;
 import sypztep.penomior.common.data.PenomiorItemData;
 import sypztep.penomior.common.data.PenomiorItemDataSerializer;
@@ -10,12 +17,11 @@ import sypztep.penomior.common.init.ModDataComponents;
 import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.tyrannus.common.util.ItemStackHelper;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class RefineUtil {
     public static Map<Integer, String> romanRefineMap = new HashMap<>();
+    public static Map<Integer, SoundEvent> soundEventsMap = new HashMap<>();
     private static final double[] normalSuccessRates = {
             100.0, 90.0, 80.0, 70.0, 60.0, 50.0, 40.0, 30.0, 20.0, 10.0,
             9.0, 8.0, 7.0, 6.0, 5.0, // Levels 1-15
@@ -73,25 +79,21 @@ public class RefineUtil {
     }
 
     //------------excute-------------//
-    public static int refineValue(int currentLvl, int maxLvl, int startAccuracy, int endAccuracy) {
+    public static int refineValue(int currentLvl, int maxLvl, int startValue, int endValue) {
         if (currentLvl < 0 || currentLvl > maxLvl)
             throw new IllegalArgumentException("Input value out of range");
-        int outputRange = endAccuracy - startAccuracy;
+        int outputRange = endValue - startValue;
 
         double normalizedInput = (double) (currentLvl) / maxLvl;
         double curvedInput = Math.pow(normalizedInput, 1.725);
 
-        return (int) (startAccuracy + curvedInput * outputRange);
+        return (int) (startValue + curvedInput * outputRange);
     }
 
     public static boolean handleRefine(ItemStack slotOutput, int failStack) {
         double successRate = calculateSuccessRate(slotOutput, failStack);
         Random random = new Random();
         double randomValue = random.nextDouble();
-        // Debug
-        System.out.println("Calculated Success Rate: " + successRate);
-        System.out.println("Random Value: " + randomValue);
-
         return randomValue < successRate;
     }
 
@@ -106,13 +108,42 @@ public class RefineUtil {
 
         return successRate;
     }
-    public static void getCalculateSuccessRate(ItemStack slotOutput, int failStack) {
-        setSuccessRate(calculateSuccessRate(slotOutput,failStack));
+
+    public static List<NbtCompound> getNbtFromAllEquippedSlots(LivingEntity living) {
+        List<NbtCompound> nbtList = new ArrayList<>();
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            ItemStack itemStack = living.getEquippedStack(slot);
+            if (!itemStack.isEmpty() && !RefineUtil.isBroken(itemStack) && isItemInCorrectSlot(itemStack, slot)) {
+                nbtList.add(ItemStackHelper.getNbtCompound(itemStack, ModDataComponents.PENOMIOR));
+            }
+        }
+        return nbtList;
     }
 
+    private static boolean isItemInCorrectSlot(ItemStack stack, EquipmentSlot slot) {
+        for (AttributeModifierSlot attributeModifierSlot : AttributeModifierSlot.values()) {
+            MutableBoolean mutableBoolean = new MutableBoolean(false);
+            stack.applyAttributeModifier(attributeModifierSlot, (entityAttributeRegistryEntry, attributeModifier) -> {
+                if (attributeModifierSlot.matches(slot))
+                    mutableBoolean.setTrue();
+            });
+            if (mutableBoolean.isTrue()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void getCalculateSuccessRate(ItemStack slotOutput, int failStack) {
+        setSuccessRate(calculateSuccessRate(slotOutput, failStack));
+    }
 
     public static void successRefine(PlayerEntity player) {
         ModEntityComponents.STATS.get(player).setFailstack(0);
+    }
+
+    public static void failRefine(PlayerEntity player, int failstack) {
+        ModEntityComponents.STATS.get(player).setFailstack(failstack + 1);
     }
 
     //------------write-data-----------// from craft item
@@ -135,6 +166,10 @@ public class RefineUtil {
         }
     }
 
+    public static boolean isBroken(ItemStack stack) {
+        return (stack.get(ModDataComponents.PENOMIOR) != null && RefineUtil.getDurability(stack) <= 0);
+    }
+
     public static void initializeItemData(ItemStack stack, PenomiorItemData itemData) {
         if (stack.get(ModDataComponents.PENOMIOR) == null) {
             RefineUtil.setRefineLvl(stack, 0);
@@ -148,5 +183,25 @@ public class RefineUtil {
         romanRefineMap.put(18, "III");
         romanRefineMap.put(19, "IV");
         romanRefineMap.put(20, "V");
+
+        soundEventsMap.put(0, SoundEvents.ENTITY_ITEM_BREAK);
+        soundEventsMap.put(1, SoundEvents.ITEM_TRIDENT_HIT_GROUND);
+        soundEventsMap.put(2, SoundEvents.BLOCK_AMETHYST_BLOCK_RESONATE);
+    }
+
+    public enum RefineSound {
+        FAIL(0),
+        SUCCESS(1),
+        REPAIR(2);
+
+        private final int select;
+
+        RefineSound(int select) {
+            this.select = select;
+        }
+
+        public int select() {
+            return select;
+        }
     }
 }

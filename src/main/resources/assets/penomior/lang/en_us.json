@@ -2,7 +2,9 @@
   "penomior.gui.player_info.header":"Player Info",
   "penomior.gui.player_info.accuracy":"Accuracy",
   "penomior.gui.player_info.evasion":"Evasion",
+  "penomior.gui.player_info.tooltip.accuracy":"Accuracy points",
+  "penomior.gui.player_info.tooltip.evasion":"Evasion points",
   "item.penomior.refine_weapon_stone": "Refine Weapon stone",
-  "item.penomior.refine_armor_stone": "Refine Armor stone"
-
+  "item.penomior.refine_armor_stone": "Refine Armor stone",
+  "item.penomior.moonlight_crescent": "Moonlight Crescent"
 }

@@ -16,6 +16,7 @@ import sypztep.penomior.common.init.ModDataComponents;
 import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.penomior.common.init.ModItem;
 import sypztep.penomior.common.init.ModScreenHandler;
+import sypztep.penomior.common.payload.RefineSoundPayloadC2S;
 import sypztep.penomior.common.util.RefineUtil;
 
 public class RefineScreenHandler extends ScreenHandler {
@@ -28,6 +29,7 @@ public class RefineScreenHandler extends ScreenHandler {
     };
     private final ScreenHandlerContext context;
     private final PlayerEntity player;
+
     public PlayerEntity getPlayer() {
         return player;
     }
@@ -54,6 +56,11 @@ public class RefineScreenHandler extends ScreenHandler {
             public boolean canInsert(ItemStack stack) {
                 return false;
             }
+
+            @Override
+            public boolean isEnabled() {
+                return false;
+            }
         });
         int i;
         for (i = 0; i < 3; ++i)
@@ -75,10 +82,10 @@ public class RefineScreenHandler extends ScreenHandler {
     private void doRefineTask() {
         ItemStack slotOutput = this.getSlot(1).getStack();
 
-        boolean hasMaterial = this.getSlot(0).hasStack() && this.getSlot(1).hasStack();
+        boolean allSlotInsert = this.getSlot(0).hasStack() && this.getSlot(1).hasStack();
         boolean canRefine = false;
 
-        if (hasMaterial && matchesItemData(slotOutput) && RefineUtil.getRefineLvl(slotOutput) < 20) {
+        if (allSlotInsert && matchesItemData(slotOutput) && RefineUtil.getRefineLvl(slotOutput) < 20) {
             ItemStack material = this.getSlot(0).getStack();
             boolean isArmor = slotOutput.getItem() instanceof ArmorItem;
             boolean isRefined = slotOutput.get(ModDataComponents.PENOMIOR) != null;
@@ -92,6 +99,9 @@ public class RefineScreenHandler extends ScreenHandler {
                 canRefine = material.isOf(ModItem.REFINE_WEAPON_STONE);
             } else {
                 canRefine = material.isOf(ModItem.REFINE_ARMOR_STONE);
+            }
+            if (material.isOf(ModItem.MOONLIGHT_CRESCENT)) {
+                canRefine = true;
             }
         }
         int failStack = ModEntityComponents.STATS.get(this.player).getFailstack();
@@ -118,7 +128,7 @@ public class RefineScreenHandler extends ScreenHandler {
     }
 
     private boolean isRefineMaterial(ItemStack stack) {
-        return stack.isOf(ModItem.REFINE_WEAPON_STONE) || stack.isOf(ModItem.REFINE_ARMOR_STONE);
+        return stack.isOf(ModItem.REFINE_WEAPON_STONE) || stack.isOf(ModItem.REFINE_ARMOR_STONE) || stack.isOf(ModItem.MOONLIGHT_CRESCENT);
     }
 
     public void refine() {
@@ -126,29 +136,38 @@ public class RefineScreenHandler extends ScreenHandler {
         PenomiorItemData itemData = PenomiorItemData.getPenomiroItemData(slotOutput);
 
         RefineUtil.initializeItemData(slotOutput, itemData); // this one will excute when data is null
-
-        if (matchesItemData(slotOutput) && RefineUtil.getRefineLvl(slotOutput) < itemData.maxLvl() && RefineUtil.getDurability(slotOutput) > 0) {
-            int currentRefineLvl = RefineUtil.getRefineLvl(slotOutput);
-            int maxLvl = itemData.maxLvl();
-            int startAccuracy = itemData.startAccuracy();
-            int endAccuracy = itemData.endAccuracy();
-            int startEvasion = itemData.startEvasion();
-            int endEvasion = itemData.endEvasion();
-            int failStack = ModEntityComponents.STATS.get(this.player).getFailstack();
-
-            // Check if refinement is successful
+        //----------pre define-----------//
+        int currentRefineLvl = RefineUtil.getRefineLvl(slotOutput);
+        int maxLvl = itemData.maxLvl();
+        int startAccuracy = itemData.startAccuracy();
+        int endAccuracy = itemData.endAccuracy();
+        int startEvasion = itemData.startEvasion();
+        int endEvasion = itemData.endEvasion();
+        int durability = RefineUtil.getDurability(slotOutput);
+        int failStack = ModEntityComponents.STATS.get(this.player).getFailstack();
+        int repairPoint = itemData.repairpoint();
+        ItemStack material = this.getSlot(0).getStack();
+        if (matchesItemData(slotOutput) && RefineUtil.getRefineLvl(slotOutput) < itemData.maxLvl() && durability > 0 && !material.isOf(ModItem.MOONLIGHT_CRESCENT)) {
+            // Refinement process
             if (RefineUtil.handleRefine(slotOutput, failStack)) {
                 RefineUtil.setRefineLvl(slotOutput, currentRefineLvl + 1);
                 RefineUtil.setEvasion(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startEvasion, endEvasion);
                 RefineUtil.setAccuracy(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startAccuracy, endAccuracy);
                 RefineUtil.successRefine(this.player);
+                RefineSoundPayloadC2S.send(RefineUtil.RefineSound.SUCCESS.select());
             } else { // Fail to refine
                 RefineUtil.setRefineLvl(slotOutput, Math.max(currentRefineLvl - 1, 0));
                 RefineUtil.setEvasion(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startEvasion, endEvasion);
                 RefineUtil.setAccuracy(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startAccuracy, endAccuracy);
                 RefineUtil.setDurability(slotOutput, Math.max(RefineUtil.getDurability(slotOutput) - 10, 0));
-                ModEntityComponents.STATS.get(this.player).setFailstack(failStack + 1);
+                RefineUtil.failRefine(player, failStack);
+                RefineSoundPayloadC2S.send(RefineUtil.RefineSound.FAIL.select());
             }
+            this.decrementStack(0);
+            //Repair process
+        } else if (material.isOf(ModItem.MOONLIGHT_CRESCENT) && durability < 100) {
+            RefineUtil.setDurability(slotOutput, durability + repairPoint);
+            RefineSoundPayloadC2S.send(RefineUtil.RefineSound.REPAIR.select());
             this.decrementStack(0);
         }
     }
