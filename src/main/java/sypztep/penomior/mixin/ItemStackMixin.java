@@ -24,14 +24,14 @@ public abstract class ItemStackMixin implements ComponentHolder {
     private ItemStack stack = (ItemStack) (Object) this;
 
     @Inject(method = "applyAttributeModifiers", at = @At("HEAD"), cancellable = true)
-    public void cancleattribute(EquipmentSlot slot, BiConsumer<RegistryEntry<EntityAttribute>, EntityAttributeModifier> attributeModifierConsumer, CallbackInfo ci) {
+    public void cancleDamageAttribute(EquipmentSlot slot, BiConsumer<RegistryEntry<EntityAttribute>, EntityAttributeModifier> attributeModifierConsumer, CallbackInfo ci) {
         if (RefineUtil.isBroken(stack)) {
             ci.cancel();
         }
     }
 
     @ModifyVariable(method = "appendAttributeModifierTooltip", at = @At(value = "STORE"))
-    private double modifyDValue(double value, @Local(ordinal = 0, argsOnly = true) EntityAttributeModifier modifier, @Local(ordinal = 0, argsOnly = true) PlayerEntity player) {
+    private double resetAttributeValue(double value, @Local(ordinal = 0, argsOnly = true) EntityAttributeModifier modifier, @Local(ordinal = 0, argsOnly = true) PlayerEntity player) {
         if (RefineUtil.isBroken(stack) && modifier.idMatches(Item.BASE_ATTACK_DAMAGE_MODIFIER_ID))
             return player.getAttributeBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
         return value;
