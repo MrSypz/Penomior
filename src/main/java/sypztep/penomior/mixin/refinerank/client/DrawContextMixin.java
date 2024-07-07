@@ -1,4 +1,4 @@
-package sypztep.penomior.mixin.client;
+package sypztep.penomior.mixin.refinerank.client;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -7,7 +7,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -34,11 +33,11 @@ public abstract class DrawContextMixin {
 
     @Inject(at = @At("RETURN"), method = "drawItemInSlot(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V")
     public void drawItemInSlot(TextRenderer textRenderer, ItemStack itemStack, int x, int y, String countOverride, CallbackInfo ci) {
-        drawtextInSlow(textRenderer, itemStack, x, y, 1F); // For double scale
+        drawtextInSlot(textRenderer, itemStack, x, y, 1F); // For double scale
     }
 
     @Unique
-    public void drawtextInSlow(TextRenderer renderer, ItemStack stack, int i, int j, float scale) {
+    public void drawtextInSlot(TextRenderer renderer, ItemStack stack, int i, int j, float scale) {
         final ClientWorld world = this.client.world;
         if (world == null || stack.isEmpty()) return;
         DrawContext context = ((DrawContext) (Object) this);

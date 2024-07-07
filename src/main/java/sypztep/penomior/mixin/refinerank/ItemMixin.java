@@ -1,4 +1,4 @@
-package sypztep.penomior.mixin;
+package sypztep.penomior.mixin.refinerank;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;

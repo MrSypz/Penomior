@@ -1,4 +1,4 @@
-package sypztep.penomior.mixin.client;
+package sypztep.penomior.mixin.playerinfo.client;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
