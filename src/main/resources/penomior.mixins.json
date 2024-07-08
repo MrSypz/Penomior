@@ -4,7 +4,7 @@
   "package": "sypztep.penomior.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "ItemStackMixin",
+    "refinerank.ItemStackMixin",
     "LivingEntityMixin",
     "refinerank.ItemMixin",
     "vanilla.attacklowerIframe.LivingEntityMixin",
