@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import sypztep.penomior.common.data.PenomiorItemData;
 import sypztep.penomior.common.util.RefineUtil;
 
 
@@ -14,7 +15,7 @@ import sypztep.penomior.common.util.RefineUtil;
 public abstract class ItemMixin {
     @Inject(method = "onCraftByPlayer", at = @At("HEAD"))
     public void onCraft(ItemStack stack, World world, PlayerEntity player, CallbackInfo ci) {
-        if (!stack.isEmpty() && !player.getWorld().isClient()) {
+        if (!stack.isEmpty() && !player.getWorld().isClient() && PenomiorItemData.getPenomiroItemData(stack) == null) {
             RefineUtil.writeRefineData(stack,0);
         }
     }
