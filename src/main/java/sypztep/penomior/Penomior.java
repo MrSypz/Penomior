@@ -32,7 +32,6 @@ public class Penomior implements ModInitializer {
         ModPayload.init();
         ModItems.init();
         ModScreenHandler.init();
-        ModLootableModify.init();
         ModItemGroups.init();
         CommandRegistrationCallback.EVENT.register(new RefineCommand());
         CommandRegistrationCallback.EVENT.register(new RefineSetCommand());
