@@ -39,26 +39,21 @@ public class RefineScreenHandler extends ScreenHandler {
 
         this.context = context;
         this.player = playerInventory.player;
-        addSlot(new Slot(this.inventory, 0, 31, 34) {
+        addSlot(new Slot(this.inventory, 0, 31, 30) {
             @Override
             public boolean canInsert(ItemStack stack) {
                 return isRefineMaterial(stack);
             }
         });
-        addSlot(new Slot(this.inventory, 1, 125, 34) {
+        addSlot(new Slot(this.inventory, 1, 143, 30) {
             @Override
             public boolean canInsert(ItemStack stack) {
                 return matchesItemData(stack);
             }
         });
-        addSlot(new Slot(this.inventory, 2, 29, 53) {
+        addSlot(new Slot(this.inventory, 2, 11, 49) {
             @Override
             public boolean canInsert(ItemStack stack) {
-                return false;
-            }
-
-            @Override
-            public boolean isEnabled() {
                 return false;
             }
         });
@@ -118,12 +113,12 @@ public class RefineScreenHandler extends ScreenHandler {
 
     @Override
     public boolean canUse(PlayerEntity player) {
-        return this.context.get((world, pos) -> player.squaredDistanceTo((double) pos.getX() + 0.5, (double) pos.getY() + 0.5, (double) pos.getZ() + 0.5) <= 64.0, true);
+        return true;
     }
 
     public boolean matchesItemData(ItemStack stack) {
         String itemID = PenomiorItemData.getItemId(stack);
-        PenomiorItemData itemData = PenomiorItemDataSerializer.getConfigCache().get(itemID);
+        PenomiorItemData itemData = PenomiorItemData.getPenomiroItemData(itemID);
         return itemData != null && itemID.equals(itemData.itemID());
     }
 
@@ -156,9 +151,11 @@ public class RefineScreenHandler extends ScreenHandler {
                 RefineUtil.successRefine(this.player);
                 RefineSoundPayloadC2S.send(RefineUtil.RefineSound.SUCCESS.select());
             } else { // Fail to refine
-                RefineUtil.setRefineLvl(slotOutput, Math.max(currentRefineLvl - 1, 0));
-                RefineUtil.setEvasion(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startEvasion, endEvasion);
-                RefineUtil.setAccuracy(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startAccuracy, endAccuracy);
+                if (currentRefineLvl > 15) { // 16 - 20
+                    RefineUtil.setRefineLvl(slotOutput, Math.max(currentRefineLvl - 1, 0));
+                    RefineUtil.setEvasion(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startEvasion, endEvasion);
+                    RefineUtil.setAccuracy(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startAccuracy, endAccuracy);
+                }
                 RefineUtil.setDurability(slotOutput, Math.max(RefineUtil.getDurability(slotOutput) - 10, 0));
                 RefineUtil.failRefine(player, failStack);
                 RefineSoundPayloadC2S.send(RefineUtil.RefineSound.FAIL.select());
@@ -174,8 +171,10 @@ public class RefineScreenHandler extends ScreenHandler {
 
     private void decrementStack(int slot) {
         ItemStack itemStack = this.inventory.getStack(slot);
-        itemStack.decrement(1);
-        this.inventory.setStack(slot, itemStack);
+        if (!itemStack.isEmpty()) {
+            itemStack.decrement(1);
+            this.inventory.setStack(slot, itemStack);
+        }
     }
 
     @Override
