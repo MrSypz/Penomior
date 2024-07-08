@@ -1,4 +1,4 @@
-package sypztep.penomior.mixin;
+package sypztep.penomior.mixin.refinerank;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.component.ComponentHolder;
@@ -10,6 +10,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.ItemTags;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
@@ -34,6 +35,8 @@ public abstract class ItemStackMixin implements ComponentHolder {
     private double resetAttributeValue(double value, @Local(ordinal = 0, argsOnly = true) EntityAttributeModifier modifier, @Local(ordinal = 0, argsOnly = true) PlayerEntity player) {
         if (RefineUtil.isBroken(stack) && modifier.idMatches(Item.BASE_ATTACK_DAMAGE_MODIFIER_ID))
             return player.getAttributeBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+        else if (stack.isIn(ItemTags.ARMOR_ENCHANTABLE) && RefineUtil.isBroken(stack))
+            return 0;
         return value;
     }
 }
