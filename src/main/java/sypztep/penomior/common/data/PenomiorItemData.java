@@ -22,6 +22,9 @@ public record PenomiorItemData(
         String itemID = Registries.ITEM.getId(stack.getItem()).toString();
         return PenomiorItemDataSerializer.getConfigCache().get(itemID);
     }
+    public static PenomiorItemData getPenomiroItemData(String itemID) {
+        return PenomiorItemDataSerializer.getConfigCache().get(itemID);
+    }
     public static String getItemId(ItemStack stack) {
         return Registries.ITEM.getId(stack.getItem()).toString();
     }
