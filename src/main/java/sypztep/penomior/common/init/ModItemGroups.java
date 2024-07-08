@@ -9,6 +9,7 @@ public class ModItemGroups {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(content -> {
             content.addAfter(Items.DISC_FRAGMENT_5, ModItems.REFINE_ARMOR_STONE);
             content.addAfter(ModItems.REFINE_ARMOR_STONE, ModItems.REFINE_WEAPON_STONE);
+            content.addAfter(ModItems.REFINE_WEAPON_STONE, ModItems.MOONLIGHT_CRESCENT);
         });
     }
 }
