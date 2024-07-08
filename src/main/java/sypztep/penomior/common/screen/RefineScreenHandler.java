@@ -151,7 +151,7 @@ public class RefineScreenHandler extends ScreenHandler {
                 RefineUtil.successRefine(this.player);
                 RefineSoundPayloadC2S.send(RefineUtil.RefineSound.SUCCESS.select());
             } else { // Fail to refine
-                if (currentRefineLvl > 15) { // 16 - 20
+                if (currentRefineLvl > 16) { // 16 - 20
                     RefineUtil.setRefineLvl(slotOutput, Math.max(currentRefineLvl - 1, 0));
                     RefineUtil.setEvasion(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startEvasion, endEvasion);
                     RefineUtil.setAccuracy(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startAccuracy, endAccuracy);
