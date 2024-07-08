@@ -12,9 +12,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.screen.*;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import sypztep.penomior.Penomior;
+import sypztep.penomior.common.init.ModDataComponents;
 import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.penomior.common.init.ModItems;
 import sypztep.penomior.common.payload.RefinePayloadC2S;
@@ -88,11 +90,14 @@ public class RefineScreen
         String formattedSuccessRate = String.format("%.2f%%", successRate);
         ItemStack stack = handler.getSlot(1).getStack();
         boolean bl = handler.matchesItemData(stack);
+        boolean bl2 = stack.get(ModDataComponents.PENOMIOR) == null;
         if (bl) {
             context.getMatrices().push();
             context.getMatrices().scale(scale, scale, scale);
-            context.drawCenteredTextWithShadow(this.textRenderer, Text.of("Rate: " + formattedSuccessRate), x, y, 0xE0E0E0);
-            context.drawCenteredTextWithShadow(this.textRenderer, Text.of("Durability: " + RefineUtil.getDurability(stack)), 180, 78, 0xE0E0E0);
+            context.drawCenteredTextWithShadow(this.textRenderer, Text.of("Rate: " + formattedSuccessRate), x + 80, y - 35, 0xE0E0E0);
+            if (bl2)
+                context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("???").formatted(Formatting.OBFUSCATED), 201, 78, 0xE0E0E0);
+            else context.drawCenteredTextWithShadow(this.textRenderer, Text.of("Durability: " + RefineUtil.getDurability(stack)), 200, 78, 0xE0E0E0);
             context.getMatrices().pop();
         }
         context.drawCenteredTextWithShadow(this.textRenderer, Text.of("Failstack: " + ModEntityComponents.STATS.get(handler.getPlayer()).getFailstack()), 132, 10, 0xE0E0E0);
@@ -108,9 +113,9 @@ public class RefineScreen
         if (bl) {
             context.setShaderColor(1, 1, 1, 0.45F);
             if (stack.getItem() instanceof SwordItem)
-                this.weaponSlotIcon.render(this.handler,context,delta,(width - backgroundWidth) / 2 + 31, (height - backgroundHeight) / 2 + 34);
+                this.weaponSlotIcon.render(this.handler,context,delta,(width - backgroundWidth) / 2 + 31, (height - backgroundHeight) / 2 + 30);
             else
-                this.armorSlotIcon.render(this.handler,context,delta,(width - backgroundWidth) / 2 + 31, (height - backgroundHeight) / 2 + 34);
+                this.armorSlotIcon.render(this.handler,context,delta,(width - backgroundWidth) / 2 + 31, (height - backgroundHeight) / 2 + 30);
             context.setShaderColor(1, 1, 1, 1);
         }
     }
