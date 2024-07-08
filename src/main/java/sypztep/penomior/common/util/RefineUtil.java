@@ -12,7 +12,6 @@ import net.minecraft.sound.SoundEvents;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import sypztep.penomior.common.data.PenomiorData;
 import sypztep.penomior.common.data.PenomiorItemData;
-import sypztep.penomior.common.data.PenomiorItemDataSerializer;
 import sypztep.penomior.common.init.ModDataComponents;
 import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.tyrannus.common.util.ItemStackHelper;
@@ -23,7 +22,7 @@ public class RefineUtil {
     public static Map<Integer, String> romanRefineMap = new HashMap<>();
     public static Map<Integer, SoundEvent> soundEventsMap = new HashMap<>();
     private static final double[] normalSuccessRates = {
-            100.0, 90.0, 80.0, 70.0, 60.0, 50.0, 40.0, 30.0, 20.0, 10.0,
+            100.0, 95.0, 90.0, 80.0, 70.0, 60.0, 50.0, 40.0, 30.0, 20.0, 10.0,
             9.0, 8.0, 7.0, 6.0, 5.0, // Levels 1-15
             25.0, // PRI (16)
             17.5, // DUO (17)
@@ -149,7 +148,7 @@ public class RefineUtil {
     //------------write-data-----------// from craft item
     public static void writeRefineData(ItemStack stack, int refineLvl) {
         String itemID = PenomiorItemData.getItemId(stack);
-        PenomiorItemData itemData = PenomiorItemDataSerializer.getConfigCache().get(itemID);
+        PenomiorItemData itemData = PenomiorItemData.getPenomiroItemData(itemID);
         if (itemData != null) {
             if (itemID.equals(itemData.itemID())) {
                 int maxLvl = itemData.maxLvl();

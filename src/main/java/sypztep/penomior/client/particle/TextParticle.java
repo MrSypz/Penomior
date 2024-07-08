@@ -37,11 +37,6 @@ public class TextParticle extends Particle {
         Easing ELASTIC_OUT = new Easing.ElasticOut();
         if (this.age++ <= 10) {
             this.scale = MathHelper.lerp(ELASTIC_OUT.ease((float)this.age / 10.0F, 0.0F, 1.0F, 1.0F), 0.0F, this.maxSize);
-            float shakeIntensity = 0.05F;
-            float shakeOffset = (float)Math.sin(this.age * 0.5) * shakeIntensity;
-
-            this.x += shakeOffset;
-            this.z += shakeOffset;
         } else {
             this.scale = MathHelper.lerp(Easing.CUBIC_IN.ease(((float)this.age - 10.0F) / 10.0F, 0.0F, 1.0F, 1.0F), this.maxSize, 0.0F);
         }
