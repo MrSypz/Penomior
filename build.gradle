@@ -19,15 +19,15 @@ repositories {
         name = "TerraformersMC"
         url = "https://maven.terraformersmc.com/"
     }
-    //CCA | Satom
+    //CCA
     maven {
         name = 'Ladysnake Mods'
         url = 'https://maven.ladysnake.org/releases'
     }
     //SODIUM
     maven {
-        name "Modrinth"
-        url "https://api.modrinth.com/maven"
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
     }
 }
 
@@ -57,7 +57,9 @@ processResources {
     filesMatching("fabric.mod.json") {
         expand "version": project.version,
                 "minecraft_version": project.minecraft_version,
-                "loader_version": project.loader_version
+                "loader_version": project.loader_version,
+        "midnightlib_version": project.midnightlib_version
+
     }
 }
 

@@ -25,7 +25,7 @@ public abstract class LivingEntityMixin extends Entity {
     }
 
 
-    @Inject(at = @At("HEAD"), method = "applyDamage", cancellable = true)
+    @Inject(at = @At("TAIL"), method = "applyDamage", cancellable = true)
     private void onEntityHurt(final DamageSource source, final float amount, CallbackInfo ci) {
         ActionResult result = EntityHurtCallback.EVENT.invoker().hurtEntity((LivingEntity) (Object) this, source,
                 amount);

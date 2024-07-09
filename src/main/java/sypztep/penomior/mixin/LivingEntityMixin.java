@@ -44,7 +44,7 @@ public abstract class LivingEntityMixin extends Entity {
         super(type, world);
     }
 
-    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;wakeUp()V", shift = At.Shift.BY, by = 2), cancellable = true)
+    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;wakeUp()V", shift = At.Shift.BY, by = 2))
     private void handleMissing(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         Entity attacker = source.getAttacker();
         MinecraftClient client = MinecraftClient.getInstance();
@@ -84,7 +84,7 @@ public abstract class LivingEntityMixin extends Entity {
     }
 
     @Unique
-    private static boolean isAttackHits(StatsComponent attackerStats, StatsComponent targetStats) {
+    private boolean isAttackHits(StatsComponent attackerStats, StatsComponent targetStats) {
         int attackerAccuracy = attackerStats.getAccuracy();
         int targetEvasion = targetStats.getEvasion();
         double hitrate = CombatUtils.calculateHitRate(attackerAccuracy, targetEvasion);
