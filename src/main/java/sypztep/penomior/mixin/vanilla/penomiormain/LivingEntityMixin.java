@@ -1,5 +1,6 @@
 package sypztep.penomior.mixin.vanilla.penomiormain;
 
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -17,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import sypztep.penomior.ModConfig;
+import sypztep.penomior.client.payload.AddMissingParticlesPayload;
 import sypztep.penomior.common.component.StatsComponent;
 import sypztep.penomior.common.data.PenomiorData;
 import sypztep.penomior.common.init.ModEntityComponents;
@@ -53,6 +55,7 @@ public abstract class LivingEntityMixin extends Entity {
                 }
             }
             if (isMissing) {// missing attack
+                PlayerLookup.tracking(this).forEach(foundPlayer -> AddMissingParticlesPayload.send(foundPlayer, this.getId()));
                 cir.setReturnValue(false); // change from ci.cancle() to cancle
             }
         }

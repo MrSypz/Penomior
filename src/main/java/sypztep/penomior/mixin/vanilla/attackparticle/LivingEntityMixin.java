@@ -24,7 +24,6 @@ public class LivingEntityMixin {
         if (oldHealth != newHealth) {
             previousHealth = newHealth;
             ParticleUtil.spawnNumberParticle(entity, Math.abs(newHealth - oldHealth));
-//            ParticleUtil.spawnTextParticle(entity, Text.translatable("penomior.text.missing")); //this one can't active cuz world is server
         }
     }
 }
