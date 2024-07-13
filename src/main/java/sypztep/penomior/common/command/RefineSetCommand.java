@@ -16,11 +16,10 @@ import sypztep.penomior.common.util.RefineUtil;
 public class RefineSetCommand implements CommandRegistrationCallback {
     @Override
     public void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
-        dispatcher.register(CommandManager.literal("refine")
-                .requires(source -> source.hasPermissionLevel(2))  // Requires permission level 2
-                .then(CommandManager.literal("set")
+        dispatcher.register(CommandManager.literal("refineset")
+                .requires(source -> source.hasPermissionLevel(3))
                         .then(CommandManager.argument("refinelevel", IntegerArgumentType.integer())
-                                .executes(context -> execute(context, IntegerArgumentType.getInteger(context, "refinelevel"))))));
+                                .executes(context -> execute(context, IntegerArgumentType.getInteger(context, "refinelevel")))));
     }
 
     private static int execute(CommandContext<ServerCommandSource> context, int refinelevel) {

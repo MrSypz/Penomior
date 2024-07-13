@@ -31,8 +31,8 @@ public record AddMissingParticlesPayload(int entityId) implements CustomPayload 
     public static class Receiver implements ClientPlayNetworking.PlayPayloadHandler<AddMissingParticlesPayload> {
         @Override
         public void receive(AddMissingParticlesPayload payload, ClientPlayNetworking.Context context) {
-            System.out.println("Excute");
             Entity entity = context.player().getWorld().getEntityById(payload.entityId());
+            if (entity != null)
                 ParticleUtil.spawnTextParticle(entity, Text.translatable("penomior.text.missing")); //this one can't active cuz world is server
         }
     }

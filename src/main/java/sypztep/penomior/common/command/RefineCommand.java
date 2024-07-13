@@ -22,7 +22,8 @@ public class RefineCommand implements CommandRegistrationCallback {
     @Override
     public void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(literal("refine")
-                .executes(RefineCommand::execute));
+                .then(CommandManager.literal("open")
+                .executes(RefineCommand::execute)));
     }
 
     private static int execute(CommandContext<ServerCommandSource> context) {
