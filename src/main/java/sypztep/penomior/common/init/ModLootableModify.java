@@ -52,12 +52,22 @@ public class ModLootableModify {
     public static void registerLootTableModifiers() {
         LootTableEvents.MODIFY.register((id, tableBuilder, source) -> {
             if (source.isBuiltin() && isHostileMobLootTable(id)) {
-                LootPool.Builder lootPoolkillByPlayer = LootPool.builder()
+                LootPool.Builder refine_weapon = LootPool.builder()
                         .rolls(BinomialLootNumberProvider.create(1, 0.1f))
                         .conditionally(KilledByPlayerLootCondition.builder())
                         .with(ItemEntry.builder(ModItems.REFINE_WEAPON_STONE));
+                LootPool.Builder refine_armor = LootPool.builder()
+                        .rolls(BinomialLootNumberProvider.create(1, 0.1f))
+                        .conditionally(KilledByPlayerLootCondition.builder())
+                        .with(ItemEntry.builder(ModItems.REFINE_ARMOR_STONE));
+                LootPool.Builder moonlight = LootPool.builder()
+                        .rolls(BinomialLootNumberProvider.create(1, 0.01f))
+                        .conditionally(KilledByPlayerLootCondition.builder())
+                        .with(ItemEntry.builder(ModItems.MOONLIGHT_CRESCENT));
 
-                tableBuilder.pool(lootPoolkillByPlayer);
+                tableBuilder.pool(refine_weapon);
+                tableBuilder.pool(refine_armor);
+                tableBuilder.pool(moonlight);
             }
         });
     }

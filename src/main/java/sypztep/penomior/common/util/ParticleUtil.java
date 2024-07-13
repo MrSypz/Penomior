@@ -22,7 +22,7 @@ public class ParticleUtil {
     }
 
     public static void spawnTextParticle(LivingEntity target, Text text) {
-        spawnParticle(target, text.getString());
+            spawnParticle(target, text.getString());
     }
 
     public static void spawnNumberParticle(LivingEntity target, float amount) {
@@ -30,7 +30,8 @@ public class ParticleUtil {
         if (text.endsWith(".0")) {
             text = text.substring(0, text.length() - 2);
         }
-        spawnParticle(target, text);
+        if (target.getWorld().isClient)
+            spawnParticle(target, text);
     }
 }
 

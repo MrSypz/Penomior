@@ -4,7 +4,7 @@
   "package": "sypztep.penomior.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "LivingEntityMixin",
+    "vanilla.penomiormain.LivingEntityMixin",
     "refinerank.ItemMixin",
     "refinerank.ItemStackMixin",
     "vanilla.attacklowerIframe.LivingEntityMixin",
@@ -12,7 +12,8 @@
   ],
   "client": [
     "playerinfo.client.InventoryScreenMixin",
-    "refinerank.client.DrawContextMixin"
+    "refinerank.client.DrawContextMixin",
+    "vanilla.attackparticle.LivingEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

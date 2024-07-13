@@ -11,6 +11,7 @@
   "penomior.text.missing" : "Miss",
 
   "penomior.midnightconfig.title": "Penomior Mod Config",
+  "penomior.midnightconfig.iframeConfig": "IFrame Config",
   "penomior.midnightconfig.iFrameDuration": "IFrame Duration",
   "penomior.midnightconfig.iFrameDuration.tooltip": "How many ticks of i-frames does an entity get when damaged, from 10 (default) 0.5 sec, to 2^31-1 (nothing can take damage)",
   "penomior.midnightconfig.attackCancelThreshold": "Attack Cancel Threshold",
