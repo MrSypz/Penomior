@@ -1,7 +1,5 @@
-package sypztep.penomior.mixin;
+package sypztep.penomior.mixin.vanilla.penomiormain;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -9,16 +7,13 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import sypztep.penomior.ModConfig;
@@ -26,7 +21,6 @@ import sypztep.penomior.common.component.StatsComponent;
 import sypztep.penomior.common.data.PenomiorData;
 import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.penomior.common.util.CombatUtils;
-import sypztep.penomior.common.util.ParticleUtil;
 import sypztep.penomior.common.util.RefineUtil;
 
 import java.util.*;
@@ -35,8 +29,6 @@ import java.util.List;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
-    @Unique
-    private float previousHealth = 0.0F;
     @Shadow
     public abstract boolean damage(DamageSource source, float amount);
 
@@ -44,55 +36,26 @@ public abstract class LivingEntityMixin extends Entity {
         super(type, world);
     }
 
-    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;wakeUp()V", shift = At.Shift.BY, by = 2))
+    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;wakeUp()V", shift = At.Shift.BY, by = 2), cancellable = true)
     private void handleMissing(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         Entity attacker = source.getAttacker();
-        MinecraftClient client = MinecraftClient.getInstance();
-        ClientWorld world = client.world;
-        if (world == null || !world.isClient()) return;
-
         if (attacker instanceof LivingEntity livingAttacker) {
             StatsComponent targetStats = ModEntityComponents.STATS.getNullable(this); // who take damage
             StatsComponent attackerStats = ModEntityComponents.STATS.getNullable(livingAttacker); // who attack?
 
             if (targetStats == null || attackerStats == null) return;
 
-            boolean attackHits = isAttackHits(attackerStats, targetStats);
-
+            boolean isMissing = CombatUtils.isMissingHits(attackerStats, targetStats);
             Identifier identifier = EntityType.getId(livingAttacker.getType());
             for (String id : ModConfig.attackExcludedEntities) {
                 if (identifier != null && identifier.toString().contains(id)) {
                     return;
                 }
             }
-            if (!attackHits) {// missing attack
-                ParticleUtil.spawnTextParticle((LivingEntity) (Object) this, Text.translatable("penomior.text.missing"));
-                cir.cancel();
+            if (isMissing) {// missing attack
+                cir.setReturnValue(false); // change from ci.cancle() to cancle
             }
         }
-    }
-
-    @Inject(method = "tick()V", at = @At("TAIL"))
-    private void damagenumber(CallbackInfo info) {
-        var entity = (LivingEntity) (Object) this;
-        float oldHealth = previousHealth;
-        float newHealth = entity.getHealth();
-        if (oldHealth != newHealth) {
-            previousHealth = newHealth;
-            ParticleUtil.spawnNumberParticle(entity, Math.abs(newHealth - oldHealth));
-        }
-    }
-
-    @Unique
-    private boolean isAttackHits(StatsComponent attackerStats, StatsComponent targetStats) {
-        int attackerAccuracy = attackerStats.getAccuracy();
-        int targetEvasion = targetStats.getEvasion();
-        double hitrate = CombatUtils.calculateHitRate(attackerAccuracy, targetEvasion);
-//            System.out.println("Attacker Accuracy: " + attackerAccuracy);
-//            System.out.println("Target Evasion: " + targetEvasion);
-//            System.out.println("Hit chance: " + hitrate);
-        Random random = new Random();
-        return random.nextDouble() < hitrate * 0.01f;
     }
 
     @Inject(method = "getEquipmentChanges", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;applyAttributeModifiers(Lnet/minecraft/entity/EquipmentSlot;Ljava/util/function/BiConsumer;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
