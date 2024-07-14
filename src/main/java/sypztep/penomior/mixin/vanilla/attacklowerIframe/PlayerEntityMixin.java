@@ -9,9 +9,9 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import sypztep.penomior.common.api.EntityHurtCallback;
-import sypztep.penomior.common.api.PlayerAttackCallback;
-import sypztep.penomior.common.api.PlayerEntityAccessor;
+import sypztep.penomior.common.api.iframe.EntityHurtCallback;
+import sypztep.penomior.common.api.iframe.PlayerAttackCallback;
+import sypztep.penomior.common.api.iframe.PlayerEntityAccessor;
 
 @Mixin(PlayerEntity.class)
 public class PlayerEntityMixin implements PlayerEntityAccessor {

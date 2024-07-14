@@ -8,7 +8,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import sypztep.penomior.ModConfig;
-import sypztep.penomior.common.api.EntityHurtCallback;
+import sypztep.penomior.common.api.iframe.EntityHurtCallback;
 
 public class HurtDurationEvent implements EntityHurtCallback {
     @Override

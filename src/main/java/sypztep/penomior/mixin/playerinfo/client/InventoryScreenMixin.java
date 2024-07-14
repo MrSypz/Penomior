@@ -22,15 +22,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import sypztep.penomior.Penomior;
-import sypztep.penomior.common.init.ModEntityComponents;
+import sypztep.penomior.common.api.InfoScreenApi;
+import sypztep.penomior.common.api.PlayerInfoProviderRegistry;
 import sypztep.penomior.common.util.DrawContextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static sypztep.penomior.common.api.InfoScreenApi.*;
-import static sypztep.penomior.common.api.InfoScreenApi.getInformation;
-
 
 @Environment(EnvType.CLIENT)
 @Mixin(InventoryScreen.class)
@@ -60,9 +60,9 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
     private void drawPlayerInfo(DrawContext context, ClientPlayerEntity player, int mouseX, int mouseY) {
         clearInformation();
 
-        addInformation(Text.translatable(PLAYER_INFO_KEY + "header"));
-        addInformation("accuracy", ModEntityComponents.STATS.get(player).getAccuracy());
-        addInformation("evasion", ModEntityComponents.STATS.get(player).getEvasion());
+        InfoScreenApi.addInformation("header", Text.translatable(InfoScreenApi.PLAYER_INFO_KEY + "header"));
+
+        PlayerInfoProviderRegistry.invokeProviders(new InfoScreenApi(), player);
 
         if (!recipeBook.isOpen()) {
             int i = this.x - 128;
@@ -72,28 +72,26 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
             int yOffset = 10;
             int xOffset = 35;
 
-            List<MutableText> information = getInformation();
-            List<String> keys = getKeys();
+            Map<String, MutableText> informationMap = InfoScreenApi.getInformation();
 
-            for (int index = 0; index < information.size(); index++) {
-                MutableText text = information.get(index);
-                String key = keys.get(index);
+            for (Map.Entry<String, MutableText> entry : informationMap.entrySet()) {
+                String key = entry.getKey();
+                MutableText text = entry.getValue();
 
-                int offset = (index == 0) ? 24 : 15;
-                int xoffset2 = 10;
+                int offset = key.equals("header") ? 24 : 15;
 
                 DrawContextUtils.drawBoldText(context, textRenderer, text.getString(), i + xOffset, j + yOffset, 0xFFFFFF, 0);
 
-                if (index != 0 && isMouseOverText(mouseX, mouseY, i + xOffset, j + yOffset, textRenderer.getWidth(text), 10)) {
+                if (!key.equals("header") && isMouseOverText(mouseX, mouseY, i + xOffset, j + yOffset, textRenderer.getWidth(text), 10)) {
                     List<Text> tooltipText = new ArrayList<>();
-                    tooltipText.add(Text.translatable(PLAYER_INFO_KEY + "tooltip." + key));
+                    tooltipText.add(Text.translatable(InfoScreenApi.PLAYER_INFO_KEY + "tooltip." + key));
 
                     int x = mouseX - 5;
                     int y = mouseY + 2;
                     context.drawTooltip(textRenderer, tooltipText, x, y);
                 }
                 yOffset += offset;
-                xOffset = xoffset2;
+                xOffset = 10; // Reset xOffset for subsequent lines
             }
         }
     }

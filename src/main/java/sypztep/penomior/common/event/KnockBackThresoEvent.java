@@ -4,8 +4,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
-import sypztep.penomior.common.api.EntityKnockbackCallback;
-import sypztep.penomior.common.api.PlayerEntityAccessor;
+import sypztep.penomior.common.api.iframe.EntityKnockbackCallback;
+import sypztep.penomior.common.api.iframe.PlayerEntityAccessor;
 
 public class KnockBackThresoEvent implements EntityKnockbackCallback {
     @Override

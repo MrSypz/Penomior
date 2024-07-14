@@ -1,4 +1,4 @@
-package sypztep.penomior.common.api;
+package sypztep.penomior.common.api.iframe;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;

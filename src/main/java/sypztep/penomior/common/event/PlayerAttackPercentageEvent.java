@@ -4,8 +4,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import sypztep.penomior.ModConfig;
-import sypztep.penomior.common.api.PlayerAttackCallback;
-import sypztep.penomior.common.api.PlayerEntityAccessor;
+import sypztep.penomior.common.api.iframe.PlayerAttackCallback;
+import sypztep.penomior.common.api.iframe.PlayerEntityAccessor;
 
 public class PlayerAttackPercentageEvent implements PlayerAttackCallback {
     @Override

@@ -11,8 +11,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import sypztep.penomior.common.api.EntityHurtCallback;
-import sypztep.penomior.common.api.EntityKnockbackCallback;
+import sypztep.penomior.common.api.iframe.EntityHurtCallback;
+import sypztep.penomior.common.api.iframe.EntityKnockbackCallback;
 
 
 @Mixin(LivingEntity.class)

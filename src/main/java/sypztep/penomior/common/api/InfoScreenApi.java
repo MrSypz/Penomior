@@ -4,80 +4,49 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import sypztep.penomior.Penomior;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-/**
- * API for managing player information display.
- */
 public class InfoScreenApi {
     public static final String PLAYER_INFO_KEY = Penomior.MODID + ".gui.player_info.";
-    private static final List<MutableText> information = new ArrayList<>();
-    private static final List<String> keys = new ArrayList<>();
+    private static final Map<String, MutableText> information = new HashMap<>();
+    private static final Map<String, String> keys = new HashMap<>();
 
-    /**
-     * Adds a custom piece of information.
-     *
-     * @param info The information to add.
-     */
-    public static void addInformation(MutableText info) {
+    public static void addInformation(String key, MutableText info) {
         synchronized (information) {
-            information.add(info);
-            keys.add(info.getString());
+            information.put(key, info);
+            keys.put(key, info.getString());
         }
     }
 
-    /**
-     * Adds an integer value with a specific key.
-     *
-     * @param key   The key for the information.
-     * @param value The integer value to display.
-     */
     public static void addInformation(String key, int value) {
         synchronized (information) {
-            information.add(Text.translatable(PLAYER_INFO_KEY + key).append(String.format(": %d", value)));
-            keys.add(key);
+            MutableText text = Text.translatable(PLAYER_INFO_KEY + key).append(String.format(": %d", value));
+            information.put(key, text);
+            keys.put(key, key);
         }
     }
 
-    /**
-     * Adds a float value with a specific key.
-     *
-     * @param key   The key for the information.
-     * @param value The float value to display.
-     */
     public static void addInformation(String key, float value) {
         synchronized (information) {
-            information.add(Text.translatable(PLAYER_INFO_KEY + key).append(String.format(": %.2f%%", value)));
-            keys.add(key);
+            MutableText text = Text.translatable(PLAYER_INFO_KEY + key).append(String.format(": %.2f%%", value));
+            information.put(key, text);
+            keys.put(key, key);
         }
     }
 
-    /**
-     * Retrieves the current list of information.
-     *
-     * @return A copy of the current information list.
-     */
-    public static List<MutableText> getInformation() {
+    public static Map<String, MutableText> getInformation() {
         synchronized (information) {
-            return new ArrayList<>(information);
+            return new HashMap<>(information);
         }
     }
 
-    /**
-     * Retrieves the current list of keys.
-     *
-     * @return A copy of the current keys list.
-     */
-    public static List<String> getKeys() {
+    public static Map<String, String> getKeys() {
         synchronized (keys) {
-            return new ArrayList<>(keys);
+            return new HashMap<>(keys);
         }
     }
 
-    /**
-     * Clears all the stored information and keys.
-     */
     public static void clearInformation() {
         synchronized (information) {
             information.clear();
