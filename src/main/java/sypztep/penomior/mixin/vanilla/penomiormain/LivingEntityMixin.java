@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
@@ -56,6 +57,8 @@ public abstract class LivingEntityMixin extends Entity {
             }
             if (isMissing) {// missing attack
                 PlayerLookup.tracking(this).forEach(foundPlayer -> AddMissingParticlesPayload.send(foundPlayer, this.getId()));
+                if (livingAttacker instanceof PlayerEntity)
+                    PlayerLookup.tracking(livingAttacker).forEach(foundPlayer -> AddMissingParticlesPayload.send(foundPlayer, this.getId()));
                 cir.setReturnValue(false); // change from ci.cancle() to cancle
             }
         }
