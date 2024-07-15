@@ -25,7 +25,7 @@ public class PlayerEntityMixin implements PlayerEntityAccessor {
 		}
 	}
 
-	@Inject(at = @At("TAIL"), method = "attack", cancellable = true)
+	@Inject(at = @At("HEAD"), method = "attack", cancellable = true)
 	private void onPlayerAttack(final Entity target, CallbackInfo ci) {
 		ActionResult result = PlayerAttackCallback.EVENT.invoker().attackEntity((PlayerEntity)(Object)this, target);
 		if (result == ActionResult.FAIL) {

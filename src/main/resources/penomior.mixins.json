@@ -12,8 +12,7 @@
   ],
   "client": [
     "playerinfo.client.InventoryScreenMixin",
-    "refinerank.client.DrawContextMixin",
-    "vanilla.attackparticle.LivingEntityMixin"
+    "refinerank.client.DrawContextMixin"
   ],
   "injectors": {
     "defaultRequire": 1
