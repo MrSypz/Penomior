@@ -1,6 +1,7 @@
 package sypztep.penomior.common.init;
 
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import sypztep.penomior.client.payload.AddBackParticlesPayload;
 import sypztep.penomior.client.payload.AddMissingParticlesPayload;
 import sypztep.penomior.client.payload.AddRefineSoundPayloadS2C;
 import sypztep.penomior.client.payload.RefinePayloadS2C;
@@ -12,6 +13,7 @@ public class ModPayload {
         PayloadTypeRegistry.playS2C().register(RefinePayloadS2C.ID, RefinePayloadS2C.CODEC); // Server to Client
         PayloadTypeRegistry.playS2C().register(AddRefineSoundPayloadS2C.ID, AddRefineSoundPayloadS2C.CODEC); // Server to Client
         PayloadTypeRegistry.playS2C().register(AddMissingParticlesPayload.ID, AddMissingParticlesPayload.CODEC); // Server to Client
+        PayloadTypeRegistry.playS2C().register(AddBackParticlesPayload.ID, AddBackParticlesPayload.CODEC); // Server to Client
         initClient();
     }
     private static void initClient() {
