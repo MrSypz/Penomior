@@ -13,9 +13,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import sypztep.penomior.ModConfig;
 import sypztep.penomior.Penomior;
 import sypztep.penomior.client.payload.AddBackParticlesPayload;
-import sypztep.penomior.client.payload.AddMissingParticlesPayload;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
@@ -27,6 +27,9 @@ public abstract class LivingEntityMixin extends Entity {
 
 	@ModifyVariable(method = "modifyAppliedDamage", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/enchantment/EnchantmentHelper;getProtectionAmount(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/entity/damage/DamageSource;)F"), argsOnly = true)
 	private float backAttackModifyDamage(float amount, DamageSource source) {
+		if (!ModConfig.backattack) {
+			return amount;
+		}
 		LivingEntity target = (LivingEntity) (Object) this;
 		Entity attacker = source.getAttacker();
 		if (!source.isIn(DamageTypeTags.IS_PLAYER_ATTACK) || source.isIn(DamageTypeTags.IS_PROJECTILE)) { //not apply projectile it too op

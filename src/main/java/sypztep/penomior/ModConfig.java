@@ -23,6 +23,12 @@ public class ModConfig extends MidnightConfig {
     public static float knockbackCancelThreshold = 0.75f;
     @Entry
     public static int iFrameDuration = 10;
+    @Comment(centered = true)
+    public static Comment combatConfig;
+    @Entry
+    public static boolean backattack = true;
+
+
     static {
         MidnightConfig.init(Penomior.MODID, ModConfig.class);
     }
