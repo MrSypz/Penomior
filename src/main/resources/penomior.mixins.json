@@ -4,11 +4,11 @@
   "package": "sypztep.penomior.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "vanilla.penomiormain.LivingEntityMixin",
     "refinerank.ItemMixin",
     "refinerank.ItemStackMixin",
-    "vanilla.attacklowerIframe.LivingEntityMixin",
-    "vanilla.attacklowerIframe.PlayerEntityMixin"
+    "vanilla.attackIframe.LivingEntityMixin",
+    "vanilla.attackIframe.PlayerEntityMixin",
+    "vanilla.penomiormain.LivingEntityMixin"
   ],
   "client": [
     "playerinfo.client.InventoryScreenMixin",

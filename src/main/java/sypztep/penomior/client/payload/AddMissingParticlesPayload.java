@@ -9,9 +9,7 @@ import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import sypztep.penomior.ModConfig;
 import sypztep.penomior.common.util.ParticleUtil;
-import sypztep.penomior.common.util.RefineUtil;
 
 public record AddMissingParticlesPayload(int entityId) implements CustomPayload {
     public static final Id<AddMissingParticlesPayload> ID = CustomPayload.id("add_missing");

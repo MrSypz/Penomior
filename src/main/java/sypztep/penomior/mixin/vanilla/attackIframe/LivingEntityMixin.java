@@ -1,4 +1,4 @@
-package sypztep.penomior.mixin.vanilla.attacklowerIframe;
+package sypztep.penomior.mixin.vanilla.attackIframe;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;

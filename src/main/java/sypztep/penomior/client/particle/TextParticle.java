@@ -18,7 +18,7 @@ import java.awt.*;
 public class TextParticle extends Particle {
     private String text;
     private float scale;
-    private final float maxSize;
+    private float maxSize;
 
     public TextParticle(ClientWorld world, double x, double y, double z) {
         super(world, x, y, z);
@@ -30,6 +30,21 @@ public class TextParticle extends Particle {
     public Particle scale(float scale) {
         this.scale *= scale;
         return super.scale(scale);
+    }
+
+    public void setMaxSize(float maxSize) {
+        this.maxSize = maxSize;
+    }
+
+    @Override
+    public void setColor(float red, float green, float blue) {
+        super.setColor(red, green, blue);
+    }
+    public void setColor(int red, int green, int blue) {
+        float redFloat = red / 255.0f;
+        float greenFloat = green / 255.0f;
+        float blueFloat = blue / 255.0f;
+        super.setColor(redFloat, greenFloat, blueFloat);
     }
 
     @Override

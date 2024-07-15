@@ -19,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import sypztep.penomior.ModConfig;
+import sypztep.penomior.Penomior;
 import sypztep.penomior.client.payload.AddMissingParticlesPayload;
 import sypztep.penomior.common.component.StatsComponent;
 import sypztep.penomior.common.data.PenomiorData;
@@ -41,24 +42,27 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;wakeUp()V", shift = At.Shift.BY, by = 2), cancellable = true)
     private void handleMissing(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity target = (LivingEntity) (Object) this;
         Entity attacker = source.getAttacker();
         if (attacker instanceof LivingEntity livingAttacker) {
-            StatsComponent targetStats = ModEntityComponents.STATS.getNullable(this); // who take damage
+            StatsComponent targetStats = ModEntityComponents.STATS.getNullable(target); // who take damage
             StatsComponent attackerStats = ModEntityComponents.STATS.getNullable(livingAttacker); // who attack?
 
             if (targetStats == null || attackerStats == null) return;
 
             boolean isMissing = CombatUtils.isMissingHits(attackerStats, targetStats);
             Identifier identifier = EntityType.getId(livingAttacker.getType());
-            for (String id : ModConfig.attackExcludedEntities) {
+            for (String id : ModConfig.dmgReceiveExcludedEntities) {
                 if (identifier != null && identifier.toString().contains(id)) {
                     return;
                 }
             }
             if (isMissing) {// missing attack
-                PlayerLookup.tracking(this).forEach(foundPlayer -> AddMissingParticlesPayload.send(foundPlayer, this.getId()));
-                if (livingAttacker instanceof PlayerEntity)
-                    PlayerLookup.tracking(livingAttacker).forEach(foundPlayer -> AddMissingParticlesPayload.send(foundPlayer, this.getId()));
+                if (livingAttacker.squaredDistanceTo(target) < 2500) {
+                    PlayerLookup.tracking(this).forEach(foundPlayer -> AddMissingParticlesPayload.send(foundPlayer, this.getId()));
+                    if (livingAttacker instanceof PlayerEntity)
+                        PlayerLookup.tracking(livingAttacker).forEach(foundPlayer -> AddMissingParticlesPayload.send(foundPlayer, this.getId()));
+                }
                 cir.setReturnValue(false); // change from ci.cancle() to cancle
             }
         }
