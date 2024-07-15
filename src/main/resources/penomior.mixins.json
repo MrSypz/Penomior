@@ -9,7 +9,7 @@
     "vanilla.backattack.LivingEntityMixin",
     "vanilla.attackIframe.LivingEntityMixin",
     "vanilla.attackIframe.PlayerEntityMixin",
-    "vanilla.penomiormain.LivingEntityMixin"
+    "vanilla.evasionaccuracy.LivingEntityMixin"
   ],
   "client": [
     "playerinfo.client.InventoryScreenMixin",

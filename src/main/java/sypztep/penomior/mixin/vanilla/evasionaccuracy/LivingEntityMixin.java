@@ -1,4 +1,4 @@
-package sypztep.penomior.mixin.vanilla.penomiormain;
+package sypztep.penomior.mixin.vanilla.evasionaccuracy;
 
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.Entity;
