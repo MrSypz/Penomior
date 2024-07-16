@@ -4,12 +4,10 @@ import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.minecraft.entity.EntityType;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
-import net.minecraft.loot.LootTables;
 import net.minecraft.loot.condition.KilledByPlayerLootCondition;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.provider.number.BinomialLootNumberProvider;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.Identifier;
 
 import java.util.Set;
 
@@ -53,15 +51,15 @@ public class ModLootableModify {
         LootTableEvents.MODIFY.register((id, tableBuilder, source) -> {
             if (source.isBuiltin() && isHostileMobLootTable(id)) {
                 LootPool.Builder refine_weapon = LootPool.builder()
-                        .rolls(BinomialLootNumberProvider.create(1, 0.1f))
+                        .rolls(BinomialLootNumberProvider.create(1, 0.01f))
                         .conditionally(KilledByPlayerLootCondition.builder())
                         .with(ItemEntry.builder(ModItems.REFINE_WEAPON_STONE));
                 LootPool.Builder refine_armor = LootPool.builder()
-                        .rolls(BinomialLootNumberProvider.create(1, 0.1f))
+                        .rolls(BinomialLootNumberProvider.create(1, 0.01f))
                         .conditionally(KilledByPlayerLootCondition.builder())
                         .with(ItemEntry.builder(ModItems.REFINE_ARMOR_STONE));
                 LootPool.Builder moonlight = LootPool.builder()
-                        .rolls(BinomialLootNumberProvider.create(1, 0.01f))
+                        .rolls(BinomialLootNumberProvider.create(1, 0.001f))
                         .conditionally(KilledByPlayerLootCondition.builder())
                         .with(ItemEntry.builder(ModItems.MOONLIGHT_CRESCENT));
 
