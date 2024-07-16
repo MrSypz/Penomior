@@ -11,7 +11,6 @@ import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
 import sypztep.penomior.client.payload.RefinePayloadS2C;
 import sypztep.penomior.common.data.PenomiorItemData;
-import sypztep.penomior.common.data.PenomiorItemDataSerializer;
 import sypztep.penomior.common.init.ModDataComponents;
 import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.penomior.common.init.ModItems;
