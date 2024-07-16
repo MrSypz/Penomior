@@ -9,7 +9,6 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,7 +17,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-import sypztep.penomior.ModConfig;
 import sypztep.penomior.client.payload.AddMissingParticlesPayload;
 import sypztep.penomior.common.component.StatsComponent;
 import sypztep.penomior.common.data.PenomiorData;
@@ -50,12 +48,7 @@ public abstract class LivingEntityMixin extends Entity {
             if (targetStats == null || attackerStats == null) return;
 
             boolean isMissing = CombatUtils.isMissingHits(attackerStats, targetStats);
-            Identifier identifier = EntityType.getId(livingAttacker.getType());
-            for (String id : ModConfig.dmgReceiveExcludedEntities) {
-                if (identifier != null && identifier.toString().contains(id)) {
-                    return;
-                }
-            }
+
             if (isMissing) {// missing attack
                 if (livingAttacker.squaredDistanceTo(target) < 2500) {
                     PlayerLookup.tracking(this).forEach(foundPlayer -> AddMissingParticlesPayload.send(foundPlayer, this.getId()));
