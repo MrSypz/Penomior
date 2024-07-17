@@ -25,10 +25,13 @@ import sypztep.penomior.common.payload.RefineSoundPayloadC2S;
 public class Penomior implements ModInitializer {
     public static final String MODID = "penomior";
     public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
-    public static Identifier id (String path) {
+
+    public static Identifier id(String path) {
         return Identifier.of(MODID, path);
     }
+
     public static boolean isCritalLoaded = false;
+
     @Override
     public void onInitialize() {
         ModDataComponents.init();
