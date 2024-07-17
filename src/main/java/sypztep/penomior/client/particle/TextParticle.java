@@ -25,6 +25,7 @@ public class TextParticle extends Particle {
         this.maxAge = 20;
         this.scale = 0.0F;
         this.maxSize = - 0.045F;
+        this.gravityStrength = -0.125f;
     }
 
     public Particle scale(float scale) {
@@ -58,6 +59,7 @@ public class TextParticle extends Particle {
         if (this.age > this.maxAge && this.scale >= 0) {
             this.markDead();
         }
+        super.tick();
     }
 
     public void setText(@NotNull String text) {
