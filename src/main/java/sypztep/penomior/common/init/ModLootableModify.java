@@ -4,14 +4,41 @@ import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.minecraft.entity.EntityType;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
+import net.minecraft.loot.LootTables;
 import net.minecraft.loot.condition.KilledByPlayerLootCondition;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.provider.number.BinomialLootNumberProvider;
+import net.minecraft.loot.provider.number.UniformLootNumberProvider;
 import net.minecraft.registry.RegistryKey;
 
 import java.util.Set;
 
 public class ModLootableModify {
+    public static void init() {
+        LootTableEvents.MODIFY.register((id, tableBuilder, source) -> {
+            if (source.isBuiltin()) {
+                LootPool.Builder lootPool = LootPool.builder()
+                        .rolls(UniformLootNumberProvider.create(1,10));
+                if (LootTables.TRIAL_CHAMBERS_REWARD_OMINOUS_RARE_CHEST.equals(id)) {
+                    lootPool.with(ItemEntry.builder(ModItems.MOONLIGHT_CRESCENT));
+                    tableBuilder.pool(lootPool);
+                }
+            }
+            if (source.isBuiltin() && isHostileMobLootTable(id)) {
+                LootPool.Builder refine_weapon = LootPool.builder()
+                        .rolls(BinomialLootNumberProvider.create(1, 0.01f))
+                        .conditionally(KilledByPlayerLootCondition.builder())
+                        .with(ItemEntry.builder(ModItems.REFINE_WEAPON_STONE));
+                LootPool.Builder refine_armor = LootPool.builder()
+                        .rolls(BinomialLootNumberProvider.create(1, 0.01f))
+                        .conditionally(KilledByPlayerLootCondition.builder())
+                        .with(ItemEntry.builder(ModItems.REFINE_ARMOR_STONE));
+
+                tableBuilder.pool(refine_weapon);
+                tableBuilder.pool(refine_armor);
+            }
+        });
+    }
     private static final Set<EntityType<?>> HOSTILE_MOBS = Set.of(
             EntityType.ZOMBIE,
             EntityType.SKELETON,
@@ -46,29 +73,6 @@ public class ModLootableModify {
             EntityType.WITHER,
             EntityType.ENDER_DRAGON
     );
-
-    public static void registerLootTableModifiers() {
-        LootTableEvents.MODIFY.register((id, tableBuilder, source) -> {
-            if (source.isBuiltin() && isHostileMobLootTable(id)) {
-                LootPool.Builder refine_weapon = LootPool.builder()
-                        .rolls(BinomialLootNumberProvider.create(1, 0.01f))
-                        .conditionally(KilledByPlayerLootCondition.builder())
-                        .with(ItemEntry.builder(ModItems.REFINE_WEAPON_STONE));
-                LootPool.Builder refine_armor = LootPool.builder()
-                        .rolls(BinomialLootNumberProvider.create(1, 0.01f))
-                        .conditionally(KilledByPlayerLootCondition.builder())
-                        .with(ItemEntry.builder(ModItems.REFINE_ARMOR_STONE));
-                LootPool.Builder moonlight = LootPool.builder()
-                        .rolls(BinomialLootNumberProvider.create(1, 0.001f))
-                        .conditionally(KilledByPlayerLootCondition.builder())
-                        .with(ItemEntry.builder(ModItems.MOONLIGHT_CRESCENT));
-
-                tableBuilder.pool(refine_weapon);
-                tableBuilder.pool(refine_armor);
-                tableBuilder.pool(moonlight);
-            }
-        });
-    }
 
     private static boolean isHostileMobLootTable(RegistryKey<LootTable> id) {
         for (EntityType<?> entityType : HOSTILE_MOBS) {
