@@ -36,7 +36,6 @@ public abstract class LivingEntityMixin extends Entity {
 			return amount;
 		}
 		if (attacker instanceof LivingEntity livingAttacker && source != null) {
-			Penomior.LOGGER.info(String.valueOf(Math.abs(MathHelper.subtractAngles(getHeadYaw(), attacker.getHeadYaw()))));
 			if (Math.abs(MathHelper.subtractAngles(getHeadYaw(), source.getSource().getHeadYaw())) <= 75) {
 				if (livingAttacker.squaredDistanceTo(target) < 2500) {
 					PlayerLookup.tracking(this).forEach(foundPlayer -> AddBackParticlesPayload.send(foundPlayer, this.getId()));
