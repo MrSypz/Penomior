@@ -57,6 +57,6 @@ public class Penomior implements ModInitializer {
         PlayerInfoProviderRegistry.registerProvider((api, player) -> {
             InfoScreenApi.addInformation("accuracy", ModEntityComponents.STATS.get(player).getAccuracy());
             InfoScreenApi.addInformation("evasion", ModEntityComponents.STATS.get(player).getEvasion());
-        });
+        }, -1); // High priority
     }
 }
