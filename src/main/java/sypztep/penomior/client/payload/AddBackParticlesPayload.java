@@ -34,7 +34,7 @@ public record AddBackParticlesPayload(int entityId) implements CustomPayload {
         public void receive(AddBackParticlesPayload payload, ClientPlayNetworking.Context context) {
             Entity entity = context.player().getWorld().getEntityById(payload.entityId());
             if (entity != null)
-                ParticleUtil.spawnTextParticle(entity, Text.translatable("penomior.text.back"),new Color(1f,0,0),-0.045f); //this one can't active cuz world is server
+                ParticleUtil.spawnTextParticle(entity, Text.translatable("penomior.text.back"),new Color(1f,1f,1f),-0.045f); //this one can't active cuz world is server
         }
     }
 }
