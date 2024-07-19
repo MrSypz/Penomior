@@ -1,4 +1,4 @@
-package sypztep.penomior.common.api;
+package sypztep.penomior.common.api.infoscreen;
 
 import net.minecraft.client.network.ClientPlayerEntity;
 
