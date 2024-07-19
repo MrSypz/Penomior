@@ -22,15 +22,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import sypztep.penomior.Penomior;
-import sypztep.penomior.common.api.InfoScreenApi;
-import sypztep.penomior.common.api.PlayerInfoProviderRegistry;
+import sypztep.penomior.common.api.infoscreen.InfoScreenApi;
+import sypztep.penomior.common.api.infoscreen.PlayerInfoProviderRegistry;
 import sypztep.penomior.common.util.DrawContextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static sypztep.penomior.common.api.InfoScreenApi.*;
+import static sypztep.penomior.common.api.infoscreen.InfoScreenApi.*;
 
 @Environment(EnvType.CLIENT)
 @Mixin(InventoryScreen.class)
