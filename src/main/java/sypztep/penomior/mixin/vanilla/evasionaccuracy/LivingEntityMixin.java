@@ -13,11 +13,13 @@ import net.minecraft.world.World;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import sypztep.penomior.client.payload.AddMissingParticlesPayload;
+import sypztep.penomior.common.util.interfaces.MissingAccessor;
 import sypztep.penomior.common.component.StatsComponent;
 import sypztep.penomior.common.data.PenomiorData;
 import sypztep.penomior.common.init.ModEntityComponents;
@@ -29,7 +31,9 @@ import java.util.List;
 
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin extends Entity {
+public abstract class LivingEntityMixin extends Entity implements MissingAccessor {
+    @Unique
+    boolean isMissing;
     @Shadow
     public abstract boolean damage(DamageSource source, float amount);
 
@@ -47,7 +51,7 @@ public abstract class LivingEntityMixin extends Entity {
 
             if (targetStats == null || attackerStats == null) return;
 
-            boolean isMissing = CombatUtils.isMissingHits(attackerStats, targetStats);
+            isMissing = CombatUtils.isMissingHits(attackerStats, targetStats);
 
             if (isMissing) {// missing attack
                 if (livingAttacker.squaredDistanceTo(target) < 2500) {
@@ -71,5 +75,15 @@ public abstract class LivingEntityMixin extends Entity {
         }
         ModEntityComponents.STATS.get(this).setEvasion(evasion.intValue());
         ModEntityComponents.STATS.get(this).setAccuracy(accuracy.intValue());
+    }
+
+    @Override
+    public boolean penomior$isMissing() {
+        return isMissing;
+    }
+
+    @Override
+    public void penomior$setMissing(boolean missing) {
+        isMissing = missing;
     }
 }
