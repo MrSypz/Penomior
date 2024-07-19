@@ -117,7 +117,7 @@ public class RefineScreenHandler extends ScreenHandler {
 
     public boolean matchesItemData(ItemStack stack) {
         String itemID = PenomiorItemData.getItemId(stack);
-        PenomiorItemData itemData = PenomiorItemData.getPenomiroItemData(itemID);
+        PenomiorItemData itemData = PenomiorItemData.getPenomiorItemData(itemID);
         return itemData != null && itemID.equals(itemData.itemID());
     }
 
@@ -127,7 +127,7 @@ public class RefineScreenHandler extends ScreenHandler {
 
     public void refine() {
         ItemStack slotOutput = this.getSlot(1).getStack();
-        PenomiorItemData itemData = PenomiorItemData.getPenomiroItemData(slotOutput);
+        PenomiorItemData itemData = PenomiorItemData.getPenomiorItemData(slotOutput);
 
         RefineUtil.initializeItemData(slotOutput, itemData); // this one will excute when data is null
         //----------pre define-----------//

@@ -18,11 +18,11 @@ public record PenomiorItemData(
         int repairpoint
 )
 {
-    public static PenomiorItemData getPenomiroItemData(ItemStack stack) {
+    public static PenomiorItemData getPenomiorItemData(ItemStack stack) {
         String itemID = Registries.ITEM.getId(stack.getItem()).toString();
         return PenomiorItemDataSerializer.getConfigCache().get(itemID);
     }
-    public static PenomiorItemData getPenomiroItemData(String itemID) {
+    public static PenomiorItemData getPenomiorItemData(String itemID) {
         return PenomiorItemDataSerializer.getConfigCache().get(itemID);
     }
     public static String getItemId(ItemStack stack) {

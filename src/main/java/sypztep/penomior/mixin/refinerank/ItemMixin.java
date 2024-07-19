@@ -15,7 +15,7 @@ import sypztep.penomior.common.util.RefineUtil;
 public abstract class ItemMixin {
     @Inject(method = "onCraftByPlayer", at = @At("HEAD"))
     public void onCraft(ItemStack stack, World world, PlayerEntity player, CallbackInfo ci) {
-        if (!stack.isEmpty() && !player.getWorld().isClient() && PenomiorItemData.getPenomiroItemData(stack) == null) {
+        if (!stack.isEmpty() && !player.getWorld().isClient() && PenomiorItemData.getPenomiorItemData(stack) == null) {
             RefineUtil.writeRefineData(stack,0);
         }
     }

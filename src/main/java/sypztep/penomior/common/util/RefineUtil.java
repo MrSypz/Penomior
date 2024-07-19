@@ -148,7 +148,7 @@ public class RefineUtil {
     //------------write-data-----------// from craft item
     public static void writeRefineData(ItemStack stack, int refineLvl) {
         String itemID = PenomiorItemData.getItemId(stack);
-        PenomiorItemData itemData = PenomiorItemData.getPenomiroItemData(itemID);
+        PenomiorItemData itemData = PenomiorItemData.getPenomiorItemData(itemID);
         if (itemData != null) {
             if (itemID.equals(itemData.itemID())) {
                 int maxLvl = itemData.maxLvl();

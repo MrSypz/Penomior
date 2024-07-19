@@ -27,7 +27,7 @@ public class RefineSetCommand implements CommandRegistrationCallback {
 
         if (player != null) {
             ItemStack slotOutput = player.getMainHandStack();
-            PenomiorItemData itemData = PenomiorItemData.getPenomiroItemData(slotOutput);
+            PenomiorItemData itemData = PenomiorItemData.getPenomiorItemData(slotOutput);
 
             RefineUtil.initializeItemData(slotOutput, itemData); // Ensure item data is initialized
 
