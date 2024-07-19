@@ -10,7 +10,8 @@
     "vanilla.attackIframe.PlayerEntityMixin",
     "vanilla.backattack.LivingEntityMixin",
     "vanilla.evasionaccuracy.LivingEntityMixin",
-    "vanilla.projectileclipthrough.PersistentProjectileEntityMixin"
+    "vanilla.projectileclipthrough.PersistentProjectileEntityMixin",
+    "vanilla.projectileclipthrough.TridentEntityMixin"
   ],
   "client": [
     "playerinfo.client.InventoryScreenMixin",
