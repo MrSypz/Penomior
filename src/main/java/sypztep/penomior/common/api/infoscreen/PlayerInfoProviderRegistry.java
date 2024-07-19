@@ -1,12 +1,14 @@
 package sypztep.penomior.common.api.infoscreen;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.network.ClientPlayerEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
+@Environment(EnvType.CLIENT)
 public class PlayerInfoProviderRegistry {
     private static final Map<Integer, List<PlayerInfoProvider>> providers = new TreeMap<>();
 
