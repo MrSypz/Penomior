@@ -23,16 +23,10 @@ public class ParticleUtil {
         particle.setMaxSize(maxSize);
         client.particleManager.addParticle(particle);
     }
-    /*
-    Spawn particle should be done in client side
-     */
     public static void spawnTextParticle(Entity target, Text text, Color color, float maxSize,float yPos) {
         if (target.getWorld().isClient())
             spawnParticle(target, text.getString(), color, maxSize,yPos);
     }
-    /*
-    Spawn particle should be done in client side
-     */
     public static void spawnTextParticle(Entity target, Text text, Color color, float maxSize) {
         if (target.getWorld().isClient())
             spawnParticle(target, text.getString(), color, maxSize,0);
