@@ -1,6 +1,5 @@
 package sypztep.penomior.mixin.vanilla.projectileclipthrough;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
@@ -25,11 +24,10 @@ public abstract class PersistentProjectileEntityMixin extends ProjectileEntity {
 
     @Inject(method = "onEntityHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/PersistentProjectileEntity;deflect(Lnet/minecraft/entity/ProjectileDeflection;Lnet/minecraft/entity/Entity;Lnet/minecraft/entity/Entity;Z)Z"), cancellable = true)
     private void onEntityHit(EntityHitResult entityHitResult, CallbackInfo ci) {
-        Entity entity = entityHitResult.getEntity();
-        if (entity instanceof MissingAccessor accessor) {
-            if (ModConfig.missingArrowPassthough && accessor.penomior$isMissing()) {
-                ci.cancel();
-            }
+        if (ModConfig.missingArrowPassthough &&
+                entityHitResult.getEntity() instanceof MissingAccessor accessor &&
+                accessor.penomior$isMissing()) {
+            ci.cancel();
         }
     }
 }

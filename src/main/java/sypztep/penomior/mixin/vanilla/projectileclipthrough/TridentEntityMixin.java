@@ -1,6 +1,5 @@
 package sypztep.penomior.mixin.vanilla.projectileclipthrough;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
@@ -21,11 +20,10 @@ public abstract class TridentEntityMixin extends PersistentProjectileEntityMixin
 
     @Inject(method = "onEntityHit",at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/TridentEntity;setVelocity(Lnet/minecraft/util/math/Vec3d;)V",shift = At.Shift.BEFORE), cancellable = true)
     protected void onEntityHit(EntityHitResult entityHitResult, CallbackInfo ci) {
-        Entity entity = entityHitResult.getEntity();
-        if (entity instanceof MissingAccessor accessor) {
-            if (ModConfig.missingArrowPassthough && accessor.penomior$isMissing()) {
-                ci.cancel();
-            }
+        if (ModConfig.missingArrowPassthough &&
+                entityHitResult.getEntity() instanceof MissingAccessor accessor &&
+                accessor.penomior$isMissing()) {
+            ci.cancel();
         }
     }
 }
