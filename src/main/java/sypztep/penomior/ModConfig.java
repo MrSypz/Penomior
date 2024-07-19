@@ -27,6 +27,9 @@ public class ModConfig extends MidnightConfig {
     public static Comment combatConfig;
     @Entry
     public static boolean backattack = true;
+    @Comment(centered = true)
+    public static Comment featureConfig;
+    public static boolean missingArrowPassthough = true;
 
 
     static {
