@@ -6,9 +6,9 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.spongepowered.asm.mixin.Mixin;
@@ -34,6 +34,9 @@ import java.util.List;
 public abstract class LivingEntityMixin extends Entity implements MissingAccessor {
     @Unique
     boolean isMissing;
+    @Unique
+    LivingEntity target = (LivingEntity) (Object) this;
+
     @Shadow
     public abstract boolean damage(DamageSource source, float amount);
 
@@ -43,7 +46,7 @@ public abstract class LivingEntityMixin extends Entity implements MissingAccesso
 
     @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;isSleeping()Z", ordinal = 0), cancellable = true)
     private void handleMissing(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        LivingEntity target = (LivingEntity) (Object) this;
+
         Entity attacker = source.getAttacker();
         if (attacker instanceof LivingEntity livingAttacker) {
             StatsComponent targetStats = ModEntityComponents.STATS.getNullable(target); // who take damage
@@ -52,12 +55,12 @@ public abstract class LivingEntityMixin extends Entity implements MissingAccesso
             if (targetStats == null || attackerStats == null) return;
 
             isMissing = CombatUtils.isMissingHits(attackerStats, targetStats);
+            penomior$setMissing(isMissing);
 
             if (isMissing) {// missing attack
-                if (livingAttacker.squaredDistanceTo(target) < 2500) {
-                    PlayerLookup.tracking(this).forEach(foundPlayer -> AddMissingParticlesPayload.send(foundPlayer, this.getId()));
-                    if (livingAttacker instanceof PlayerEntity)
-                        PlayerLookup.tracking(livingAttacker).forEach(foundPlayer -> AddMissingParticlesPayload.send(foundPlayer, this.getId()));
+                if (livingAttacker.squaredDistanceTo(target) < 1500) {
+                    PlayerLookup.tracking((ServerWorld) target.getWorld(), target.getChunkPos()).forEach(foundPlayer -> AddMissingParticlesPayload.send(foundPlayer, this.getId())); //Who Take Damage
+                    PlayerLookup.tracking((ServerWorld) livingAttacker.getWorld(), livingAttacker.getChunkPos()).forEach(foundPlayer -> AddMissingParticlesPayload.send(foundPlayer, this.getId())); // Attacker
                 }
                 cir.setReturnValue(false); // change from ci.cancle() to cancle
             }
@@ -68,13 +71,13 @@ public abstract class LivingEntityMixin extends Entity implements MissingAccesso
     private void LivingEntityOnEquipmentChange(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> cir) {
         MutableInt evasion = new MutableInt();
         MutableInt accuracy = new MutableInt();
-        List<NbtCompound> equippedNbt = RefineUtil.getNbtFromAllEquippedSlots((LivingEntity) (Object) this);
+        List<NbtCompound> equippedNbt = RefineUtil.getNbtFromAllEquippedSlots(target);
         for (NbtCompound nbt : equippedNbt) {
             evasion.add(nbt.getInt(PenomiorData.EVASION));
             accuracy.add(nbt.getInt(PenomiorData.ACCURACY));
         }
-        ModEntityComponents.STATS.get(this).setEvasion(evasion.intValue());
-        ModEntityComponents.STATS.get(this).setAccuracy(accuracy.intValue());
+        ModEntityComponents.STATS.get(target).setEvasion(evasion.intValue());
+        ModEntityComponents.STATS.get(target).setAccuracy(accuracy.intValue());
     }
 
     @Override
