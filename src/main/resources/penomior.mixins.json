@@ -6,10 +6,11 @@
   "mixins": [
     "refinerank.ItemMixin",
     "refinerank.ItemStackMixin",
-    "vanilla.backattack.LivingEntityMixin",
     "vanilla.attackIframe.LivingEntityMixin",
     "vanilla.attackIframe.PlayerEntityMixin",
-    "vanilla.evasionaccuracy.LivingEntityMixin"
+    "vanilla.backattack.LivingEntityMixin",
+    "vanilla.evasionaccuracy.LivingEntityMixin",
+    "vanilla.projectileclipthrough.PersistentProjectileEntityMixin"
   ],
   "client": [
     "playerinfo.client.InventoryScreenMixin",
