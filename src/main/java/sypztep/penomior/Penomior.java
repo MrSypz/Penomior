@@ -53,10 +53,5 @@ public class Penomior implements ModInitializer {
         ServerPlayNetworking.registerGlobalReceiver(RefineSoundPayloadC2S.ID, new RefineSoundPayloadC2S.Receiver());
         // Initialize the serializer
         PenomiorItemDataSerializer.serializer.loadConfig();
-
-        PlayerInfoProviderRegistry.registerProvider((api, player) -> {
-            InfoScreenApi.addInformation("accuracy", ModEntityComponents.STATS.get(player).getAccuracy());
-            InfoScreenApi.addInformation("evasion", ModEntityComponents.STATS.get(player).getEvasion());
-        }, -1); // High priority
     }
 }

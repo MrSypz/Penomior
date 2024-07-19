@@ -10,6 +10,9 @@ import sypztep.penomior.client.payload.AddMissingParticlesPayload;
 import sypztep.penomior.client.payload.AddRefineSoundPayloadS2C;
 import sypztep.penomior.client.payload.RefinePayloadS2C;
 import sypztep.penomior.client.screen.RefineScreen;
+import sypztep.penomior.common.api.infoscreen.InfoScreenApi;
+import sypztep.penomior.common.api.infoscreen.PlayerInfoProviderRegistry;
+import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.penomior.common.init.ModScreenHandler;
 
 
@@ -23,5 +26,10 @@ public class PenomiorClient implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(AddBackParticlesPayload.ID, new AddBackParticlesPayload.Receiver());
 
         ItemTooltipCallback.EVENT.register(new PenomiorTooltip());
+
+        PlayerInfoProviderRegistry.registerProvider((api, player) -> {
+            InfoScreenApi.addInformation("accuracy", ModEntityComponents.STATS.get(player).getAccuracy());
+            InfoScreenApi.addInformation("evasion", ModEntityComponents.STATS.get(player).getEvasion());
+        }, -1); // High priority
     }
 }
