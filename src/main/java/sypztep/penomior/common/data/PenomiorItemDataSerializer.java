@@ -117,7 +117,6 @@ public class PenomiorItemDataSerializer {
         return new PenomiorItemDataMap(defaultData);
     }
 
-
     public record PenomiorItemDataMap(Map<String, PenomiorItemData> itemDataMap) {
     }
 }
