@@ -11,6 +11,12 @@
   "penomior.text.missing" : "Miss",
   "penomior.text.back" : "Back Attack",
 
+  "config.jade.plugin_penomior.stats_config": "Entity Stats",
+
+  "penomior.evasion.point": "Evasion: %d",
+  "penomior.accuracy.point": "Accuracy: %d",
+  "penomior.hitchance": "Hit Chance: %f%%",
+
   "penomior.midnightconfig.title": "Penomior Mod Config",
   "penomior.midnightconfig.iframeConfig": "IFrame Config",
   "penomior.midnightconfig.dmgReceiveExcludedEntities": "DamageReceiveExcludedEntities",
