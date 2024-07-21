@@ -14,7 +14,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import sypztep.penomior.ModConfig;
-import sypztep.penomior.Penomior;
 import sypztep.penomior.client.payload.AddBackParticlesPayload;
 
 @Mixin(LivingEntity.class)
