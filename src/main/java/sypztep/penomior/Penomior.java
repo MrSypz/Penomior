@@ -3,12 +3,12 @@ package sypztep.penomior;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sypztep.penomior.common.api.infoscreen.InfoScreenApi;
-import sypztep.penomior.common.api.infoscreen.PlayerInfoProviderRegistry;
 import sypztep.penomior.common.api.iframe.EntityHurtCallback;
 import sypztep.penomior.common.api.iframe.EntityKnockbackCallback;
 import sypztep.penomior.common.api.iframe.PlayerAttackCallback;
@@ -21,6 +21,7 @@ import sypztep.penomior.common.event.PlayerAttackPercentageEvent;
 import sypztep.penomior.common.init.*;
 import sypztep.penomior.common.payload.RefinePayloadC2S;
 import sypztep.penomior.common.payload.RefineSoundPayloadC2S;
+import sypztep.penomior.common.reloadlistener.MobStatsReloadListener;
 
 public class Penomior implements ModInitializer {
     public static final String MODID = "penomior";
@@ -53,5 +54,7 @@ public class Penomior implements ModInitializer {
         ServerPlayNetworking.registerGlobalReceiver(RefineSoundPayloadC2S.ID, new RefineSoundPayloadC2S.Receiver());
         // Initialize the serializer
         PenomiorItemDataSerializer.serializer.loadConfig();
+        //Data Driven
+        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new MobStatsReloadListener());
     }
 }
