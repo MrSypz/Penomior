@@ -21,8 +21,8 @@ import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.penomior.common.init.ModItems;
 import sypztep.penomior.common.payload.RefinePayloadC2S;
 import sypztep.penomior.common.screen.RefineScreenHandler;
-import sypztep.penomior.common.util.CyclingItemSlotIcon;
 import sypztep.penomior.common.util.RefineUtil;
+import sypztep.tyrannus.common.util.CyclingItemSlotIcon;
 
 import java.util.*;
 

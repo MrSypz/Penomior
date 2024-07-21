@@ -29,8 +29,6 @@ repositories {
         name = "Modrinth"
         url = "https://api.modrinth.com/maven"
     }
-    maven { url 'https://jitpack.io' }
-
 }
 
 dependencies {
@@ -47,7 +45,6 @@ dependencies {
 
     modImplementation "maven.modrinth:midnightlib:${project.midnightlib_version}"
 
-//    modImplementation "com.github.MrSypz:Crital:${project.crital_version}"
     modImplementation include ("com.github.MrSypz:Tyrannus:${project.tyrannus_version}")
 
     modRuntimeOnly "maven.modrinth:sodium:${sodium_version}"
