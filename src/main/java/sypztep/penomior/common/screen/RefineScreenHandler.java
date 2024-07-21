@@ -83,16 +83,17 @@ public class RefineScreenHandler extends ScreenHandler {
             ItemStack material = this.getSlot(0).getStack();
             boolean isArmor = slotOutput.getItem() instanceof ArmorItem;
             boolean isRefined = slotOutput.get(ModDataComponents.PENOMIOR) != null;
+            int currentRefineLvl = RefineUtil.getRefineLvl(slotOutput);
 
             // Determine if refinement is possible based on item type and material
             if (!isRefined && !isArmor) {
-                canRefine = material.isOf(ModItems.REFINE_WEAPON_STONE);
+                canRefine = material.isOf(ModItems.REFINE_WEAPON_STONE) && currentRefineLvl < 14;
             } else if (!isRefined) {
-                canRefine = material.isOf(ModItems.REFINE_ARMOR_STONE);
+                canRefine = material.isOf(ModItems.REFINE_ARMOR_STONE) && currentRefineLvl < 14;
             } else if (!isArmor) {
-                canRefine = material.isOf(ModItems.REFINE_WEAPON_STONE);
+                canRefine = material.isOf(ModItems.REFINE_WEAPON_STONE) && currentRefineLvl < 14;
             } else {
-                canRefine = material.isOf(ModItems.REFINE_ARMOR_STONE);
+                canRefine = material.isOf(ModItems.REFINE_ARMOR_STONE) && currentRefineLvl < 14;
             }
             if (material.isOf(ModItems.MOONLIGHT_CRESCENT)) {
                 canRefine = true;
