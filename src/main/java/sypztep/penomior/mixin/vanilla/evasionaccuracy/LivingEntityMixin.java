@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
@@ -46,7 +47,6 @@ public abstract class LivingEntityMixin extends Entity implements MissingAccesso
 
     @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;isSleeping()Z", ordinal = 0), cancellable = true)
     private void handleMissing(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-
         Entity attacker = source.getAttacker();
         if (attacker instanceof LivingEntity livingAttacker) {
             StatsComponent targetStats = ModEntityComponents.STATS.getNullable(target); // who take damage
@@ -69,15 +69,17 @@ public abstract class LivingEntityMixin extends Entity implements MissingAccesso
 
     @Inject(method = "getEquipmentChanges", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;applyAttributeModifiers(Lnet/minecraft/entity/EquipmentSlot;Ljava/util/function/BiConsumer;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
     private void LivingEntityOnEquipmentChange(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> cir) {
-        MutableInt evasion = new MutableInt();
-        MutableInt accuracy = new MutableInt();
-        List<NbtCompound> equippedNbt = RefineUtil.getNbtFromAllEquippedSlots(target);
-        for (NbtCompound nbt : equippedNbt) {
-            evasion.add(nbt.getInt(PenomiorData.EVASION));
-            accuracy.add(nbt.getInt(PenomiorData.ACCURACY));
+        if (target instanceof PlayerEntity) {
+            MutableInt evasion = new MutableInt();
+            MutableInt accuracy = new MutableInt();
+            List<NbtCompound> equippedNbt = RefineUtil.getNbtFromAllEquippedSlots(target);
+            for (NbtCompound nbt : equippedNbt) {
+                evasion.add(nbt.getInt(PenomiorData.EVASION));
+                accuracy.add(nbt.getInt(PenomiorData.ACCURACY));
+            }
+            ModEntityComponents.STATS.get(target).setEvasion(evasion.intValue());
+            ModEntityComponents.STATS.get(target).setAccuracy(accuracy.intValue());
         }
-        ModEntityComponents.STATS.get(target).setEvasion(evasion.intValue());
-        ModEntityComponents.STATS.get(target).setAccuracy(accuracy.intValue());
     }
 
     @Override

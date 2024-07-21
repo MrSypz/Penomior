@@ -10,6 +10,7 @@
     "vanilla.attackIframe.PlayerEntityMixin",
     "vanilla.backattack.LivingEntityMixin",
     "vanilla.evasionaccuracy.LivingEntityMixin",
+    "vanilla.evasionaccuracy.ServerWorldMixin",
     "vanilla.projectileclipthrough.PersistentProjectileEntityMixin",
     "vanilla.projectileclipthrough.TridentEntityMixin"
   ],
