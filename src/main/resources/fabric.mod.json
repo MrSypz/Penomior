@@ -22,6 +22,9 @@
     ],
     "cardinal-components-entity": [
       "sypztep.penomior.common.init.ModEntityComponents"
+    ],
+    "jade": [
+      "sypztep.penomior.common.compat.JadePlugin"
     ]
   },
   "mixins": [

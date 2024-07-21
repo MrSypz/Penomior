@@ -29,6 +29,13 @@ repositories {
         name = "Modrinth"
         url = "https://api.modrinth.com/maven"
     }
+    maven {
+        name = "Jade"
+        url = "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
 }
 
 dependencies {
@@ -49,6 +56,9 @@ dependencies {
 
     modRuntimeOnly "maven.modrinth:sodium:${sodium_version}"
     modRuntimeOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
+
+    modImplementation "curse.maven:jade-324717:${jade_version}"
+
 }
 
 processResources {
