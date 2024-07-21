@@ -6,6 +6,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
@@ -122,13 +123,15 @@ public class RefineUtil {
     private static boolean isItemInCorrectSlot(ItemStack stack, EquipmentSlot slot) {
         for (AttributeModifierSlot attributeModifierSlot : AttributeModifierSlot.values()) {
             MutableBoolean mutableBoolean = new MutableBoolean(false);
-            stack.applyAttributeModifier(attributeModifierSlot, (entityAttributeRegistryEntry, attributeModifier) -> {
-                if (attributeModifierSlot.matches(slot))
-                    mutableBoolean.setTrue();
-            });
-            if (mutableBoolean.isTrue()) {
-                return true;
-            }
+            if (!stack.isOf(Items.SHIELD)) {
+                stack.applyAttributeModifier(attributeModifierSlot, (entityAttributeRegistryEntry, attributeModifier) -> {
+                    if (attributeModifierSlot.matches(slot))
+                        mutableBoolean.setTrue();
+                });
+                if (mutableBoolean.isTrue()) {
+                    return true;
+                }
+            } else return true;
         }
         return false;
     }

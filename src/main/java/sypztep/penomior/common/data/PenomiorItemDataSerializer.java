@@ -74,8 +74,13 @@ public class PenomiorItemDataSerializer {
     @Contract(" -> new")
     private @NotNull PenomiorItemDataMap getDefaultData() {
         Map<String, PenomiorItemData> defaultData = new HashMap<>();
+        // Unique
+        defaultData.put("minecraft:trident", new PenomiorItemData("minecraft:trident", 20, 0, 192, 0, 0, 100, 0, 20, 0, 0, 1));
+        defaultData.put("minecraft:mace", new PenomiorItemData("minecraft:mace", 20, 0, 192, 0, 0, 100, 0, 20, 0, 0, 1));
+        defaultData.put("minecraft:turtle_helmet", new PenomiorItemData("minecraft:turtle_helmet", 20, 0, 0, 0, 90, 100, 0, 0, 0, 15, 1));
+        defaultData.put("minecraft:shield", new PenomiorItemData("minecraft:shield", 20, 1, 44, 0, 33, 100, 0, 0, 0, 15, 5));
+
         // Swords
-        defaultData.put("minecraft:wooden_sword", new PenomiorItemData("minecraft:wooden_sword", 20, 0, 182, 0, 0, 100, 0, 15, 0, 0, 5));
         defaultData.put("minecraft:stone_sword", new PenomiorItemData("minecraft:stone_sword", 20, 0, 182, 0, 0, 100, 0, 15, 0, 0, 5));
         defaultData.put("minecraft:golden_sword", new PenomiorItemData("minecraft:golden_sword", 20, 0, 182, 0, 0, 100, 0, 15, 0, 0, 5));
         defaultData.put("minecraft:iron_sword", new PenomiorItemData("minecraft:iron_sword", 20, 0, 182, 0, 0, 100, 0, 15, 0, 0, 5));
