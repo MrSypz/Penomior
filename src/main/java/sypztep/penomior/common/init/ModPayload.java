@@ -6,7 +6,6 @@ import sypztep.penomior.client.payload.AddMissingParticlesPayload;
 import sypztep.penomior.client.payload.AddRefineSoundPayloadS2C;
 import sypztep.penomior.client.payload.RefinePayloadS2C;
 import sypztep.penomior.common.payload.RefinePayloadC2S;
-import sypztep.penomior.common.payload.RefineSoundPayloadC2S;
 
 public class ModPayload {
     public static void init() {
@@ -18,6 +17,5 @@ public class ModPayload {
     }
     private static void initClient() {
         PayloadTypeRegistry.playC2S().register(RefinePayloadC2S.ID, RefinePayloadC2S.CODEC); // Client to Server
-        PayloadTypeRegistry.playC2S().register(RefineSoundPayloadC2S.ID, RefineSoundPayloadC2S.CODEC); // Client to Server
     }
 }
