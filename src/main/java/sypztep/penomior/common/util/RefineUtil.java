@@ -167,7 +167,10 @@ public class RefineUtil {
             }
         }
     }
-
+    public static void setBroken(ItemStack stack) {
+        if (stack.get(ModDataComponents.PENOMIOR) != null)
+            RefineUtil.setDurability(stack,0);
+    }
     public static boolean isBroken(ItemStack stack) {
         return (stack.get(ModDataComponents.PENOMIOR) != null && RefineUtil.getDurability(stack) <= 0);
     }
