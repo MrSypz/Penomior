@@ -9,13 +9,13 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
+import sypztep.penomior.client.payload.AddRefineSoundPayloadS2C;
 import sypztep.penomior.client.payload.RefinePayloadS2C;
 import sypztep.penomior.common.data.PenomiorItemData;
 import sypztep.penomior.common.init.ModDataComponents;
 import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.penomior.common.init.ModItems;
 import sypztep.penomior.common.init.ModScreenHandler;
-import sypztep.penomior.common.payload.RefineSoundPayloadC2S;
 import sypztep.penomior.common.util.RefineUtil;
 
 public class RefineScreenHandler extends ScreenHandler {
@@ -142,6 +142,7 @@ public class RefineScreenHandler extends ScreenHandler {
         int failStack = ModEntityComponents.STATS.get(this.player).getFailstack();
         int repairPoint = itemData.repairpoint();
         ItemStack material = this.getSlot(0).getStack();
+        ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
         if (matchesItemData(slotOutput) && RefineUtil.getRefineLvl(slotOutput) < itemData.maxLvl() && durability > 0 && !material.isOf(ModItems.MOONLIGHT_CRESCENT)) {
             // Refinement process
             if (RefineUtil.handleRefine(slotOutput, failStack)) {
@@ -149,7 +150,7 @@ public class RefineScreenHandler extends ScreenHandler {
                 RefineUtil.setEvasion(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startEvasion, endEvasion);
                 RefineUtil.setAccuracy(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startAccuracy, endAccuracy);
                 RefineUtil.successRefine(this.player);
-                RefineSoundPayloadC2S.send(RefineUtil.RefineSound.SUCCESS.select());
+                AddRefineSoundPayloadS2C.send(serverPlayer, player.getId(), RefineUtil.RefineSound.SUCCESS.select());
             } else { // Fail to refine
                 if (currentRefineLvl > 16) { // 17 - 20
                     RefineUtil.setRefineLvl(slotOutput, Math.max(currentRefineLvl - 1, 0));
@@ -158,13 +159,13 @@ public class RefineScreenHandler extends ScreenHandler {
                 }
                 RefineUtil.setDurability(slotOutput, Math.max(RefineUtil.getDurability(slotOutput) - 10, 0));
                 RefineUtil.failRefine(player, failStack);
-                RefineSoundPayloadC2S.send(RefineUtil.RefineSound.FAIL.select());
+                AddRefineSoundPayloadS2C.send(serverPlayer, player.getId(), RefineUtil.RefineSound.FAIL.select());
             }
             this.decrementStack(0);
             //Repair process
         } else if (material.isOf(ModItems.MOONLIGHT_CRESCENT) && durability < 100) {
             RefineUtil.setDurability(slotOutput, durability + repairPoint);
-            RefineSoundPayloadC2S.send(RefineUtil.RefineSound.REPAIR.select());
+            AddRefineSoundPayloadS2C.send(serverPlayer, player.getId(), RefineUtil.RefineSound.REPAIR.select());
             this.decrementStack(0);
         }
     }
