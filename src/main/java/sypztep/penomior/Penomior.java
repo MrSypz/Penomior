@@ -20,7 +20,6 @@ import sypztep.penomior.common.event.KnockBackThresoEvent;
 import sypztep.penomior.common.event.PlayerAttackPercentageEvent;
 import sypztep.penomior.common.init.*;
 import sypztep.penomior.common.payload.RefinePayloadC2S;
-import sypztep.penomior.common.payload.RefineSoundPayloadC2S;
 import sypztep.penomior.common.reloadlistener.MobStatsReloadListener;
 
 public class Penomior implements ModInitializer {
@@ -51,7 +50,6 @@ public class Penomior implements ModInitializer {
         isCritalLoaded = FabricLoader.getInstance().isModLoaded("crital");
 
         ServerPlayNetworking.registerGlobalReceiver(RefinePayloadC2S.ID, new RefinePayloadC2S.Receiver());
-        ServerPlayNetworking.registerGlobalReceiver(RefineSoundPayloadC2S.ID, new RefineSoundPayloadC2S.Receiver());
         // Initialize the serializer
         PenomiorItemDataSerializer.serializer.loadConfig();
         //Data Driven
