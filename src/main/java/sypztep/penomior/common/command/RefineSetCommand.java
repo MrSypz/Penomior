@@ -10,6 +10,7 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import sypztep.penomior.common.data.PenomiorItemData;
 import sypztep.penomior.common.util.RefineUtil;
 
@@ -28,13 +29,17 @@ public class RefineSetCommand implements CommandRegistrationCallback {
         if (player != null) {
             ItemStack slotOutput = player.getMainHandStack();
             PenomiorItemData itemData = PenomiorItemData.getPenomiorItemData(slotOutput);
+            if (itemData == null) {
+                player.sendMessage(Text.literal("Invalid Item Data").formatted(Formatting.RED), false);
+                return 0;
+            }
 
             RefineUtil.initializeItemData(slotOutput, itemData); // Ensure item data is initialized
 
             int maxLvl = itemData.maxLvl();
 
             if (refinelevel < 0 || refinelevel > maxLvl) {
-                player.sendMessage(Text.literal("Invalid refine level. Must be between 0 and " + maxLvl), false);
+                player.sendMessage(Text.literal("Invalid refine level. Must be between 0 and " + maxLvl).formatted(Formatting.RED), false);
                 return 0;
             }
             RefineUtil.setRefineLvl(slotOutput, refinelevel);
