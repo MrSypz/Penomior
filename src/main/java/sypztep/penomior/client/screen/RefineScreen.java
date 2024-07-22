@@ -8,8 +8,8 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
 import net.minecraft.screen.*;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -112,7 +112,7 @@ public class RefineScreen
         boolean bl = handler.matchesItemData(stack);
         if (bl) {
             context.setShaderColor(1, 1, 1, 0.45F);
-            if (stack.getItem() instanceof SwordItem)
+            if (!(stack.getItem() instanceof ArmorItem))
                 this.weaponSlotIcon.render(this.handler,context,delta,(width - backgroundWidth) / 2 + 31, (height - backgroundHeight) / 2 + 30);
             else
                 this.armorSlotIcon.render(this.handler,context,delta,(width - backgroundWidth) / 2 + 31, (height - backgroundHeight) / 2 + 30);
