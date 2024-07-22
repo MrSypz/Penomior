@@ -30,7 +30,6 @@ public class RefineCommand implements CommandRegistrationCallback {
         ServerPlayerEntity player = context.getSource().getPlayer();
 
         if (player != null) {
-            // Open the screen handler for the player
             player.openHandledScreen(createScreenHandlerFactory(player.getWorld(), player.getBlockPos()));
         }
 
