@@ -22,6 +22,8 @@ public class ModConfig extends MidnightConfig {
     @Entry
     public static float knockbackCancelThreshold = 0.75f;
     @Entry
+    public static boolean refineItemUnbreak = false;
+    @Entry
     public static int iFrameDuration = 10;
     @Comment(centered = true)
     public static Comment combatConfig;
