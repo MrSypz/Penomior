@@ -5,13 +5,19 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeInstance;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.mutable.MutableInt;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -19,6 +25,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import sypztep.penomior.Penomior;
 import sypztep.penomior.client.payload.AddMissingParticlesPayload;
 import sypztep.penomior.common.util.interfaces.MissingAccessor;
 import sypztep.penomior.common.component.StatsComponent;
@@ -40,6 +47,8 @@ public abstract class LivingEntityMixin extends Entity implements MissingAccesso
 
     @Shadow
     public abstract boolean damage(DamageSource source, float amount);
+
+    @Shadow @Nullable public abstract EntityAttributeInstance getAttributeInstance(RegistryEntry<EntityAttribute> attribute);
 
     protected LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -72,14 +81,33 @@ public abstract class LivingEntityMixin extends Entity implements MissingAccesso
         if (target instanceof PlayerEntity) {
             MutableInt evasion = new MutableInt();
             MutableInt accuracy = new MutableInt();
+            MutableInt extraDamage = new MutableInt();
+            MutableInt extraProtect = new MutableInt();
             List<NbtCompound> equippedNbt = RefineUtil.getNbtFromAllEquippedSlots(target);
             for (NbtCompound nbt : equippedNbt) {
                 evasion.add(nbt.getInt(PenomiorData.EVASION));
                 accuracy.add(nbt.getInt(PenomiorData.ACCURACY));
+                extraDamage.add(nbt.getInt(PenomiorData.DAMAGE));
+                extraProtect.add(nbt.getInt(PenomiorData.PROTECTION));
             }
             ModEntityComponents.STATS.get(target).setEvasion(evasion.intValue());
             ModEntityComponents.STATS.get(target).setAccuracy(accuracy.intValue());
+            EntityAttributeInstance armor = this.getAttributeInstance(EntityAttributes.GENERIC_ARMOR);
+            EntityAttributeInstance attack = this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+            if (attack != null) {
+                EntityAttributeModifier mod = new EntityAttributeModifier(Penomior.id("extra.damage_stats"), extraDamage.intValue(), EntityAttributeModifier.Operation.ADD_VALUE);
+                ReplaceAttributeModifier(attack, mod);
+            }
+            if (armor != null) {
+                EntityAttributeModifier mod = new EntityAttributeModifier(Penomior.id("extra.armor_stats"), extraProtect.intValue(), EntityAttributeModifier.Operation.ADD_VALUE);
+                ReplaceAttributeModifier(armor, mod);
+            }
         }
+    }
+    @Unique
+    private static void ReplaceAttributeModifier(EntityAttributeInstance att, EntityAttributeModifier mod) {
+        att.removeModifier(mod);
+        att.addPersistentModifier(mod);
     }
 
     @Override
