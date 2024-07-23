@@ -81,7 +81,7 @@ public abstract class ItemStackMixin implements ComponentHolder {
         int extraProtect = RefineUtil.getExtraProtect(stack);
 
         if (stack.isIn(ItemTags.ARMOR_ENCHANTABLE) && !RefineUtil.isBroken(stack) && attribute.matches(EntityAttributes.GENERIC_ARMOR) && RefineUtil.getRefineLvl(stack) > 0) {
-            textConsumer.accept(createText("penomior.attribute.modifier.plus.1", d, extraProtect));
+            textConsumer.accept(createText("penomior.attribute.modifier.plus.1",attribute, d, extraProtect));
             ci.cancel();
         }
     }
@@ -97,12 +97,20 @@ public abstract class ItemStackMixin implements ComponentHolder {
 
     @Unique
     private Text createText(String key, double value, int extra) {
-        return ScreenTexts.space()
-                .append(Text.translatable(
-                        key,
-                        AttributeModifiersComponent.DECIMAL_FORMAT.format(value),
-                        "+" + AttributeModifiersComponent.DECIMAL_FORMAT.format(extra)
-                ).formatted(Formatting.DARK_GREEN));
+            return ScreenTexts.space()
+                    .append(Text.translatable(
+                            key,
+                            AttributeModifiersComponent.DECIMAL_FORMAT.format(value),
+                            "+" + AttributeModifiersComponent.DECIMAL_FORMAT.format(extra)
+                    ).formatted(Formatting.DARK_GREEN));
+    }
+    @Unique
+    private Text createText(String key, RegistryEntry<EntityAttribute> attribute, double value, int extra) {
+        return Text.translatable(
+                key,
+                AttributeModifiersComponent.DECIMAL_FORMAT.format(value),
+                "+" + AttributeModifiersComponent.DECIMAL_FORMAT.format(extra)
+        ).formatted(attribute.value().getFormatting(true));
     }
 
     @Inject(method = "damage(ILnet/minecraft/server/world/ServerWorld;Lnet/minecraft/server/network/ServerPlayerEntity;Ljava/util/function/Consumer;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"), cancellable = true)
