@@ -17,6 +17,9 @@
   "penomior.accuracy.point": "Accuracy: %d",
   "penomior.hitchance": "Hit Chance: %f%%",
 
+  "penomior.attribute.modifier.equals.0": "%s (%s) Attack Damage",
+  "penomior.attribute.modifier.plus.1": "+%s (%s) Armor",
+
   "penomior.midnightconfig.title": "Penomior Mod Config",
   "penomior.midnightconfig.iframeConfig": "IFrame Config",
   "penomior.midnightconfig.dmgReceiveExcludedEntities": "DamageReceiveExcludedEntities",
