@@ -48,8 +48,15 @@ public class RefineSetCommand implements CommandRegistrationCallback {
             int endAccuracy = itemData.endAccuracy();
             int startEvasion = itemData.startEvasion();
             int endEvasion = itemData.endEvasion();
+            int startDamage = itemData.starDamage();
+            int endDamage = itemData.endDamage();
+            int startProtect = itemData.startProtection();
+            int endProtect = itemData.endProtection();
             RefineUtil.setEvasion(slotOutput, refinelevel, maxLvl, startEvasion, endEvasion);
             RefineUtil.setAccuracy(slotOutput, refinelevel, maxLvl, startAccuracy, endAccuracy);
+            RefineUtil.setExtraDamage(slotOutput, refinelevel, maxLvl, startDamage, endDamage);
+            RefineUtil.setExtraProtect(slotOutput, refinelevel, maxLvl, startProtect, endProtect);
+
             player.sendMessage(Text.literal("Refine level set to " + refinelevel), false);
         }
 
