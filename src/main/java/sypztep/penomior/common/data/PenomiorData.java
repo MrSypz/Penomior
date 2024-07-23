@@ -7,4 +7,6 @@ public class PenomiorData {
     public static final String EVASION = Penomior.MODID + ".Evasion";
     public static final String ACCURACY = Penomior.MODID + ".Accuracy";
     public static final String DURABILITY = Penomior.MODID + ".Durability";
+    public static final String DAMAGE = Penomior.MODID + ".Damage";
+    public static final String PROTECTION = Penomior.MODID + ".Protection";
 }
