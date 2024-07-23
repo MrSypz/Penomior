@@ -52,6 +52,14 @@ public class RefineUtil {
     public static void setDurability(ItemStack stack, int durability) {
         stack.apply(ModDataComponents.PENOMIOR, NbtComponent.DEFAULT, applied -> applied.apply(compound -> compound.putInt(PenomiorData.DURABILITY, durability)));
     }
+    public static void setExtraDamage(ItemStack stack, int refinelvl, int maxLvl, int startExtraDamage, int endExtraDamage) {
+        int refine = refineValue(refinelvl, maxLvl, startExtraDamage, endExtraDamage);
+        stack.apply(ModDataComponents.PENOMIOR, NbtComponent.DEFAULT, applied -> applied.apply(compound -> compound.putInt(PenomiorData.DAMAGE, refine)));
+    }
+    public static void setExtraProtect(ItemStack stack, int refinelvl, int maxLvl, int startProtect, int endProtect) {
+        int refine = refineValue(refinelvl, maxLvl, startProtect, endProtect);
+        stack.apply(ModDataComponents.PENOMIOR, NbtComponent.DEFAULT, applied -> applied.apply(compound -> compound.putInt(PenomiorData.PROTECTION, refine)));
+    }
 
     public static double getSuccessRate() {
         return successRate;
@@ -76,6 +84,12 @@ public class RefineUtil {
 
     public static int getDurability(ItemStack stack) {
         return ItemStackHelper.getNbtCompound(stack, ModDataComponents.PENOMIOR).getInt(PenomiorData.DURABILITY);
+    }
+    public static int getExtraDamage(ItemStack stack) {
+        return ItemStackHelper.getNbtCompound(stack, ModDataComponents.PENOMIOR).getInt(PenomiorData.DAMAGE);
+    }
+    public static int getExtraProtect(ItemStack stack) {
+        return ItemStackHelper.getNbtCompound(stack, ModDataComponents.PENOMIOR).getInt(PenomiorData.PROTECTION);
     }
 
     //------------excute-------------//
@@ -160,10 +174,16 @@ public class RefineUtil {
                 int startEvasion = itemData.startEvasion();
                 int endEvasion = itemData.endEvasion();
                 int maxDurability = itemData.maxDurability();
+                int startDamage = itemData.starDamage();
+                int endDamage = itemData.endDamage();
+                int startProtect = itemData.startProtection();
+                int endProtect = itemData.endProtection();
                 RefineUtil.setRefineLvl(stack, refineLvl);
                 RefineUtil.setAccuracy(stack, refineLvl, maxLvl, startAccuracy, endAccuracy);
                 RefineUtil.setEvasion(stack, refineLvl, maxLvl, startEvasion, endEvasion);
                 RefineUtil.setDurability(stack, maxDurability);
+                RefineUtil.setExtraDamage(stack, refineLvl, maxLvl, startDamage, endDamage);
+                RefineUtil.setExtraProtect(stack, refineLvl, maxLvl, startProtect, endProtect);
             }
         }
     }
