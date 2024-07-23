@@ -139,16 +139,22 @@ public class RefineScreenHandler extends ScreenHandler {
         int startEvasion = itemData.startEvasion();
         int endEvasion = itemData.endEvasion();
         int durability = RefineUtil.getDurability(slotOutput);
+        int startDamage = itemData.starDamage();
+        int endDamage = itemData.endDamage();
+        int startProtect = itemData.startProtection();
+        int endProtect = itemData.endProtection();
         int failStack = ModEntityComponents.STATS.get(this.player).getFailstack();
         int repairPoint = itemData.repairpoint();
         ItemStack material = this.getSlot(0).getStack();
         ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
         if (matchesItemData(slotOutput) && RefineUtil.getRefineLvl(slotOutput) < itemData.maxLvl() && durability > 0 && !material.isOf(ModItems.MOONLIGHT_CRESCENT)) {
             // Refinement process
-            if (RefineUtil.handleRefine(slotOutput, failStack)) {
+            if (RefineUtil.handleRefine(slotOutput, failStack)) { // Random Success Rate
                 RefineUtil.setRefineLvl(slotOutput, currentRefineLvl + 1);
                 RefineUtil.setEvasion(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startEvasion, endEvasion);
                 RefineUtil.setAccuracy(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startAccuracy, endAccuracy);
+                RefineUtil.setExtraDamage(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startDamage, endDamage);
+                RefineUtil.setExtraProtect(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startProtect, endProtect);
                 RefineUtil.successRefine(this.player);
                 AddRefineSoundPayloadS2C.send(serverPlayer, player.getId(), RefineUtil.RefineSound.SUCCESS.select());
             } else { // Fail to refine
@@ -156,6 +162,8 @@ public class RefineScreenHandler extends ScreenHandler {
                     RefineUtil.setRefineLvl(slotOutput, Math.max(currentRefineLvl - 1, 0));
                     RefineUtil.setEvasion(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startEvasion, endEvasion);
                     RefineUtil.setAccuracy(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startAccuracy, endAccuracy);
+                    RefineUtil.setExtraDamage(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startDamage, endDamage);
+                    RefineUtil.setExtraProtect(slotOutput, RefineUtil.getRefineLvl(slotOutput), maxLvl, startProtect, endProtect);
                 }
                 RefineUtil.setDurability(slotOutput, Math.max(RefineUtil.getDurability(slotOutput) - 10, 0));
                 RefineUtil.failRefine(player, failStack);
