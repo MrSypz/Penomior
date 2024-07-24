@@ -31,7 +31,8 @@ public class ModConfig extends MidnightConfig {
     public static boolean backattack = true;
     @Comment(centered = true)
     public static Comment featureConfig;
-    public static boolean missingArrowPassthough = true;
+    @Entry public static boolean missingArrowPassthough = true;
+    @Entry public static boolean playerstatsInfo = true;
 
 
     static {

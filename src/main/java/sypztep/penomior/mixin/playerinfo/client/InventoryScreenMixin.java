@@ -21,6 +21,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import sypztep.penomior.ModConfig;
 import sypztep.penomior.Penomior;
 import sypztep.penomior.common.api.infoscreen.InfoScreenApi;
 import sypztep.penomior.common.api.infoscreen.PlayerInfoProviderRegistry;
@@ -51,7 +52,7 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
     @Inject(method = "drawBackground", at = @At(value = "RETURN"))
     public void drawBackgroundMixin(DrawContext context, float delta, int mouseX, int mouseY, CallbackInfo info) {
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        if (player != null) {
+        if (player != null && ModConfig.playerstatsInfo) {
             drawPlayerInfo(context, player, mouseX, mouseY);
         }
     }
