@@ -12,7 +12,7 @@ base {
 
 repositories {
     maven {
-        name = "TyrannusAPI"
+        name = "TyrannusAPI, Crital"
         url = "https://jitpack.io"
     }
     maven {
@@ -53,6 +53,7 @@ dependencies {
     modImplementation "maven.modrinth:midnightlib:${project.midnightlib_version}"
 
     modImplementation include ("com.github.MrSypz:Tyrannus:${project.tyrannus_version}")
+    modCompileOnly ('com.github.MrSypz:Crital:v0.7.4-beta')
 
     modRuntimeOnly "maven.modrinth:sodium:${sodium_version}"
     modRuntimeOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
