@@ -7,6 +7,7 @@ import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import sypztep.crital.common.data.CritalData;
+import sypztep.crital.common.init.ModDataComponent;
 import sypztep.penomior.Penomior;
 import sypztep.penomior.common.init.ModDataComponents;
 import sypztep.penomior.common.util.RefineUtil;
@@ -18,8 +19,9 @@ public class PenomiorTooltip implements ItemTooltipCallback {
     @Override
     public void getTooltip(ItemStack stack, Item.TooltipContext tooltipContext, TooltipType tooltipType, List<Text> lines) {
         if (stack.get(ModDataComponents.PENOMIOR) != null) {
-            if (Penomior.isCritalLoaded && ItemStackHelper.getNbtCompound(stack).contains(CritalData.TIER_FLAG))
-                return;
+            if (Penomior.isCritalLoaded)
+                if (ItemStackHelper.getNbtCompound(stack, ModDataComponent.CRITAL).contains(CritalData.TIER))
+                    return;
 
             if (RefineUtil.isBroken(stack))
                 lines.add(Text.literal("Broken ✗").formatted(Formatting.RED));
