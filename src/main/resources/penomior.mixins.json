@@ -16,7 +16,6 @@
     "vanilla.projectileclipthrough.TridentEntityMixin"
   ],
   "client": [
-    "playerinfo.client.InventoryScreenMixin",
     "refinerank.client.DrawContextMixin"
   ],
   "injectors": {
