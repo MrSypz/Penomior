@@ -133,6 +133,17 @@ public class RefineUtil {
         }
         return nbtList;
     }
+    public static List<ItemStack> getItemStackFromAllEquippedSlots(LivingEntity living) {
+        List<ItemStack> itemStacks = new ArrayList<>();
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            ItemStack itemStack = living.getEquippedStack(slot);
+            if (!itemStack.isEmpty() && !RefineUtil.isBroken(itemStack) && isItemInCorrectSlot(itemStack, slot)) {
+                itemStacks.add(itemStack);
+            }
+        }
+        return itemStacks;
+    }
+
 
     private static boolean isItemInCorrectSlot(ItemStack stack, EquipmentSlot slot) {
         for (AttributeModifierSlot attributeModifierSlot : AttributeModifierSlot.values()) {

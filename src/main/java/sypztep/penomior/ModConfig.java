@@ -16,7 +16,6 @@ public class ModConfig extends MidnightConfig {
     public static List<String> attackExcludedEntities = Arrays.asList(
             "minecraft:warden"
     );
-
     @Entry
     public static float attackCancelThreshold = 0.15f;
     @Entry
@@ -31,10 +30,10 @@ public class ModConfig extends MidnightConfig {
     public static boolean backattack = true;
     @Comment(centered = true)
     public static Comment featureConfig;
-    @Entry public static boolean missingArrowPassthough = true;
-    @Entry public static boolean playerstatsInfo = true;
-
-
+    @Entry
+    public static boolean missingArrowPassthough = true;
+    @Entry
+    public static boolean playerstatsInfo = true;
     static {
         MidnightConfig.init(Penomior.MODID, ModConfig.class);
     }

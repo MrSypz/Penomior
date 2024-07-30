@@ -33,7 +33,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 @Mixin(ItemStack.class)
-public abstract class ItemStackMixin implements ComponentHolder {
+public abstract class ItemStackMixin implements ComponentHolder{
     @Shadow
     public abstract int getDamage();
 
@@ -55,7 +55,8 @@ public abstract class ItemStackMixin implements ComponentHolder {
         if (player != null) {
             if (RefineUtil.isBroken(stack) && modifier.idMatches(Item.BASE_ATTACK_DAMAGE_MODIFIER_ID))
                 return player.getAttributeBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
-            else if (stack.isIn(ItemTags.ARMOR_ENCHANTABLE) && RefineUtil.isBroken(stack)) return 0;
+            else if (stack.isIn(ItemTags.ARMOR_ENCHANTABLE) && RefineUtil.isBroken(stack))
+                return 0;
         }
         return value;
     }
@@ -66,7 +67,6 @@ public abstract class ItemStackMixin implements ComponentHolder {
 
         double d = computeDamageValue(modifier, player);
         int extraDamage = RefineUtil.getExtraDamage(stack);
-
         if (!RefineUtil.isBroken(stack) && modifier.idMatches(Item.BASE_ATTACK_DAMAGE_MODIFIER_ID) && RefineUtil.getRefineLvl(stack) > 0) {
             textConsumer.accept(createText("penomior.attribute.modifier.equals.0", d, extraDamage));
             ci.cancel();
@@ -79,7 +79,6 @@ public abstract class ItemStackMixin implements ComponentHolder {
 
         double d = computeDamageValue(modifier, player);
         int extraProtect = RefineUtil.getExtraProtect(stack);
-
         if (stack.isIn(ItemTags.ARMOR_ENCHANTABLE) && !RefineUtil.isBroken(stack) && attribute.matches(EntityAttributes.GENERIC_ARMOR) && RefineUtil.getRefineLvl(stack) > 0) {
             textConsumer.accept(createText("penomior.attribute.modifier.plus.1",attribute, d, extraProtect));
             ci.cancel();

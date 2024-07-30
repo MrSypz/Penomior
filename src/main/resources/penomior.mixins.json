@@ -12,6 +12,7 @@
     "vanilla.backattack.LivingEntityMixin",
     "vanilla.evasionaccuracy.LivingEntityMixin",
     "vanilla.evasionaccuracy.ServerWorldMixin",
+    "vanilla.extraattribute.LivingEntityMixin",
     "vanilla.projectileclipthrough.PersistentProjectileEntityMixin",
     "vanilla.projectileclipthrough.TridentEntityMixin"
   ],
