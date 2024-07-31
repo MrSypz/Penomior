@@ -45,7 +45,7 @@ public class PlayerInfoScreen extends Screen {
                 "apen", 0,
                 "acc", accuracyAccessor.getAccuracy(),
                 "dp", client.player.getAttributeValue(EntityAttributes.GENERIC_ARMOR),
-                "dpt", client.player.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS),
+                "at", client.player.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS),
                 "dr", 0,
                 "eva", accuracyAccessor.getEvasion()
         );
@@ -61,7 +61,7 @@ public class PlayerInfoScreen extends Screen {
                 new ListElement("Accuracy: %acc"),
                 new ListElement("DEFENSE", Penomior.id("hud/container/icon_1.png")),
                 new ListElement("Armor: %dp"),
-                new ListElement("Armor Toughness: %dpt"),
+                new ListElement("Armor Toughness: %at"),
                 new ListElement("Damage Reduction: %dr %"),
                 new ListElement("Evasion: %eva")
         );
