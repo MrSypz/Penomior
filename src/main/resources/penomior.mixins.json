@@ -10,6 +10,7 @@
     "vanilla.attackIframe.LivingEntityMixin",
     "vanilla.attackIframe.PlayerEntityMixin",
     "vanilla.backattack.LivingEntityMixin",
+    "vanilla.critattribute.PlayerEntityMixin",
     "vanilla.evasionaccuracy.LivingEntityMixin",
     "vanilla.evasionaccuracy.ServerWorldMixin",
     "vanilla.extraattribute.LivingEntityMixin",
