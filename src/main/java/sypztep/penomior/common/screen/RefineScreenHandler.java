@@ -177,20 +177,20 @@ public class RefineScreenHandler extends ScreenHandler {
                 RefineUtil.failRefine(player, failStack);
                 AddRefineSoundPayloadS2C.send(serverPlayer, player.getId(), RefineUtil.RefineSound.FAIL.select());
             }
-            this.decrementStack(0);
+            this.decrementStack();
             //Repair process
         } else if (material.isOf(ModItems.MOONLIGHT_CRESCENT) && durability < 100) {
             RefineUtil.setDurability(slotOutput, durability + repairPoint);
             AddRefineSoundPayloadS2C.send(serverPlayer, player.getId(), RefineUtil.RefineSound.REPAIR.select());
-            this.decrementStack(0);
+            this.decrementStack();
         }
     }
 
-    private void decrementStack(int slot) {
-        ItemStack itemStack = this.inventory.getStack(slot);
+    private void decrementStack() {
+        ItemStack itemStack = this.inventory.getStack(0);
         if (!itemStack.isEmpty()) {
             itemStack.decrement(1);
-            this.inventory.setStack(slot, itemStack);
+            this.inventory.setStack(0, itemStack);
         }
     }
 
