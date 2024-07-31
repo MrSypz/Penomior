@@ -12,7 +12,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import sypztep.penomior.common.data.PenomiorData;
-import sypztep.penomior.common.data.PenomiorItemData;
+import sypztep.penomior.common.data.PenomiorItemEntry;
 import sypztep.penomior.common.init.ModDataComponents;
 import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.tyrannus.common.util.ItemStackHelper;
@@ -175,28 +175,31 @@ public class RefineUtil {
 
     //------------write-data-----------// from craft item
     public static void writeRefineData(ItemStack stack, int refineLvl) {
-        String itemID = PenomiorItemData.getItemId(stack);
-        PenomiorItemData itemData = PenomiorItemData.getPenomiorItemData(itemID);
-        if (itemData != null) {
-            if (itemID.equals(itemData.itemID())) {
-                int maxLvl = itemData.maxLvl();
-                int startAccuracy = itemData.startAccuracy();
-                int endAccuracy = itemData.endAccuracy();
-                int startEvasion = itemData.startEvasion();
-                int endEvasion = itemData.endEvasion();
-                int maxDurability = itemData.maxDurability();
-                int startDamage = itemData.starDamage();
-                int endDamage = itemData.endDamage();
-                int startProtect = itemData.startProtection();
-                int endProtect = itemData.endProtection();
-                RefineUtil.setRefineLvl(stack, refineLvl);
-                RefineUtil.setAccuracy(stack, refineLvl, maxLvl, startAccuracy, endAccuracy);
-                RefineUtil.setEvasion(stack, refineLvl, maxLvl, startEvasion, endEvasion);
-                RefineUtil.setDurability(stack, maxDurability);
-                RefineUtil.setExtraDamage(stack, refineLvl, maxLvl, startDamage, endDamage);
-                RefineUtil.setExtraProtect(stack, refineLvl, maxLvl, startProtect, endProtect);
-            }
-        }
+        // Retrieve the item ID from the ItemStack
+        String itemID = PenomiorItemEntry.getItemId(stack);
+        // Retrieve PenomiorItemEntry data using the item ID
+        Optional<PenomiorItemEntry> itemDataOpt = PenomiorItemEntry.getPenomiorItemData(itemID);
+        // If item data is present, update the item attributes
+        itemDataOpt.ifPresent(itemData -> {
+            int maxLvl = itemData.maxLvl();
+            int startAccuracy = itemData.startAccuracy();
+            int endAccuracy = itemData.endAccuracy();
+            int startEvasion = itemData.startEvasion();
+            int endEvasion = itemData.endEvasion();
+            int maxDurability = itemData.maxDurability();
+            int startDamage = itemData.starDamage();
+            int endDamage = itemData.endDamage();
+            int startProtect = itemData.startProtection();
+            int endProtect = itemData.endProtection();
+
+            // Update item attributes using RefineUtil
+            RefineUtil.setRefineLvl(stack, refineLvl);
+            RefineUtil.setAccuracy(stack, refineLvl, maxLvl, startAccuracy, endAccuracy);
+            RefineUtil.setEvasion(stack, refineLvl, maxLvl, startEvasion, endEvasion);
+            RefineUtil.setDurability(stack, maxDurability);
+            RefineUtil.setExtraDamage(stack, refineLvl, maxLvl, startDamage, endDamage);
+            RefineUtil.setExtraProtect(stack, refineLvl, maxLvl, startProtect, endProtect);
+        });
     }
     public static void setBroken(ItemStack stack) {
         if (stack.get(ModDataComponents.PENOMIOR) != null)
@@ -206,7 +209,7 @@ public class RefineUtil {
         return (stack.get(ModDataComponents.PENOMIOR) != null && RefineUtil.getDurability(stack) <= 0);
     }
 
-    public static void initializeItemData(ItemStack stack, PenomiorItemData itemData) {
+    public static void initializeItemData(ItemStack stack, PenomiorItemEntry itemData) {
         if (stack.get(ModDataComponents.PENOMIOR) == null) {
             RefineUtil.setRefineLvl(stack, 0);
             RefineUtil.setDurability(stack, itemData.maxDurability());

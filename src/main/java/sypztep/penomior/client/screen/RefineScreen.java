@@ -89,7 +89,7 @@ public class RefineScreen
         double successRate = RefineUtil.getSuccessRate() * 100;
         String formattedSuccessRate = String.format("%.2f%%", successRate);
         ItemStack stack = handler.getSlot(1).getStack();
-        boolean bl = handler.matchesItemData(stack);
+        boolean bl = handler.isValidItem(stack);
         boolean bl2 = stack.get(ModDataComponents.PENOMIOR) == null;
         if (bl) {
             context.getMatrices().push();
@@ -109,7 +109,7 @@ public class RefineScreen
         int j = (this.height - this.backgroundHeight) / 2;
         context.drawTexture(TEXTURE, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
         ItemStack stack = handler.getSlot(1).getStack();
-        boolean bl = handler.matchesItemData(stack);
+        boolean bl = handler.isValidItem(stack);
         if (bl) {
             context.setShaderColor(1, 1, 1, 0.45F);
             if (!(stack.getItem() instanceof ArmorItem))

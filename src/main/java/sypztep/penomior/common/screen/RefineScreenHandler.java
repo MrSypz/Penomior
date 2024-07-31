@@ -11,12 +11,15 @@ import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
 import sypztep.penomior.client.payload.AddRefineSoundPayloadS2C;
 import sypztep.penomior.client.payload.RefinePayloadS2C;
-import sypztep.penomior.common.data.PenomiorItemData;
+import sypztep.penomior.common.data.PenomiorItemEntry;
 import sypztep.penomior.common.init.ModDataComponents;
 import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.penomior.common.init.ModItems;
 import sypztep.penomior.common.init.ModScreenHandler;
 import sypztep.penomior.common.util.RefineUtil;
+
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 public class RefineScreenHandler extends ScreenHandler {
     private final Inventory inventory = new SimpleInventory(3) {
@@ -47,7 +50,7 @@ public class RefineScreenHandler extends ScreenHandler {
         addSlot(new Slot(this.inventory, 1, 143, 30) {
             @Override
             public boolean canInsert(ItemStack stack) {
-                return matchesItemData(stack);
+                return isValidItem(stack);
             }
         });
         addSlot(new Slot(this.inventory, 2, 11, 49) {
@@ -79,7 +82,7 @@ public class RefineScreenHandler extends ScreenHandler {
         boolean allSlotInsert = this.getSlot(0).hasStack() && this.getSlot(1).hasStack();
         boolean canRefine = false;
 
-        if (allSlotInsert && matchesItemData(slotOutput) && RefineUtil.getRefineLvl(slotOutput) < 20) {
+        if (allSlotInsert && isValidItem(slotOutput) && RefineUtil.getRefineLvl(slotOutput) < 20) {
             ItemStack material = this.getSlot(0).getStack();
             boolean isArmor = slotOutput.getItem() instanceof ArmorItem;
             boolean isRefined = slotOutput.get(ModDataComponents.PENOMIOR) != null;
@@ -116,10 +119,10 @@ public class RefineScreenHandler extends ScreenHandler {
         return true;
     }
 
-    public boolean matchesItemData(ItemStack stack) {
-        String itemID = PenomiorItemData.getItemId(stack);
-        PenomiorItemData itemData = PenomiorItemData.getPenomiorItemData(itemID);
-        return itemData != null && itemID.equals(itemData.itemID());
+    public boolean isValidItem(ItemStack stack) {
+        String itemID = PenomiorItemEntry.getItemId(stack);
+        Optional<PenomiorItemEntry> itemDataOpt = PenomiorItemEntry.getPenomiorItemData(itemID);
+        return itemDataOpt.isPresent();
     }
 
     private boolean isRefineMaterial(ItemStack stack) {
@@ -128,7 +131,12 @@ public class RefineScreenHandler extends ScreenHandler {
 
     public void refine() {
         ItemStack slotOutput = this.getSlot(1).getStack();
-        PenomiorItemData itemData = PenomiorItemData.getPenomiorItemData(slotOutput);
+        String itemID = PenomiorItemEntry.getItemId(slotOutput);
+        Optional<PenomiorItemEntry> itemDataOpt = PenomiorItemEntry.getPenomiorItemData(itemID);
+        PenomiorItemEntry itemData = PenomiorItemEntry.getPenomiorItemData(itemID)
+                .orElseThrow(() -> new NoSuchElementException("Item data not found for item ID: " + itemID));
+        if (itemDataOpt.isPresent())
+            itemData = itemDataOpt.get();
 
         RefineUtil.initializeItemData(slotOutput, itemData); // this one will excute when data is null
         //----------pre define-----------//
@@ -147,7 +155,7 @@ public class RefineScreenHandler extends ScreenHandler {
         int repairPoint = itemData.repairpoint();
         ItemStack material = this.getSlot(0).getStack();
         ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
-        if (matchesItemData(slotOutput) && RefineUtil.getRefineLvl(slotOutput) < itemData.maxLvl() && durability > 0 && !material.isOf(ModItems.MOONLIGHT_CRESCENT)) {
+        if (isValidItem(slotOutput) && RefineUtil.getRefineLvl(slotOutput) < itemData.maxLvl() && durability > 0 && !material.isOf(ModItems.MOONLIGHT_CRESCENT)) {
             // Refinement process
             if (RefineUtil.handleRefine(slotOutput, failStack)) { // Random Success Rate
                 RefineUtil.setRefineLvl(slotOutput, currentRefineLvl + 1);
@@ -204,7 +212,7 @@ public class RefineScreenHandler extends ScreenHandler {
                     if (!insertItem(slotStack, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (matchesItemData(slotStack)) {
+                } else if (isValidItem(slotStack)) {
                     if (!insertItem(slotStack, 1, 2, false)) {
                         return ItemStack.EMPTY;
                     }

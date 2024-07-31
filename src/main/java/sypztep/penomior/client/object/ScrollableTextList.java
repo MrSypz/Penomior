@@ -14,7 +14,7 @@ public class ScrollableTextList {
     private static final float SCROLL_SPEED = 1.2F; // Speed of the scrolling effect
     private static final int ICON_SIZE = 16; // Size of the icon
 
-    private static int heigh;
+    private static int localHeight;
 
     private final List<ListElement> items;
     private float scrollOffset; // Use float for smooth scrolling
@@ -41,7 +41,7 @@ public class ScrollableTextList {
         int totalItems = items.size();
         int totalScrollableHeight = totalItems * textHeight; // Total height of all items
         int maxScrollOffset = Math.max(0, totalScrollableHeight - height); // Maximum scrollable area
-        heigh = height;
+        localHeight = height;
 
         // Smoothly update scrollOffset towards targetScrollOffset
         if (scrollOffset != targetScrollOffset) {
@@ -140,7 +140,7 @@ public class ScrollableTextList {
         int totalScrollableHeight = totalItems * textHeight;
 
         // Clamp targetScrollOffset to be within bounds
-        int maxScrollOffset = Math.max(0, totalScrollableHeight - heigh); // Ensure height is factored in
+        int maxScrollOffset = Math.max(0, totalScrollableHeight - localHeight); // Ensure height is factored in
         targetScrollOffset = Math.max(0, Math.min(targetScrollOffset, maxScrollOffset));
     }
 
