@@ -35,7 +35,6 @@ public class Animation {
     public float getProgress() {
         return elapsedTime / duration;
     }
-
     // Check if the animation is completed
     public boolean isCompleted() {
         return isCompleted;
