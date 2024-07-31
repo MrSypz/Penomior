@@ -11,7 +11,6 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import sypztep.penomior.Penomior;
-import sypztep.penomior.common.util.MobStatsEntry;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
