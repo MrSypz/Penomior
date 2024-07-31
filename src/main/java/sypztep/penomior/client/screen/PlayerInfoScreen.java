@@ -1,26 +1,31 @@
 package sypztep.penomior.client.screen;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.Vec2f;
+import sypztep.penomior.Penomior;
 import sypztep.penomior.client.object.Animation;
+import sypztep.penomior.client.object.ListElement;
 import sypztep.penomior.client.object.ScrollableTextList;
 import sypztep.penomior.common.init.ModEntityAttributes;
 import sypztep.penomior.common.util.*;
+import sypztep.penomior.common.util.interfaces.AttributeStorage;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Environment(EnvType.CLIENT)
 public class PlayerInfoScreen extends Screen {
     private static final float ANIMATION_DURATION = 12.0f; // Duration of the animation in seconds
     private static final float FINAL_Y_OFFSET = 50.0f; // Final vertical offset of the text
 
     private Animation verticalAnimation;
     private Animation fadeAnimation;
+
     private final ScrollableTextList scrollableTextList;
 
     public PlayerInfoScreen(MinecraftClient client) {
@@ -30,25 +35,38 @@ public class PlayerInfoScreen extends Screen {
 
         Map<String, Double> attributeAmounts = ItemStackHelper.getAttributeAmounts(client.player);
         double attackDamage = attributeAmounts.getOrDefault("attribute.name.generic.attack_damage", client.player.getAttributeBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
-
+        AttributeStorage accuracyAccessor = (AttributeStorage) client.player;
+        // Map of values for text replacement
         Map<String, Object> values = Map.of(
                 "ap", attackDamage,
                 "asp", client.player.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED),
-                "cdmg", client.player.getAttributeValue(ModEntityAttributes.GENERIC_CRIT_DAMAGE),
-                "ccn", client.player.getAttributeValue(ModEntityAttributes.GENERIC_CRIT_CHANCE),
-                "dp", client.player.getAttributeValue(EntityAttributes.GENERIC_ARMOR)
+                "cdmg", client.player.getAttributeValue(ModEntityAttributes.GENERIC_CRIT_DAMAGE) * 100f,
+                "ccn", client.player.getAttributeValue(ModEntityAttributes.GENERIC_CRIT_CHANCE) * 100f,
+                "apen", 0,
+                "acc", accuracyAccessor.getAccuracy(),
+                "dp", client.player.getAttributeValue(EntityAttributes.GENERIC_ARMOR),
+                "dpt", client.player.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS),
+                "dr", 0,
+                "eva", accuracyAccessor.getEvasion()
         );
 
-        List<String> element = new ArrayList<>(List.of(
-                "MELEE",
-                "Attack Power: %ap",
-                "Attack Speed: %asp",
-                "Critical Damage: %cdmg",
-                "Critical Chance: %ccn",
-                "DEFENSE",
-                "Armor: %dp"
-        ));
-        this.scrollableTextList = new ScrollableTextList(element, values);
+        // Create a list of ListElement objects with text and associated icons
+        List<ListElement> listItems = List.of(
+                new ListElement("MELEE", Penomior.id("hud/container/icon_0")),
+                new ListElement("Attack Power: %ap"),
+                new ListElement("Attack Speed: %asp"),
+                new ListElement("Critical Damage: %cdmg %"),
+                new ListElement("Critical Chance: %ccn %"),
+                new ListElement("Armor Penetrate: %apen %"),
+                new ListElement("Accuracy: %acc"),
+                new ListElement("DEFENSE", Penomior.id("hud/container/icon_1.png")),
+                new ListElement("Armor: %dp"),
+                new ListElement("Armor Toughness: %dpt"),
+                new ListElement("Damage Reduction: %dr %"),
+                new ListElement("Evasion: %eva")
+        );
+
+        this.scrollableTextList = new ScrollableTextList(listItems, values); // Assuming textHeight is 25
     }
 
     @Override
@@ -62,55 +80,55 @@ public class PlayerInfoScreen extends Screen {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         this.renderBackground(context, mouseX, mouseY, delta);
 
-        if (!verticalAnimation.isCompleted()) verticalAnimation.update(delta);
-        if (!fadeAnimation.isCompleted()) fadeAnimation.update(delta);
+        verticalAnimation.update(delta);
+        fadeAnimation.update(delta);
 
+        // Get screen dimensions
+        int screenWidth = context.getScaledWindowWidth();
+        int screenHeight = context.getScaledWindowHeight();
+
+        // Calculate positions and sizes based on screen dimensions
+        float contentSectionWidthRatio = 0.25f; // 25% of screen width
+        float contentSectionHeightRatio = 0.5f; // 50% of screen height
+
+        int contentWidth = (int) (screenWidth * contentSectionWidthRatio);
+        int contentHeight = (int) (screenHeight * contentSectionHeightRatio);
+
+        // Position x should be centered with some margin
+        int textComponentX = (int) (screenWidth * 0.67f); // 2/3 of the screen width
+        int verticalOffset = (int) AnimationUtils.getPositionOffset(verticalAnimation.getProgress(), FINAL_Y_OFFSET, screenHeight);
+
+        // Set background color
         DrawContextUtils.fillScreen(context, 0xFF121212);
 
-        float verticalOffset = AnimationUtils.getPositionOffset(verticalAnimation.getProgress(), FINAL_Y_OFFSET);
-        int alpha = AnimationUtils.getAlpha(fadeAnimation.getProgress());
-        float fadeProgress = fadeAnimation.getProgress();
+        // Draw content section
+        drawContentSection(context, textComponentX, verticalOffset, contentWidth, contentHeight, screenHeight, delta);
 
-        Vec2f scale = new Vec2f(1.0f, 1.0f);
-
-        drawContentSection(context, 1280, (int) verticalOffset, alpha, scale);
-        drawHeaderSection(context, 1280, (int) verticalOffset, alpha, fadeProgress, scale);
+        // Draw header section
+        drawHeaderSection(context, textComponentX, verticalOffset, fadeAnimation.getProgress());
     }
 
-    private void drawContentSection(DrawContext context, int x, float verticalOffset, int alpha, Vec2f scale) {
-        int contentHeight = 810; // Equivalent to 1.5 times the base height
-        int contentWidth = 480; // Equivalent to one-fourth the base width
+    private void drawContentSection(DrawContext context, int x, float verticalOffset, int contentWidth, int contentHeight, int screenHeight, float deltatick) {
+        // Set the rectangle's position with margin and draw it
+        int rectX = x + 10;
+        int rectY = (int) verticalOffset + 14;
+        DrawContextUtils.drawRect(context, rectX, rectY, contentWidth, contentHeight + 8, 0xFF1E1E1E);
 
-        PositionElementUtil.drawScaledRect(context, x + 20, (int) verticalOffset - 10, contentWidth, contentHeight + 6, 0xFF1E1E1E, scale);
-
-        scrollableTextList.render(context, this.textRenderer,
-                PositionElementUtil.getScaledX(context.getScaledWindowWidth(), x + 25, scale.x),
-                PositionElementUtil.getScaledY(context.getScaledWindowHeight(), (int) verticalOffset + 45, scale.y),
-                PositionElementUtil.getScaledWidth(context.getScaledWindowWidth(), contentWidth, scale.x),
-                PositionElementUtil.getScaledHeight(context.getScaledWindowHeight(), contentHeight * 2, scale.y),
-                0.5f, alpha);
+        // Render scrollable text list
+        scrollableTextList.render(context, this.textRenderer, x + 25, (int) (verticalOffset + 55), contentWidth, screenHeight, 0.5f, AnimationUtils.getAlpha(fadeAnimation.getProgress()), deltatick);
     }
 
-    private void drawHeaderSection(DrawContext context, int x, float verticalOffset, int alpha, float fadeProgress, Vec2f scale) {
-        AnimationUtils.drawFadeText(context, this.textRenderer, "Information",
-                PositionElementUtil.getScaledX(context.getScaledWindowWidth(), x + 60, scale.x),
-                PositionElementUtil.getScaledY(context.getScaledWindowHeight(), (int) (-25 + verticalOffset), scale.y), alpha);
-
-        DrawContextUtils.renderHorizontalLineWithCenterGradient(context,
-                PositionElementUtil.getScaledX(context.getScaledWindowWidth(), x + 48, scale.x),
-                PositionElementUtil.getScaledY(context.getScaledWindowHeight(), (int) (-15 + verticalOffset), scale.y),
-                PositionElementUtil.getScaledWidth(context.getScaledWindowWidth(), 80, scale.x), 1, 400,
+    private void drawHeaderSection(DrawContext context, int x, float verticalOffset, float fadeProgress) {
+        AnimationUtils.drawFadeText(context, this.textRenderer, Text.translatable("penomior.gui.player_info.header"), x + 60, (int) (verticalOffset), AnimationUtils.getAlpha(fadeProgress));
+        DrawContextUtils.renderHorizontalLineWithCenterGradient(context, x + 48, (int) (-4 + verticalOffset), 80, 1, 400,
                 ColorUtils.rgbaToHex(255, 255, 255, 255), ColorUtils.rgbaToHex(0, 0, 0, 0), fadeProgress);
-
-        DrawContextUtils.renderVerticalLine(context,
-                PositionElementUtil.getScaledX(context.getScaledWindowWidth(), x, scale.x),
-                PositionElementUtil.getScaledY(context.getScaledWindowHeight(), (int) (-25 + verticalOffset), scale.y),
-                PositionElementUtil.getScaledHeight(context.getScaledWindowHeight(), 226, scale.y), 1, 400, ColorUtils.fromRgb(255, 255, 255));
+        DrawContextUtils.renderHorizontalLineWithCenterGradient(context, x + 48, (int) (10 + verticalOffset), 80, 1, 400,
+                ColorUtils.rgbaToHex(255, 255, 255, 255), ColorUtils.rgbaToHex(0, 0, 0, 0), fadeProgress);
     }
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        scrollableTextList.scroll((int) verticalAmount * 20);
+        scrollableTextList.scroll((int) verticalAmount * 25);
         return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 
@@ -119,10 +137,3 @@ public class PlayerInfoScreen extends Screen {
         return false;
     }
 }
-
-
-
-
-
-
-
