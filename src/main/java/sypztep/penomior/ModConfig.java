@@ -13,16 +13,17 @@ public class ModConfig extends MidnightConfig {
             "minecraft:slime", "minecraft:magma_cube"
     );
     @Entry
-    public static List<String> attackExcludedEntities = Arrays.asList(
+    public static List<String> attackExcludedEntities = List.of(
             "minecraft:warden"
     );
-    @Entry
+    @Entry(min = 0.0f, max = 1.0f)
     public static float attackCancelThreshold = 0.15f;
-    @Entry
+
+    @Entry(min = 0.0f, max = 1.0f)
     public static float knockbackCancelThreshold = 0.75f;
     @Entry
     public static boolean refineItemUnbreak = false;
-    @Entry
+    @Entry(min = -1)
     public static int iFrameDuration = 10;
     @Comment(centered = true)
     public static Comment combatConfig;
@@ -32,8 +33,6 @@ public class ModConfig extends MidnightConfig {
     public static Comment featureConfig;
     @Entry
     public static boolean missingArrowPassthough = true;
-    @Entry
-    public static boolean playerstatsInfo = true;
     static {
         MidnightConfig.init(Penomior.MODID, ModConfig.class);
     }
