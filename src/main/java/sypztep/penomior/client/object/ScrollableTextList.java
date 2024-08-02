@@ -30,7 +30,7 @@ public class ScrollableTextList {
         this.textHeight = 25;
     }
 
-    public void render(DrawContext context, TextRenderer textRenderer, int x, int y, int width, int height, float scale, int alpha, float deltaTick) {
+    public void render(DrawContext context, TextRenderer textRenderer, int x, int y, int width, int height, float scale,float iconscale, int alpha, float deltaTick) {
         int totalItems = items.size();
         int totalScrollableHeight = totalItems * textHeight; // Total height of all items
         int maxScrollOffset = Math.max(0, totalScrollableHeight - height); // Maximum scrollable area
@@ -78,8 +78,8 @@ public class ScrollableTextList {
                     // Draw icon if present
                     if (icon != null) {
                         context.getMatrices().push();
-                        context.getMatrices().translate((x + offsetX - ICON_SIZE) / scale + 10, currentY, 0);
-                        context.getMatrices().scale(scale, scale, 1.0F);
+                        context.getMatrices().translate((x + offsetX - ICON_SIZE) / scale + 10, currentY , 0);
+                        context.getMatrices().scale(iconscale, iconscale, 1.0F);
                         context.drawGuiTexture(icon, 0, 0, ICON_SIZE, ICON_SIZE); // Adjust x, y, width, height
                         context.getMatrices().pop();
                     }
