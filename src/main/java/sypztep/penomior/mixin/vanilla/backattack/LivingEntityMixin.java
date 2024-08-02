@@ -7,6 +7,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.tag.DamageTypeTags;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,7 +15,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import sypztep.penomior.ModConfig;
-import sypztep.penomior.client.payload.AddBackParticlesPayload;
+import sypztep.penomior.client.payload.AddTextParticlesPayload;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
@@ -36,11 +37,9 @@ public abstract class LivingEntityMixin extends Entity {
 		}
 		if (attacker instanceof LivingEntity livingAttacker && source != null) {
 			if (Math.abs(MathHelper.subtractAngles(getHeadYaw(), source.getSource().getHeadYaw())) <= 75) {
-				if (livingAttacker.squaredDistanceTo(target) < 2500) {
-					PlayerLookup.tracking(this).forEach(foundPlayer -> AddBackParticlesPayload.send(foundPlayer, this.getId()));
+					PlayerLookup.tracking((ServerWorld) target.getWorld(), target.getChunkPos()).forEach(foundPlayer -> AddTextParticlesPayload.send(foundPlayer, this.getId(), AddTextParticlesPayload.TextParticle.BACKATTACK)); // Attacker
 					if (livingAttacker instanceof PlayerEntity)
-						PlayerLookup.tracking(livingAttacker).forEach(foundPlayer -> AddBackParticlesPayload.send(foundPlayer, this.getId()));
-				}
+						PlayerLookup.tracking((ServerWorld) livingAttacker.getWorld(), livingAttacker.getChunkPos()).forEach(foundPlayer -> AddTextParticlesPayload.send(foundPlayer, this.getId(), AddTextParticlesPayload.TextParticle.BACKATTACK)); // Attacker
 				return amount * 1.5F;
 			}
 		}

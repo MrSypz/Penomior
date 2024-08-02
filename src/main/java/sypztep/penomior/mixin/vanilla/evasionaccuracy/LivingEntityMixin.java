@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import sypztep.penomior.Penomior;
-import sypztep.penomior.client.payload.AddMissingParticlesPayload;
+import sypztep.penomior.client.payload.AddTextParticlesPayload;
 import sypztep.penomior.common.util.interfaces.MissingAccessor;
 import sypztep.penomior.common.component.StatsComponent;
 import sypztep.penomior.common.data.PenomiorData;
@@ -48,7 +48,9 @@ public abstract class LivingEntityMixin extends Entity implements MissingAccesso
     @Shadow
     public abstract boolean damage(DamageSource source, float amount);
 
-    @Shadow @Nullable public abstract EntityAttributeInstance getAttributeInstance(RegistryEntry<EntityAttribute> attribute);
+    @Shadow
+    @Nullable
+    public abstract EntityAttributeInstance getAttributeInstance(RegistryEntry<EntityAttribute> attribute);
 
     protected LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -67,10 +69,8 @@ public abstract class LivingEntityMixin extends Entity implements MissingAccesso
             penomior$setMissing(isMissing);
 
             if (isMissing) {// missing attack
-                if (livingAttacker.squaredDistanceTo(target) < 1500) {
-                    PlayerLookup.tracking((ServerWorld) target.getWorld(), target.getChunkPos()).forEach(foundPlayer -> AddMissingParticlesPayload.send(foundPlayer, this.getId())); //Who Take Damage
-                    PlayerLookup.tracking((ServerWorld) livingAttacker.getWorld(), livingAttacker.getChunkPos()).forEach(foundPlayer -> AddMissingParticlesPayload.send(foundPlayer, this.getId())); // Attacker
-                }
+                PlayerLookup.tracking((ServerWorld) target.getWorld(), target.getChunkPos()).forEach(foundPlayer -> AddTextParticlesPayload.send(foundPlayer, this.getId(), AddTextParticlesPayload.TextParticle.MISSING)); //Who Take Damage
+                PlayerLookup.tracking((ServerWorld) livingAttacker.getWorld(), livingAttacker.getChunkPos()).forEach(foundPlayer -> AddTextParticlesPayload.send(foundPlayer, this.getId(), AddTextParticlesPayload.TextParticle.MISSING)); // Attacker
                 cir.setReturnValue(false); // change from ci.cancle() to cancle
             }
         }
@@ -105,11 +105,13 @@ public abstract class LivingEntityMixin extends Entity implements MissingAccesso
             }
         }
     }
+
     @Unique
     private static void ReplaceAttributeModifier(EntityAttributeInstance att, EntityAttributeModifier mod) {
         att.removeModifier(mod);
         att.addPersistentModifier(mod);
     }
+
     @Override
     public boolean penomior$isMissing() {
         return isMissing;
