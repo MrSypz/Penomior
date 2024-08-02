@@ -1,10 +1,10 @@
 package sypztep.penomior.client.object;
 
 public class Animation {
-    private final float duration; // Duration of the animation in seconds
-    private float elapsedTime; // Time elapsed since animation started
-    private final boolean isLooping; // Whether the animation should loop
-    private boolean isCompleted; // Whether the animation is completed
+    protected final float duration; // Duration of the animation in seconds
+    protected float elapsedTime; // Time elapsed since animation started
+    protected final boolean isLooping; // Whether the animation should loop
+    protected boolean isCompleted; // Whether the animation is completed
 
     // Constructor
     public Animation(float duration, boolean isLooping) {
