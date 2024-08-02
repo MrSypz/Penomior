@@ -26,6 +26,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         if (ModConfig.inDev) {
             return (float) this.getAttributeValue(ModEntityAttributes.GENERIC_CRIT_DAMAGE);
         }
+//        PlayerLookup.tracking((ServerWorld) this.getWorld(), this.getChunkPos()).forEach(foundPlayer -> AddTextParticlesPayload.send(foundPlayer, this.getId(), AddTextParticlesPayload.TextParticle.CRITICAL)); // Attacker
         return original;
     }
     @ModifyVariable(method = "attack", at = @At("STORE"), ordinal = 2)
