@@ -8,6 +8,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.text.Text;
 import sypztep.penomior.Penomior;
+import sypztep.penomior.client.object.SmoothProgressBar;
 import sypztep.penomior.client.object.Animation;
 import sypztep.penomior.client.object.ListElement;
 import sypztep.penomior.client.object.ScrollableTextList;
@@ -25,6 +26,7 @@ public class PlayerInfoScreen extends Screen {
 
     private Animation verticalAnimation;
     private Animation fadeAnimation;
+//    private SmoothProgressBar progessBar;
 
     private final ScrollableTextList scrollableTextList;
 
@@ -74,6 +76,7 @@ public class PlayerInfoScreen extends Screen {
         super.init();
         this.verticalAnimation = new Animation(ANIMATION_DURATION, false); // Single play for vertical animation
         this.fadeAnimation = new Animation(ANIMATION_DURATION, false); // Single play for fade animation
+//        this.progessBar = new SmoothProgressBar(ANIMATION_DURATION * 1.4f, false, 200, 20, 0xFF00FF00, 0xFF1E1E1E);
     }
 
     @Override
@@ -82,6 +85,7 @@ public class PlayerInfoScreen extends Screen {
 
         verticalAnimation.update(delta);
         fadeAnimation.update(delta);
+//        progessBar.update(delta);
 
         // Get screen dimensions
         int screenWidth = context.getScaledWindowWidth();
@@ -106,6 +110,17 @@ public class PlayerInfoScreen extends Screen {
 
         // Draw header section
         drawHeaderSection(context, textComponentX, verticalOffset, fadeAnimation.getProgress());
+
+        // Define the size and position of the progress bar
+        int barWidth = 200;
+        int barHeight = 20;
+        int x = (screenWidth - barWidth) / 2;
+        int y = (screenHeight - barHeight) / 2;
+
+//        progessBar.setProgress(0.51f);
+
+        // Render the progress bar
+//        progessBar.render(context, x, y);
     }
 
     private void drawContentSection(DrawContext context, int x, float verticalOffset, int contentWidth, int contentHeight, int screenHeight, float deltatick) {
@@ -129,6 +144,7 @@ public class PlayerInfoScreen extends Screen {
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
         scrollableTextList.scroll((int) verticalAmount * 25);
+
         return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 
