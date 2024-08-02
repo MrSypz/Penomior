@@ -27,7 +27,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import sypztep.penomior.Penomior;
 import sypztep.penomior.client.payload.AddMissingParticlesPayload;
-import sypztep.penomior.common.util.interfaces.AttributeStorage;
 import sypztep.penomior.common.util.interfaces.MissingAccessor;
 import sypztep.penomior.common.component.StatsComponent;
 import sypztep.penomior.common.data.PenomiorData;
@@ -40,15 +39,7 @@ import java.util.List;
 
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin extends Entity implements MissingAccessor, AttributeStorage {
-    @Unique
-    private int evasion;
-    @Unique
-    private int accuracy;
-    @Unique
-    private int extraDamage;
-    @Unique
-    private int extraProtection;
+public abstract class LivingEntityMixin extends Entity implements MissingAccessor {
     @Unique
     private boolean isMissing;
     @Unique
@@ -101,11 +92,6 @@ public abstract class LivingEntityMixin extends Entity implements MissingAccesso
             }
             ModEntityComponents.STATS.get(target).setEvasion(evasion.intValue());
             ModEntityComponents.STATS.get(target).setAccuracy(accuracy.intValue());
-            //Interface accessor
-            setEvasion(evasion.intValue());
-            setAccuracy(accuracy.intValue());
-            setExtraDamage(extraDamage.intValue());
-            setExtraProtection(extraProtect.intValue());
 
             EntityAttributeInstance armor = this.getAttributeInstance(EntityAttributes.GENERIC_ARMOR);
             EntityAttributeInstance attack = this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
@@ -123,46 +109,6 @@ public abstract class LivingEntityMixin extends Entity implements MissingAccesso
     private static void ReplaceAttributeModifier(EntityAttributeInstance att, EntityAttributeModifier mod) {
         att.removeModifier(mod);
         att.addPersistentModifier(mod);
-    }
-
-    @Override
-    public int getEvasion() {
-        return evasion;
-    }
-
-    @Override
-    public void setEvasion(int evasion) {
-        this.evasion = evasion;
-    }
-
-    @Override
-    public int getAccuracy() {
-        return accuracy;
-    }
-
-    @Override
-    public void setAccuracy(int accuracy) {
-        this.accuracy = accuracy;
-    }
-
-    @Override
-    public int getExtraDamage() {
-        return extraDamage;
-    }
-
-    @Override
-    public void setExtraDamage(int extraDamage) {
-        this.extraDamage = extraDamage;
-    }
-
-    @Override
-    public int getExtraProtection() {
-        return extraProtection;
-    }
-
-    @Override
-    public void setExtraProtection(int extraProtection) {
-        this.extraProtection = extraProtection;
     }
     @Override
     public boolean penomior$isMissing() {
