@@ -1,4 +1,4 @@
-package sypztep.penomior.common.reloadlistener;
+package sypztep.penomior.common.data;
 
 import net.minecraft.entity.EntityType;
 
