@@ -110,10 +110,10 @@ public class PlayerInfoScreen extends Screen {
         drawHeaderSection(context, textComponentX, verticalOffset, fadeAnimation.getProgress());
 
         // Define the size and position of the progress bar
-        int barWidth = 200;
-        int barHeight = 20;
-        int x = (screenWidth - barWidth) / 2;
-        int y = (screenHeight - barHeight) / 2;
+//        int barWidth = 200;
+//        int barHeight = 20;
+//        int x = (screenWidth - barWidth) / 2;
+//        int y = (screenHeight - barHeight) / 2;
 
 //        progessBar.setProgress(0.51f);
 

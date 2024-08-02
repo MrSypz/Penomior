@@ -9,10 +9,7 @@ public final class AnimationUtils {
         return finalYOffset * (1.0f - (float) Math.pow(1.0f - progress, 3)); // Ease-out effect
     }
     public static float getPositionOffset(float progress, float finalYOffset, int screenHeight) {
-        // Calculate the scaled finalYOffset based on the screen height
         float scaledFinalYOffset = finalYOffset * (screenHeight / 1000.0f); // Example scaling factor, adjust as needed
-
-        // Calculate the position offset with an ease-out effect
         return scaledFinalYOffset * (1.0f - (float) Math.pow(1.0f - progress, 3));
     }
     public static int getAlpha(float progress) {
