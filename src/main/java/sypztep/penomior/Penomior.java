@@ -31,7 +31,6 @@ public class Penomior implements ModInitializer {
         return Identifier.of(MODID, path);
     }
 
-    public static boolean isCritalLoaded = false;
 
     @Override
     public void onInitialize() {
@@ -47,9 +46,6 @@ public class Penomior implements ModInitializer {
         EntityHurtCallback.EVENT.register(new HurtDurationEvent());
         EntityKnockbackCallback.EVENT.register(new KnockBackThresoEvent());
         PlayerAttackCallback.EVENT.register(new PlayerAttackPercentageEvent());
-
-        isCritalLoaded = FabricLoader.getInstance().isModLoaded("crital");
-
 
         ServerPlayNetworking.registerGlobalReceiver(RefinePayloadC2S.ID, new RefinePayloadC2S.Receiver());
         //Data Driven
