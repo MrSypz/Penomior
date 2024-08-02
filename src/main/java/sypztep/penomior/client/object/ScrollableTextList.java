@@ -29,13 +29,6 @@ public class ScrollableTextList {
         this.targetScrollOffset = 0;
         this.textHeight = 25;
     }
-    public ScrollableTextList(List<ListElement> items, Map<String, Object> values,int textHeight) {
-        this.items = items;
-        this.values = values;
-        this.scrollOffset = 0;
-        this.targetScrollOffset = 0;
-        this.textHeight = textHeight;
-    }
 
     public void render(DrawContext context, TextRenderer textRenderer, int x, int y, int width, int height, float scale, int alpha, float deltaTick) {
         int totalItems = items.size();
