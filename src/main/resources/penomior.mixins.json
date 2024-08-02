@@ -13,6 +13,7 @@
     "vanilla.critattribute.PlayerEntityMixin",
     "vanilla.evasionaccuracy.LivingEntityMixin",
     "vanilla.evasionaccuracy.ServerWorldMixin",
+    "vanilla.extraattribute.EntityAttributesMixin",
     "vanilla.extraattribute.LivingEntityMixin",
     "vanilla.newdamage.DamageUtilMixin",
     "vanilla.projectileclipthrough.PersistentProjectileEntityMixin",

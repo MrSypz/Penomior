@@ -36,17 +36,19 @@ public class PlayerInfoScreen extends Screen {
 
         Map<String, Double> attributeAmounts = ItemStackHelper.getAttributeAmounts(client.player);
         double attackDamage = attributeAmounts.getOrDefault("attribute.name.generic.attack_damage", client.player.getAttributeBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
+        double armor = client.player.getAttributeValue(EntityAttributes.GENERIC_ARMOR);
+        double armorthoughness = client.player.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS);
         // Map of values for text replacement
         Map<String, Object> values = Map.of(
                 "ap", attackDamage,
                 "asp", client.player.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED),
                 "cdmg", client.player.getAttributeValue(ModEntityAttributes.GENERIC_CRIT_DAMAGE) * 100f,
                 "ccn", client.player.getAttributeValue(ModEntityAttributes.GENERIC_CRIT_CHANCE) * 100f,
-                "apen", 0,
+//                "apen", 0,
                 "acc", ModEntityComponents.STATS.get(client.player).getAccuracy(),
-                "dp", client.player.getAttributeValue(EntityAttributes.GENERIC_ARMOR),
-                "at", client.player.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS),
-                "dr", 0,
+                "dp", armor,
+                "at", armorthoughness,
+                "dr", CombatUtils.getFinalDamageReductionFactor((float) armor, (float) armorthoughness) * 100,
                 "eva", ModEntityComponents.STATS.get(client.player).getEvasion()
         );
 
@@ -57,7 +59,7 @@ public class PlayerInfoScreen extends Screen {
                 new ListElement("Attack Speed: %asp"),
                 new ListElement("Critical Damage: %cdmg %"),
                 new ListElement("Critical Chance: %ccn %"),
-                new ListElement("Armor Penetrate: %apen %"),
+//                new ListElement("Armor Penetrate: %apen %"),
                 new ListElement("Accuracy: %acc"),
                 new ListElement("DEFENSE", Penomior.id("hud/container/icon_1.png")),
                 new ListElement("Armor: %dp"),
@@ -128,7 +130,7 @@ public class PlayerInfoScreen extends Screen {
         DrawContextUtils.drawRect(context, rectX, rectY, contentWidth, contentHeight + 8, 0xFF1E1E1E);
 
         // Render scrollable text list
-        playerInfo.render(context, this.textRenderer, x + 25, (int) (verticalOffset + 55), contentWidth, screenHeight, 0.5f, AnimationUtils.getAlpha(fadeAnimation.getProgress()), deltatick);
+        playerInfo.render(context, this.textRenderer, x + 25, (int) (verticalOffset + 55), contentWidth, screenHeight, 0.5f,1f, AnimationUtils.getAlpha(fadeAnimation.getProgress()), deltatick);
     }
     private void drawHeaderSection(DrawContext context, int x, float verticalOffset, float fadeProgress) {
         AnimationUtils.drawFadeText(context, this.textRenderer, Text.translatable("penomior.gui.player_info.header"), x + 60, (int) (verticalOffset), AnimationUtils.getAlpha(fadeProgress));
