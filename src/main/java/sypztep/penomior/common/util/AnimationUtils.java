@@ -2,6 +2,7 @@ package sypztep.penomior.common.util;
 
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 
 public final class AnimationUtils {
@@ -17,6 +18,12 @@ public final class AnimationUtils {
         return (int) alphaValue; // Convert to 0-255 range
     }
     public static void drawFadeText(DrawContext context,TextRenderer textRenderer, String text, int x, int y, int alpha) {
+        alpha = Math.max(0, Math.min(alpha, 255));
+        int color = (alpha << 24) | (255 << 16) | (255 << 8) | 255; // RGBA
+
+        context.drawText(textRenderer, text, x, y, color, false);
+    }
+    public static void drawFadeText(DrawContext context, TextRenderer textRenderer, OrderedText text, int x, int y, int alpha) {
         alpha = Math.max(0, Math.min(alpha, 255));
         int color = (alpha << 24) | (255 << 16) | (255 << 8) | 255; // RGBA
 

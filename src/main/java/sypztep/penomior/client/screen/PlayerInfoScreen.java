@@ -27,7 +27,7 @@ public class PlayerInfoScreen extends Screen {
     private Animation fadeAnimation;
 //    private SmoothProgressBar progessBar;
 
-    private final ScrollableTextList scrollableTextList;
+    private final ScrollableTextList playerInfo;
 
     public PlayerInfoScreen(MinecraftClient client) {
         super(Text.literal("Hello"));
@@ -66,7 +66,7 @@ public class PlayerInfoScreen extends Screen {
                 new ListElement("Evasion: %eva")
         );
 
-        this.scrollableTextList = new ScrollableTextList(listItems, values); // Assuming textHeight is 25
+        this.playerInfo = new ScrollableTextList(listItems, values); // Assuming textHeight is 25
     }
 
     @Override
@@ -128,9 +128,8 @@ public class PlayerInfoScreen extends Screen {
         DrawContextUtils.drawRect(context, rectX, rectY, contentWidth, contentHeight + 8, 0xFF1E1E1E);
 
         // Render scrollable text list
-        scrollableTextList.render(context, this.textRenderer, x + 25, (int) (verticalOffset + 55), contentWidth, screenHeight, 0.5f, AnimationUtils.getAlpha(fadeAnimation.getProgress()), deltatick);
+        playerInfo.render(context, this.textRenderer, x + 25, (int) (verticalOffset + 55), contentWidth, screenHeight, 0.5f, AnimationUtils.getAlpha(fadeAnimation.getProgress()), deltatick);
     }
-
     private void drawHeaderSection(DrawContext context, int x, float verticalOffset, float fadeProgress) {
         AnimationUtils.drawFadeText(context, this.textRenderer, Text.translatable("penomior.gui.player_info.header"), x + 60, (int) (verticalOffset), AnimationUtils.getAlpha(fadeProgress));
         DrawContextUtils.renderHorizontalLineWithCenterGradient(context, x + 48, (int) (-4 + verticalOffset), 80, 1, 400,
@@ -141,7 +140,7 @@ public class PlayerInfoScreen extends Screen {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        scrollableTextList.scroll((int) verticalAmount * 25);
+        playerInfo.scroll((int) verticalAmount * 25);
 
         return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
