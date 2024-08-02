@@ -19,7 +19,7 @@ import sypztep.tyrannus.common.util.ItemStackHelper;
 
 import java.util.*;
 
-public class RefineUtil {
+public final class RefineUtil {
     public static Map<Integer, String> romanRefineMap = new HashMap<>();
     public static Map<Integer, SoundEvent> soundEventsMap = new HashMap<>();
     private static final double[] normalSuccessRates = {

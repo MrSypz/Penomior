@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-public class ItemStackHelper {
+public final class ItemStackHelper {
     public static Map<String, Double> getAttributeAmounts(PlayerEntity player) {
         Map<String, Double> attributeAmounts = new HashMap<>();
         for (ItemStack stack : RefineUtil.getItemStackFromAllEquippedSlots(player)) {

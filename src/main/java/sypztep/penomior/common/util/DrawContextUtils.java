@@ -3,7 +3,7 @@ package sypztep.penomior.common.util;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 
-public class DrawContextUtils {
+public final class DrawContextUtils {
     public static void drawBoldText(DrawContext context, TextRenderer renderer, String string, int i, int j, int color,int bordercolor) {
         context.drawText(renderer, string, i+1, j, bordercolor, false);
         context.drawText(renderer, string, i-1, j, bordercolor, false);

@@ -9,7 +9,7 @@ import sypztep.penomior.client.particle.TextParticle;
 
 import java.awt.*;
 
-public class ParticleUtil {
+public final class ParticleUtil {
 
     private static void spawnParticle(Entity target, String text, Color color, float maxSize,float yPos) {
         MinecraftClient client = MinecraftClient.getInstance();

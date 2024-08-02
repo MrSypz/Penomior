@@ -1,6 +1,6 @@
 package sypztep.penomior.common.util;
 
-public class ColorUtils {
+public final class ColorUtils {
     public static int rgbaToHex(int red, int green, int blue, int alpha) {
         return ((alpha & 0xFF) << 24) |
                 ((red & 0xFF) << 16) |

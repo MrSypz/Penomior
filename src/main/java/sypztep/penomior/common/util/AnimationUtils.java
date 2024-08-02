@@ -4,7 +4,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 
-public class AnimationUtils {
+public final class AnimationUtils {
     public static float getPositionOffset(float progress, float finalYOffset) {
         return finalYOffset * (1.0f - (float) Math.pow(1.0f - progress, 3)); // Ease-out effect
     }
