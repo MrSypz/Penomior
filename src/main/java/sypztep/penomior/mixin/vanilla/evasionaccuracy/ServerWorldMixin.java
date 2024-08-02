@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import sypztep.penomior.common.component.StatsComponent;
 import sypztep.penomior.common.init.ModEntityComponents;
-import sypztep.penomior.common.util.MobStatsEntry;
+import sypztep.penomior.common.data.MobStatsEntry;
 
 @Mixin(ServerWorld.class)
 public abstract class ServerWorldMixin {

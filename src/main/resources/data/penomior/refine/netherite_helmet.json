@@ -1,0 +1,13 @@
+{
+    "maxLvl": 20,
+    "startAccuracy": 0,
+    "endAccuracy": 0,
+    "startEvasion": 0,
+    "endEvasion": 82,
+    "maxDurability": 100,
+    "starDamage": 0,
+    "endDamage": 0,
+    "startProtection": 0,
+    "endProtection": 15,
+    "repairpoint": 1
+}

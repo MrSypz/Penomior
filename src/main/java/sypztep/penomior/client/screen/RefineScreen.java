@@ -21,6 +21,7 @@ import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.penomior.common.init.ModItems;
 import sypztep.penomior.common.payload.RefinePayloadC2S;
 import sypztep.penomior.common.screen.RefineScreenHandler;
+import sypztep.penomior.common.util.DrawContextUtils;
 import sypztep.penomior.common.util.RefineUtil;
 import sypztep.tyrannus.common.util.CyclingItemSlotIcon;
 
@@ -70,14 +71,14 @@ public class RefineScreen
     public void removed() {
         super.removed();
         this.handler.removeListener(this);
+
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context, mouseX, mouseY, delta);
+        DrawContextUtils.fillScreen(context, 0xFF121212);
+        DrawContextUtils.drawRect(context,width / 2 , height / 2,200,100,0xFFFFFF);
         super.render(context, mouseX, mouseY, delta);
-        RenderSystem.disableBlend();
-
         this.drawMouseoverTooltip(context, mouseX, mouseY);
     }
 
@@ -89,11 +90,11 @@ public class RefineScreen
         double successRate = RefineUtil.getSuccessRate() * 100;
         String formattedSuccessRate = String.format("%.2f%%", successRate);
         ItemStack stack = handler.getSlot(1).getStack();
-        boolean bl = handler.matchesItemData(stack);
+        boolean bl = handler.isValidItem(stack);
         boolean bl2 = stack.get(ModDataComponents.PENOMIOR) == null;
         if (bl) {
             context.getMatrices().push();
-            context.getMatrices().scale(scale, scale, scale);
+            context.getMatrices().scale(scale, scale, 0);
             context.drawCenteredTextWithShadow(this.textRenderer, Text.of("Rate: " + formattedSuccessRate), x + 80, y - 35, 0xE0E0E0);
             if (bl2)
                 context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("???").formatted(Formatting.OBFUSCATED), 201, 78, 0xE0E0E0);
@@ -109,7 +110,7 @@ public class RefineScreen
         int j = (this.height - this.backgroundHeight) / 2;
         context.drawTexture(TEXTURE, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
         ItemStack stack = handler.getSlot(1).getStack();
-        boolean bl = handler.matchesItemData(stack);
+        boolean bl = handler.isValidItem(stack);
         if (bl) {
             context.setShaderColor(1, 1, 1, 0.45F);
             if (!(stack.getItem() instanceof ArmorItem))

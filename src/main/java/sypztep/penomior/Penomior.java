@@ -14,13 +14,14 @@ import sypztep.penomior.common.api.iframe.EntityKnockbackCallback;
 import sypztep.penomior.common.api.iframe.PlayerAttackCallback;
 import sypztep.penomior.common.command.RefineCommand;
 import sypztep.penomior.common.command.RefineSetCommand;
-import sypztep.penomior.common.data.PenomiorItemDataSerializer;
 import sypztep.penomior.common.event.HurtDurationEvent;
 import sypztep.penomior.common.event.KnockBackThresoEvent;
 import sypztep.penomior.common.event.PlayerAttackPercentageEvent;
 import sypztep.penomior.common.init.*;
 import sypztep.penomior.common.payload.RefinePayloadC2S;
+import sypztep.penomior.common.reloadlistener.DamageReductionReloadListener;
 import sypztep.penomior.common.reloadlistener.MobStatsReloadListener;
+import sypztep.penomior.common.reloadlistener.PenomiorItemReloadListener;
 
 public class Penomior implements ModInitializer {
     public static final String MODID = "penomior";
@@ -49,10 +50,11 @@ public class Penomior implements ModInitializer {
 
         isCritalLoaded = FabricLoader.getInstance().isModLoaded("crital");
 
+
         ServerPlayNetworking.registerGlobalReceiver(RefinePayloadC2S.ID, new RefinePayloadC2S.Receiver());
-        // Initialize the serializer
-        PenomiorItemDataSerializer.serializer.loadConfig();
         //Data Driven
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new MobStatsReloadListener());
+        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new PenomiorItemReloadListener());
+        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new DamageReductionReloadListener());
     }
 }

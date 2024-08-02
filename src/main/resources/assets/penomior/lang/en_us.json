@@ -1,9 +1,5 @@
 {
-  "penomior.gui.player_info.header":"Player Info",
-  "penomior.gui.player_info.accuracy":"Accuracy",
-  "penomior.gui.player_info.evasion":"Evasion",
-  "penomior.gui.player_info.tooltip.accuracy":"Accuracy points",
-  "penomior.gui.player_info.tooltip.evasion":"Evasion points",
+  "penomior.gui.player_info.header": "Player Stats",
   "item.penomior.refine_weapon_stone": "Refine Weapon stone",
   "item.penomior.refine_armor_stone": "Refine Armor stone",
   "item.penomior.moonlight_crescent": "Moonlight Crescent",
@@ -22,20 +18,17 @@
   "penomior.attribute.modifier.equals.0": "%s (%s) Attack Damage",
   "penomior.attribute.modifier.plus.1": "+%s (%s) Armor",
 
-  "penomior.midnightconfig.title": "Penomior Mod Config",
-  "penomior.midnightconfig.iframeConfig": "IFrame Config",
-  "penomior.midnightconfig.dmgReceiveExcludedEntities": "DamageReceiveExcludedEntities",
-  "penomior.midnightconfig.dmgReceiveExcludedEntities.tooltip": "Excluded the damage intake that by-pass Iframe",
-  "penomior.midnightconfig.attackExcludedEntities": "AttackExcludedEntities",
-  "penomior.midnightconfig.attackExcludedEntities.tooltip": "Excluded the Entities that by-pass Iframe",
-  "penomior.midnightconfig.iFrameDuration": "IFrame Duration",
-  "penomior.midnightconfig.iFrameDuration.tooltip": "How many ticks of i-frames does an entity get when damaged, from 10 (default) 0.5 sec, to 2^31-1 (nothing can take damage)",
-  "penomior.midnightconfig.attackCancelThreshold": "Attack Cancel Threshold",
-  "penomior.midnightconfig.attackCancelThreshold.tooltip": "How weak a player's attack can be before it gets nullified, from 0 (0%, cancels multiple attacks on the same tick) to 1 (100%, players cannot attack), or -0.1 (disables this feature)",
-  "penomior.midnightconfig.knockbackCancelThreshold": "Knockback Cancel Threshold",
-  "penomior.midnightconfig.knockbackCancelThreshold.tooltip": "How weak a player's attack can be before the knockback gets nullified, from 0 (0%, cancels multiple attacks on the same tick) to 1 (100%, no knockback), or -0.1 (disables this feature)",
+  "text.autoconfig.penomior.title": "Penomior Mod Config",
 
-  "penomior.midnightconfig.combatConfig": "Combat Config",
-  "penomior.midnightconfig.backattack": "Back Attack Damage",
-  "penomior.midnightconfig.backattack.tooltip": "BackAttack Feature when attack from behind damage 1.5 time"
+  "text.autoconfig.penomior.category.gameplay": "IFrame Config",
+  "text.autoconfig.penomior.category.refinement": "Refinement Config",
+  "text.autoconfig.penomior.category.combat": "Combat Config",
+  "text.autoconfig.penomior.category.feature": "Feature Config",
+  "text.autoconfig.penomior.category.feature-client": "Client Feature Config",
+
+  "text.autoconfig.penomior.option.dmgReceiveExcludedEntities": "DamageReceiveExcludedEntities",
+  "text.autoconfig.penomior.option.attackExcludedEntities": "AttackExcludedEntities",
+  "text.autoconfig.penomior.option.iFrameDuration": "IFrame Duration",
+  "text.autoconfig.penomior.option.attackCancelThreshold": "Attack Cancel Threshold",
+  "text.autoconfig.penomior.option.knockbackCancelThreshold": "Knockback Cancel Threshold"
 }

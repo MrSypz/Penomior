@@ -11,8 +11,10 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import sypztep.penomior.common.data.PenomiorItemData;
+import sypztep.penomior.common.data.PenomiorItemEntry;
 import sypztep.penomior.common.util.RefineUtil;
+
+import java.util.Optional;
 
 public class RefineSetCommand implements CommandRegistrationCallback {
     @Override
@@ -28,7 +30,11 @@ public class RefineSetCommand implements CommandRegistrationCallback {
 
         if (player != null) {
             ItemStack slotOutput = player.getMainHandStack();
-            PenomiorItemData itemData = PenomiorItemData.getPenomiorItemData(slotOutput);
+            String itemID = PenomiorItemEntry.getItemId(slotOutput);
+            Optional<PenomiorItemEntry> itemDataOpt = PenomiorItemEntry.getPenomiorItemData(itemID);
+            PenomiorItemEntry itemData = null;
+            if (itemDataOpt.isPresent())
+                itemData = itemDataOpt.get();
             if (itemData == null) {
                 player.sendMessage(Text.literal("Invalid Item Data").formatted(Formatting.RED), false);
                 return 0;
