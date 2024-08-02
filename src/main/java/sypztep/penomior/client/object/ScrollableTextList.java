@@ -146,7 +146,12 @@ public class ScrollableTextList {
 
     public static class StringFormatter {
         public static String format(String template, Map<String, Object> values) {
-            for (Map.Entry<String, Object> entry : values.entrySet()) {
+            List<Map.Entry<String, Object>> sortedEntries = values.entrySet()
+                    .stream()
+                    .sorted((e1, e2) -> Integer.compare(e2.getKey().length(), e1.getKey().length()))
+                    .toList();
+
+            for (Map.Entry<String, Object> entry : sortedEntries) {
                 String placeholder = "%" + entry.getKey();
                 Object value = entry.getValue();
                 String replacement = formatValue(value);

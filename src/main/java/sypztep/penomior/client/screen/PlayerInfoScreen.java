@@ -8,13 +8,12 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.text.Text;
 import sypztep.penomior.Penomior;
-import sypztep.penomior.client.object.SmoothProgressBar;
 import sypztep.penomior.client.object.Animation;
 import sypztep.penomior.client.object.ListElement;
 import sypztep.penomior.client.object.ScrollableTextList;
 import sypztep.penomior.common.init.ModEntityAttributes;
+import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.penomior.common.util.*;
-import sypztep.penomior.common.util.interfaces.AttributeStorage;
 
 import java.util.List;
 import java.util.Map;
@@ -37,7 +36,6 @@ public class PlayerInfoScreen extends Screen {
 
         Map<String, Double> attributeAmounts = ItemStackHelper.getAttributeAmounts(client.player);
         double attackDamage = attributeAmounts.getOrDefault("attribute.name.generic.attack_damage", client.player.getAttributeBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
-        AttributeStorage accuracyAccessor = (AttributeStorage) client.player;
         // Map of values for text replacement
         Map<String, Object> values = Map.of(
                 "ap", attackDamage,
@@ -45,11 +43,11 @@ public class PlayerInfoScreen extends Screen {
                 "cdmg", client.player.getAttributeValue(ModEntityAttributes.GENERIC_CRIT_DAMAGE) * 100f,
                 "ccn", client.player.getAttributeValue(ModEntityAttributes.GENERIC_CRIT_CHANCE) * 100f,
                 "apen", 0,
-                "acc", accuracyAccessor.getAccuracy(),
+                "acc", ModEntityComponents.STATS.get(client.player).getAccuracy(),
                 "dp", client.player.getAttributeValue(EntityAttributes.GENERIC_ARMOR),
                 "at", client.player.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS),
                 "dr", 0,
-                "eva", accuracyAccessor.getEvasion()
+                "eva", ModEntityComponents.STATS.get(client.player).getEvasion()
         );
 
         // Create a list of ListElement objects with text and associated icons
