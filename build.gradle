@@ -36,6 +36,11 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    //Cloth Config
+    maven {
+        name = "Cloth Config"
+        url = "https://maven.shedaniel.me/"
+    }
 }
 
 dependencies {
@@ -47,15 +52,16 @@ dependencies {
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    modImplementation include ("org.ladysnake.cardinal-components-api:cardinal-components-base:${cardinal_components_version}")
-    modImplementation include ("org.ladysnake.cardinal-components-api:cardinal-components-entity:${cardinal_components_version}")
+    modImplementation include("org.ladysnake.cardinal-components-api:cardinal-components-base:${cardinal_components_version}")
+    modImplementation include("org.ladysnake.cardinal-components-api:cardinal-components-entity:${cardinal_components_version}")
 
-    modImplementation "maven.modrinth:midnightlib:${project.midnightlib_version}"
-
-    modImplementation include ("com.github.MrSypz:Tyrannus:${project.tyrannus_version}")
+    modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_version}") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
+    modImplementation include("com.github.MrSypz:Tyrannus:${project.tyrannus_version}")
 
     modRuntimeOnly "maven.modrinth:sodium:${sodium_version}"
-    modRuntimeOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
+    modApi "com.terraformersmc:modmenu:${project.modmenu_version}"
 
     modImplementation "curse.maven:jade-324717:${jade_version}"
 
@@ -70,8 +76,7 @@ processResources {
     filesMatching("fabric.mod.json") {
         expand "version": project.version,
                 "minecraft_version": project.minecraft_version,
-                "loader_version": project.loader_version,
-        "midnightlib_version": project.midnightlib_version
+                "loader_version": project.loader_version
 
     }
 }
@@ -94,7 +99,7 @@ java {
 
 jar {
     from("LICENSE") {
-        rename { "${it}_${project.archivesBaseName}"}
+        rename { "${it}_${project.archivesBaseName}" }
     }
 }
 
