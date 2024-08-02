@@ -7,6 +7,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import sypztep.penomior.Penomior;
 import sypztep.penomior.client.object.Animation;
 import sypztep.penomior.client.object.ListElement;
@@ -61,7 +62,7 @@ public class PlayerInfoScreen extends Screen {
                 new ListElement("Critical Chance: %ccn %"),
 //                new ListElement("Armor Penetrate: %apen %"),
                 new ListElement("Accuracy: %acc"),
-                new ListElement("DEFENSE", Penomior.id("hud/container/icon_1.png")),
+                new ListElement("VITALITY", Identifier.ofVanilla("hud/heart/full")),
                 new ListElement("Armor: %dp"),
                 new ListElement("Armor Toughness: %at"),
                 new ListElement("Damage Reduction: %dr %"),
