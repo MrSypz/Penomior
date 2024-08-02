@@ -9,8 +9,7 @@ public class ModPayload {
         PayloadTypeRegistry.playS2C().register(RefinePayloadS2C.ID, RefinePayloadS2C.CODEC); // Server to Client
 
         PayloadTypeRegistry.playS2C().register(AddRefineSoundPayloadS2C.ID, AddRefineSoundPayloadS2C.CODEC); // Server to Client
-        PayloadTypeRegistry.playS2C().register(AddMissingParticlesPayload.ID, AddMissingParticlesPayload.CODEC); // Server to Client
-        PayloadTypeRegistry.playS2C().register(AddBackParticlesPayload.ID, AddBackParticlesPayload.CODEC); // Server to Client
+        PayloadTypeRegistry.playS2C().register(AddTextParticlesPayload.ID, AddTextParticlesPayload.CODEC); // Server to Client
         initClient();
     }
     private static void initClient() {
