@@ -60,7 +60,7 @@ public final class DrawContextUtils {
 
                 // Calculate the distance from the center vertically
                 float distance = (float) Math.abs(pixelY - centerY);
-                float normalizedDistance = Math.min(distance / (height / 2), 1.0f); // Normalize distance to [0, 1]
+                float normalizedDistance = Math.min(distance / ((float) height / 2), 1.0f); // Normalize distance to [0, 1]
 
                 // Interpolate color based on distance
                 int color = ColorUtils.interpolateColor(centerColor, edgeColor, normalizedDistance);
