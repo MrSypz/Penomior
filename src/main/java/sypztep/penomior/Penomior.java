@@ -50,6 +50,7 @@ public class Penomior implements ModInitializer {
 
         isCritalLoaded = FabricLoader.getInstance().isModLoaded("crital");
 
+
         ServerPlayNetworking.registerGlobalReceiver(RefinePayloadC2S.ID, new RefinePayloadC2S.Receiver());
         //Data Driven
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new MobStatsReloadListener());
