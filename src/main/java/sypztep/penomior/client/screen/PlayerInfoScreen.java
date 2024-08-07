@@ -88,9 +88,9 @@ public class PlayerInfoScreen extends Screen {
         fadeAnimation.update(delta);
 //        progessBar.update(delta);
 
-        // Get screen dimensions
-        int screenWidth = context.getScaledWindowWidth();
-        int screenHeight = context.getScaledWindowHeight();
+        // Get screen dimensions from the Screen class
+        int screenWidth = this.width;
+        int screenHeight = this.height;
 
         // Calculate positions and sizes based on screen dimensions
         float contentSectionWidthRatio = 0.25f; // 25% of screen width
@@ -133,6 +133,7 @@ public class PlayerInfoScreen extends Screen {
         // Render scrollable text list
         playerInfo.render(context, this.textRenderer, x + 25, (int) (verticalOffset + 55), contentWidth, screenHeight, 0.5f,1f, AnimationUtils.getAlpha(fadeAnimation.getProgress()), deltatick);
     }
+
     private void drawHeaderSection(DrawContext context, int x, float verticalOffset, float fadeProgress) {
         AnimationUtils.drawFadeText(context, this.textRenderer, Text.translatable("penomior.gui.player_info.header"), x + 60, (int) (verticalOffset), AnimationUtils.getAlpha(fadeProgress));
         DrawContextUtils.renderHorizontalLineWithCenterGradient(context, x + 48, (int) (-4 + verticalOffset), 80, 1, 400,

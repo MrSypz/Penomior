@@ -125,14 +125,11 @@ public class ScrollableTextList {
     }
 
     public void scroll(int amount) {
-        // Invert the scrolling behavior
         targetScrollOffset -= amount;
 
-        // Calculate total scrollable height
         int totalItems = items.size();
         int totalScrollableHeight = totalItems * textHeight;
 
-        // Clamp targetScrollOffset to be within bounds
         int maxScrollOffset = Math.max(0, totalScrollableHeight - localHeight); // Ensure height is factored in
         targetScrollOffset = Math.max(0, Math.min(targetScrollOffset, maxScrollOffset));
     }

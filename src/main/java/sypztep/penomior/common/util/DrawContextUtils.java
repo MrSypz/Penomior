@@ -78,14 +78,11 @@ public final class DrawContextUtils {
                 int pixelX = x + dx;
                 int pixelY = y + dy;
 
-                // Calculate the distance from the center horizontally
                 float distance = (float) Math.abs(pixelX - centerX);
                 float normalizedDistance = Math.min(distance / ((float) width / 2), 1.0f); // Normalize distance to [0, 1]
 
-                // Interpolate color based on distance
                 int color = ColorUtils.interpolateColor(centerColor, edgeColor, normalizedDistance);
 
-                // Set pixel color
                 context.fill(pixelX, pixelY, pixelX + 1, pixelY + 1, z, color);
             }
         }
@@ -99,21 +96,15 @@ public final class DrawContextUtils {
                 int pixelX = x + dx;
                 int pixelY = y + dy;
 
-                // Calculate the distance from the center horizontally
                 float distance = (float) Math.abs(pixelX - centerX);
                 float normalizedDistance = Math.min(distance / ((float) width / 2), 1.0f); // Normalize distance to [0, 1]
 
-                // Interpolate color based on distance
                 int gradientColor = ColorUtils.interpolateColor(centerColor, edgeColor, normalizedDistance);
 
-                // Adjust alpha for fade-in effect
                 int originalAlpha = (gradientColor >> 24) & 0xFF; // Extract the alpha from the gradient color
+
                 int finalAlpha = (int) (alpha * originalAlpha); // Apply the fade-in effect
-
-                // Combine the color components and set the final color with adjusted alpha
                 int finalColor = (gradientColor & 0x00FFFFFF) | (finalAlpha << 24);
-
-                // Set pixel color
                 context.fill(pixelX, pixelY, pixelX + 1, pixelY + 1, z, finalColor);
             }
         }
