@@ -101,7 +101,7 @@ public class RefineScreen
             else context.drawCenteredTextWithShadow(this.textRenderer, Text.of("Durability: " + RefineUtil.getDurability(stack)), 200, 78, 0xE0E0E0);
             context.getMatrices().pop();
         }
-        context.drawCenteredTextWithShadow(this.textRenderer, Text.of("Failstack: " + ModEntityComponents.STATS.get(handler.getPlayer()).getFailstack()), 132, 10, 0xE0E0E0);
+        context.drawCenteredTextWithShadow(this.textRenderer, Text.of("Failstack: " + ModEntityComponents.UNIQUESTATS.get(handler.getPlayer()).getFailstack()), 132, 10, 0xE0E0E0);
     }
 
     @Override

@@ -12,6 +12,6 @@ import sypztep.penomior.common.init.ModEntityAttributes;
 public class LivingEntityMixin {
     @Inject(method = "createLivingAttributes", at = @At("RETURN"), cancellable = true)
     private static void registryExtraStats(CallbackInfoReturnable<DefaultAttributeContainer.Builder> cir) {
-        cir.setReturnValue(cir.getReturnValue().add(ModEntityAttributes.GENERIC_CRIT_DAMAGE).add(ModEntityAttributes.GENERIC_CRIT_CHANCE));
+        cir.setReturnValue(cir.getReturnValue().add(ModEntityAttributes.GENERIC_CRIT_DAMAGE).add(ModEntityAttributes.GENERIC_CRIT_CHANCE).add(ModEntityAttributes.GENERIC_HEALTH_REGEN));
     }
 }

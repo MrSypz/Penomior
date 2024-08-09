@@ -16,6 +16,7 @@ import sypztep.penomior.common.init.ModEntityAttributes;
 import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.penomior.common.util.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,16 +41,17 @@ public class PlayerInfoScreen extends Screen {
         double armor = client.player.getAttributeValue(EntityAttributes.GENERIC_ARMOR);
         double armorToughness = client.player.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS);
         // Map of values for text replacement
-        Map<String, Object> values = Map.of(
-                "ap", attackDamage,
-                "asp", client.player.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED),
-                "cdmg", client.player.getAttributeValue(ModEntityAttributes.GENERIC_CRIT_DAMAGE) * 100f,
-                "ccn", client.player.getAttributeValue(ModEntityAttributes.GENERIC_CRIT_CHANCE) * 100f,
-//                "apen", 0,
-                "acc", ModEntityComponents.STATS.get(client.player).getAccuracy(),
-                "dp", armor + (2.0f + armorToughness / 4.0f),
-                "eva", ModEntityComponents.STATS.get(client.player).getEvasion()
-        );
+        Map<String, Object> values = new HashMap<>();
+        values.put("ap", attackDamage);
+        values.put("asp", client.player.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED));
+        values.put("cdmg", client.player.getAttributeValue(ModEntityAttributes.GENERIC_CRIT_DAMAGE) * 100f);
+        values.put("ccn", client.player.getAttributeValue(ModEntityAttributes.GENERIC_CRIT_CHANCE) * 100f);
+        values.put("acc", ModEntityComponents.STATS.get(client.player).getAccuracy());
+        values.put("hp", client.player.getHealth());
+        values.put("maxhp", client.player.getAttributeValue(EntityAttributes.GENERIC_MAX_HEALTH));
+        values.put("dp", armor + (2.0f + armorToughness / 4.0f));
+        values.put("nhrg", client.player.getAttributeValue(ModEntityAttributes.GENERIC_HEALTH_REGEN) * 100f);
+        values.put("eva", ModEntityComponents.STATS.get(client.player).getEvasion());
 
         // Create a list of ListElement objects with text and associated icons
         List<ListElement> listItems = List.of(
@@ -58,10 +60,12 @@ public class PlayerInfoScreen extends Screen {
                 new ListElement("Attack Speed: %asp"),
                 new ListElement("Critical Damage: %cdmg %"),
                 new ListElement("Critical Chance: %ccn %"),
-//                new ListElement("Armor Penetrate: %apen %"),
                 new ListElement("Accuracy: %acc"),
                 new ListElement("VITALITY", Identifier.ofVanilla("hud/heart/full")),
+                new ListElement("Health: %hp"),
+                new ListElement("Health: %maxhp"),
                 new ListElement("Defenes: %dp"),
+                new ListElement("Nature Health Regen: %nhrg"),
                 new ListElement("Evasion: %eva")
         );
 

@@ -40,7 +40,8 @@
   },
   "custom": {
     "cardinal-components": [
-      "penomior:stats"
+      "penomior:stats",
+      "penomior:uniquestats"
     ]
   }
 }

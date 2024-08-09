@@ -15,6 +15,7 @@
     "vanilla.evasionaccuracy.ServerWorldMixin",
     "vanilla.extraattribute.EntityAttributesMixin",
     "vanilla.extraattribute.LivingEntityMixin",
+    "vanilla.naturehealthregen.LivingEntityMixin",
     "vanilla.newdamage.DamageUtilMixin",
     "vanilla.projectileclipthrough.PersistentProjectileEntityMixin",
     "vanilla.projectileclipthrough.TridentEntityMixin"

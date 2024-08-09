@@ -8,7 +8,7 @@ import sypztep.penomior.common.init.ModEntityComponents;
 
 public class StatsComponent implements AutoSyncedComponent {
     private final LivingEntity obj;
-    int accuracy, evasion, failstack;
+    private int accuracy, evasion;
 
     public StatsComponent(LivingEntity obj) {
         this.obj = obj;
@@ -18,14 +18,12 @@ public class StatsComponent implements AutoSyncedComponent {
     public void readFromNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         accuracy = tag.getInt("Accuracy");
         evasion = tag.getInt("Evasion");
-        failstack = tag.getInt("Failstack");
     }
 
     @Override
     public void writeToNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         tag.putInt("Accuracy", accuracy);
         tag.putInt("Evasion", evasion);
-        tag.putInt("Failstack", failstack);
     }
 
     public int getAccuracy() {
@@ -36,15 +34,6 @@ public class StatsComponent implements AutoSyncedComponent {
         return this.evasion;
     }
 
-    public int getFailstack() {
-        return failstack;
-    }
-
-    public void setFailstack(int failstack) {
-        this.failstack = failstack;
-        sync();
-    }
-
     public void setEvasion(int evasion) {
         this.evasion = evasion;
         sync();
@@ -52,25 +41,6 @@ public class StatsComponent implements AutoSyncedComponent {
 
     public void setAccuracy(int accuracy) {
         this.accuracy = accuracy;
-        sync();
-    }
-    //----------------Add-------------------//
-    public void addEvasion(int value) {
-        this.evasion += value;
-        sync();
-    }
-
-    public void addAccuracy(int value) {
-        this.accuracy += value;
-        sync();
-    }
-    public void removeEvasion(int value) {
-        this.evasion -= value;
-        sync();
-    }
-
-    public void removeAccuracy(int value) {
-        this.accuracy -= value;
         sync();
     }
 

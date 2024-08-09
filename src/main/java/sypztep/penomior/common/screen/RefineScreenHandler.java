@@ -103,7 +103,7 @@ public class RefineScreenHandler extends ScreenHandler {
                 canRefine = true;
             }
         }
-        int failStack = ModEntityComponents.STATS.get(this.player).getFailstack();
+        int failStack = ModEntityComponents.UNIQUESTATS.get(this.player).getFailstack();
         RefineUtil.getCalculateSuccessRate(slotOutput, failStack);
         RefinePayloadS2C.send((ServerPlayerEntity) this.player, !canRefine);
     }
@@ -157,7 +157,7 @@ public class RefineScreenHandler extends ScreenHandler {
         int endDamage = itemData.endDamage();
         int startProtect = itemData.startProtection();
         int endProtect = itemData.endProtection();
-        int failStack = ModEntityComponents.STATS.get(this.player).getFailstack();
+        int failStack = ModEntityComponents.UNIQUESTATS.get(this.player).getFailstack();
         int repairPoint = itemData.repairpoint();
         ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
 

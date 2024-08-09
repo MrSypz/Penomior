@@ -169,11 +169,11 @@ public final class RefineUtil {
     }
 
     public static void successRefine(PlayerEntity player) {
-        ModEntityComponents.STATS.get(player).setFailstack(0);
+        ModEntityComponents.UNIQUESTATS.get(player).setFailstack(0);
     }
 
     public static void failRefine(PlayerEntity player, int failstack) {
-        ModEntityComponents.STATS.get(player).setFailstack(failstack + 1);
+        ModEntityComponents.UNIQUESTATS.get(player).setFailstack(failstack + 1);
     }
 
     //------------write-data-----------// from craft item
