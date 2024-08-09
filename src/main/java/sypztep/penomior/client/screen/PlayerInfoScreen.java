@@ -38,7 +38,7 @@ public class PlayerInfoScreen extends Screen {
         Map<String, Double> attributeAmounts = ItemStackHelper.getAttributeAmounts(client.player);
         double attackDamage = attributeAmounts.getOrDefault("attribute.name.generic.attack_damage", client.player.getAttributeBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
         double armor = client.player.getAttributeValue(EntityAttributes.GENERIC_ARMOR);
-        double armorthoughness = client.player.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS);
+        double armorToughness = client.player.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS);
         // Map of values for text replacement
         Map<String, Object> values = Map.of(
                 "ap", attackDamage,
@@ -47,9 +47,7 @@ public class PlayerInfoScreen extends Screen {
                 "ccn", client.player.getAttributeValue(ModEntityAttributes.GENERIC_CRIT_CHANCE) * 100f,
 //                "apen", 0,
                 "acc", ModEntityComponents.STATS.get(client.player).getAccuracy(),
-                "dp", armor,
-                "at", armorthoughness,
-                "dr", CombatUtils.getFinalDamageReductionFactor((float) armor, (float) armorthoughness) * 100,
+                "dp", armor + (2.0f + armorToughness / 4.0f),
                 "eva", ModEntityComponents.STATS.get(client.player).getEvasion()
         );
 
@@ -63,9 +61,7 @@ public class PlayerInfoScreen extends Screen {
 //                new ListElement("Armor Penetrate: %apen %"),
                 new ListElement("Accuracy: %acc"),
                 new ListElement("VITALITY", Identifier.ofVanilla("hud/heart/full")),
-                new ListElement("Armor: %dp"),
-                new ListElement("Armor Toughness: %at"),
-                new ListElement("Damage Reduction: %dr %"),
+                new ListElement("Defenes: %dp"),
                 new ListElement("Evasion: %eva")
         );
 

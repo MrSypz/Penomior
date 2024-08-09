@@ -4,7 +4,6 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
@@ -19,7 +18,6 @@ import sypztep.penomior.common.event.KnockBackThresoEvent;
 import sypztep.penomior.common.event.PlayerAttackPercentageEvent;
 import sypztep.penomior.common.init.*;
 import sypztep.penomior.common.payload.RefinePayloadC2S;
-import sypztep.penomior.common.reloadlistener.DamageReductionReloadListener;
 import sypztep.penomior.common.reloadlistener.MobStatsReloadListener;
 import sypztep.penomior.common.reloadlistener.PenomiorItemReloadListener;
 
@@ -51,6 +49,5 @@ public class Penomior implements ModInitializer {
         //Data Driven
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new MobStatsReloadListener());
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new PenomiorItemReloadListener());
-        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new DamageReductionReloadListener());
     }
 }

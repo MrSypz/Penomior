@@ -8,9 +8,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import sypztep.penomior.common.component.StatsComponent;
-import sypztep.penomior.common.data.DamageReductionEntry;
 
-import java.util.Map;
 import java.util.Random;
 
 public final class CombatUtils {
@@ -35,36 +33,22 @@ public final class CombatUtils {
         return !isAttackHits(attackerStats, targetStats);
     }
 
-    public static float newDamageLeftCalculate(LivingEntity armorWearer, float damageAmount, DamageSource damageSource, float armor, float armorToughness) {
-        float i;
+    public static float newDamageLeftCalculate(LivingEntity livingEntity, float damageAmount, DamageSource damageSource, float armor, float armorToughness) {
+        float finalFactor;
         World world;
-        float finalDamageReductionFactor = 1 - getFinalDamageReductionFactor(armor, armorToughness);
-        float f = 2.0f + armorToughness / 4.0f;
-        float g = MathHelper.clamp(armor - damageAmount / f, armor * 0.2f, 20.0f);
-        float h = g / 25.0f;
+
+        float finalArmorToughness = 2.0f + armorToughness / 4.0f;
+        float armorValue = armor + finalArmorToughness;
+        float damageReduction = Math.min(armorValue / (armorValue + 100), 0.9f);
+
         ItemStack itemStack = damageSource.getWeaponStack();
-        if (itemStack != null && (world = armorWearer.getWorld()) instanceof ServerWorld) {
+        if (itemStack != null && (world = livingEntity.getWorld()) instanceof ServerWorld) {
             ServerWorld serverWorld = (ServerWorld) world;
-            i = MathHelper.clamp(EnchantmentHelper.getArmorEffectiveness(serverWorld, itemStack, armorWearer, damageSource, h), 0.0f, 1.0f);
-        } else {
-            i = h;
-        }
-        float j = 1.0f - i;
+            finalFactor = MathHelper.clamp(EnchantmentHelper.getArmorEffectiveness(serverWorld, itemStack, livingEntity, damageSource, armorValue), 0.0f, 1.0f);
+        } else
+            finalFactor = damageReduction;
 
-        return damageAmount * finalDamageReductionFactor * j;
+        return damageAmount * (1.0f - finalFactor);
     }
 
-    public static float getFinalDamageReductionFactor(float armor, float armorToughness) {
-        float totalPoints = armor + armorToughness * 3;
-        Map<Integer, Float> damageReductionMap = DamageReductionEntry.DAMAGEREDUCTION_ENTRY_MAP;
-        // Calculate damage reduction percentage based on total points
-        float damageReductionPercentage = 0.0f;
-        for (Map.Entry<Integer, Float> entry : damageReductionMap.entrySet()) {
-            if (totalPoints <= entry.getKey()) {
-                damageReductionPercentage = entry.getValue();
-                break;
-            }
-        }
-        return damageReductionPercentage;
-    }
 }
