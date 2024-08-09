@@ -11,6 +11,7 @@ import net.minecraft.loot.provider.number.BinomialLootNumberProvider;
 import net.minecraft.loot.provider.number.UniformLootNumberProvider;
 import net.minecraft.registry.RegistryKey;
 
+import java.util.List;
 import java.util.Set;
 
 public class ModLootableModify {
@@ -39,7 +40,7 @@ public class ModLootableModify {
             }
         });
     }
-    private static final Set<EntityType<?>> HOSTILE_MOBS = Set.of(
+    private static final List<EntityType<?>> HOSTILE_MOBS = List.of(
             EntityType.ZOMBIE,
             EntityType.SKELETON,
             EntityType.CREEPER,
