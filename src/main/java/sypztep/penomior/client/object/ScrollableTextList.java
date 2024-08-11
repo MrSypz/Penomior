@@ -5,6 +5,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import sypztep.penomior.common.util.AnimationUtils;
+import sypztep.penomior.common.util.DrawContextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,21 +17,24 @@ public class ScrollableTextList {
 
     private static int localHeight;
 
-    private final List<ListElement> items;
+    private final List<ListItem> items;
     private float scrollOffset; // Use float for smooth scrolling
     private float targetScrollOffset;
-    private final Map<String, Object> values;
+    private Map<String, Object> values;
     private final int textHeight; // Height of each text item
 
-    public ScrollableTextList(List<ListElement> items, Map<String, Object> values) {
+    public ScrollableTextList(List<ListItem> items, Map<String, Object> values) {
         this.items = items;
         this.values = values;
         this.scrollOffset = 0;
         this.targetScrollOffset = 0;
         this.textHeight = 25;
     }
+    public void updateValues(Map<String, Object> newValues) {
+        this.values = newValues;
+    }
 
-    public void render(DrawContext context, TextRenderer textRenderer, int x, int y, int width, int height, float scale,float iconscale, int alpha, float deltaTick) {
+    public void render(DrawContext context, TextRenderer textRenderer, int x, int y, int width, int height, float scale, float iconscale, int alpha, float deltaTick) {
         int totalItems = items.size();
         int totalScrollableHeight = totalItems * textHeight; // Total height of all items
         int maxScrollOffset = Math.max(0, totalScrollableHeight - height); // Maximum scrollable area
@@ -55,8 +59,10 @@ public class ScrollableTextList {
         matrixStack.push();
         matrixStack.scale(scale, scale, 1.0F);
 
-        // Render text items with icons
-        for (ListElement listItem : items) {
+        DrawContextUtils.drawRect(context, (int) (x / scale), y, width, height, 0xFF1E1E1E);
+
+        // Render text items with icons and optional buttons
+        for (ListItem listItem : items) {
             String itemText = listItem.text();
             Identifier icon = listItem.icon(); // Get icon for the item
             boolean isMainContext = itemText.equals(itemText.toUpperCase()); // Main context is upper case like 'HELLO'
@@ -70,22 +76,25 @@ public class ScrollableTextList {
             // Format the text with values
             String formattedText = StringFormatter.format(displayText, values);
 
-            // Wrap text to fit width
+            // Wrap text to fit width (considering scaling)
             List<String> wrappedLines = wrapText(textRenderer, formattedText, (int) (width / scale));
 
             for (String line : wrappedLines) {
                 if (currentY >= y && currentY + (textRenderer.fontHeight * scale) <= y + height) {
+                    // Calculate vertical alignment offset
+                    int textY = (int) ((currentY + (textRenderer.fontHeight * scale) / 2) - (textRenderer.fontHeight * scale) / 2);
+
                     // Draw icon if present
                     if (icon != null) {
-                        context.getMatrices().push();
-                        context.getMatrices().translate((x + offsetX - ICON_SIZE) / scale + 10, currentY , 0);
-                        context.getMatrices().scale(iconscale, iconscale, 1.0F);
+                        matrixStack.push();
+                        matrixStack.translate((x + offsetX - ICON_SIZE) / scale + 10, (textY + (textRenderer.fontHeight * scale) / 2 - ICON_SIZE / 2), 0);
+                        matrixStack.scale(iconscale, iconscale, 1.0F);
                         context.drawGuiTexture(icon, 0, 0, ICON_SIZE, ICON_SIZE); // Adjust x, y, width, height
-                        context.getMatrices().pop();
+                        matrixStack.pop();
                     }
 
                     // Draw text
-                    AnimationUtils.drawFadeText(context, textRenderer, line, (int) ((x + offsetX) / scale), currentY, alpha);
+                    AnimationUtils.drawFadeText(context, textRenderer, line, (int) ((x + offsetX) / scale), textY, alpha);
                 }
                 currentY += textRenderer.fontHeight;
 
@@ -97,6 +106,7 @@ public class ScrollableTextList {
 
         matrixStack.pop();
     }
+
 
 
     private List<String> wrapText(TextRenderer textRenderer, String text, int maxWidth) {
@@ -124,14 +134,21 @@ public class ScrollableTextList {
         return lines;
     }
 
-    public void scroll(int amount) {
-        targetScrollOffset -= amount;
+    public void scroll(int amount, int mouseX, int mouseY, int x, int y, int width, int height) {
+        if (isMouseOver(mouseX, mouseY, x, y, width, height)) {
+            targetScrollOffset -= amount;
 
-        int totalItems = items.size();
-        int totalScrollableHeight = totalItems * textHeight;
+            int totalItems = items.size();
+            int totalScrollableHeight = totalItems * textHeight;
 
-        int maxScrollOffset = Math.max(0, totalScrollableHeight - localHeight); // Ensure height is factored in
-        targetScrollOffset = Math.max(0, Math.min(targetScrollOffset, maxScrollOffset));
+            int maxScrollOffset = Math.max(0, totalScrollableHeight - localHeight);
+            targetScrollOffset = Math.max(0, Math.min(targetScrollOffset, maxScrollOffset));
+        }
+    }
+
+
+    public boolean isMouseOver(int mouseX, int mouseY, int x, int y, int width, int height) {
+        return mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
     }
 
     public static class StringFormatter {
