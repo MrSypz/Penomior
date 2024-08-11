@@ -13,6 +13,7 @@ import sypztep.penomior.common.util.CombatUtils;
 public class DamageUtilMixin {
     @Inject(method = "getDamageLeft", at = @At("HEAD"), cancellable = true)
     private static void newDamageLeftCalculate(LivingEntity armorWearer, float damageAmount, DamageSource damageSource, float armor, float armorToughness, CallbackInfoReturnable<Float> cir) {
-        cir.setReturnValue(CombatUtils.newDamageLeftCalculate(armorWearer,damageAmount,damageSource,armor,armorToughness));
+//        cir.setReturnValue(CombatUtils.newDamageLeftCalculate(armorWearer,damageAmount,damageSource,armor,armorToughness));
+    //TODO: Change the method that calculate damage
     }
 }

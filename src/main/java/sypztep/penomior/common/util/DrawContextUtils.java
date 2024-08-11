@@ -1,7 +1,11 @@
 package sypztep.penomior.common.util;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.*;
+import net.minecraft.client.util.math.MatrixStack;
+import org.joml.Matrix4f;
 
 public final class DrawContextUtils {
     public static void drawBoldText(DrawContext context, TextRenderer renderer, String string, int i, int j, int color,int bordercolor) {
@@ -10,6 +14,47 @@ public final class DrawContextUtils {
         context.drawText(renderer, string, i, j+1, bordercolor, false);
         context.drawText(renderer, string, i, j-1, bordercolor, false);
         context.drawText(renderer, string, i, j, color, false);
+    }
+    public static void drawFilledPolygon(DrawContext context, int x, int y, int[] xPoints, int[] yPoints, int color) {
+        // Ensure that the number of points is at least 3
+        if (xPoints.length < 3 || yPoints.length < 3 || xPoints.length != yPoints.length) {
+            return; // A polygon cannot be formed with fewer than 3 points or mismatched arrays
+        }
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
+        MatrixStack matrixStack = context.getMatrices();
+        Matrix4f matrix = matrixStack.peek().getPositionMatrix();
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
+
+        float alpha = (color >> 24 & 255) / 255.0F;
+        float red = (color >> 16 & 255) / 255.0F;
+        float green = (color >> 8 & 255) / 255.0F;
+        float blue = (color & 255) / 255.0F;
+
+        int centerX = x;
+        int centerY = y;
+        for (int i = 0; i < xPoints.length; i++) {
+            centerX += xPoints[i];
+            centerY += yPoints[i];
+        }
+        centerX /= xPoints.length;
+        centerY /= yPoints.length;
+
+        // Start the polygon at the center point
+        bufferBuilder.vertex(matrix, centerX, centerY, 0.0F).color(red, green, blue, alpha);
+
+        // Add all points around the polygon
+        for (int i = 0; i < xPoints.length; i++) {
+            bufferBuilder.vertex(matrix, xPoints[i], yPoints[i], 0.0F).color(red, green, blue, alpha);
+        }
+
+        // Close the polygon by connecting to the first point again
+        bufferBuilder.vertex(matrix, xPoints[0], yPoints[0], 0.0F).color(red, green, blue, alpha);
+
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
+        RenderSystem.disableBlend();
     }
     public static void drawBorder(DrawContext context, int color, int thickness) {
         int width = context.getScaledWindowWidth();
