@@ -7,10 +7,6 @@ public class StrengthStat extends Stat {
         super(baseValue);
     }
 
-    @Override
-    public void increase(int points) {
-        this.currentValue += points * increasePerPoint;
-    }
 
     @Override
     public void applyPrimaryEffect(PlayerEntity player) {

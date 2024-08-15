@@ -26,8 +26,8 @@ public class IncreasePointButton extends ActionWidgetButton {
     }
 
     private void increaseStatPoint() {
-        if (playerStats.getPlayerStats().getStatPoints() > 0) { //TODO : make it calculate the value + increasement to make it not negative value
-            playerStats.getPlayerStats().useStatPoint(statType,1);
+        if (playerStats.getPlayerStats().getLevelSystem().getStatPoints() > 0) {
+            playerStats.getPlayerStats().getLevelSystem().useStatPoint(statType,1,playerStats.getPlayerStats());
         }
     }
 }

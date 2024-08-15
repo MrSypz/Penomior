@@ -30,32 +30,12 @@ public class PlayerStats {
 
     public void resetStats() {
         stats.values().forEach(Stat::reset);
-        // Optionally, reset level system or other components
-
     }
 
     public Map<StatTypes, Stat> getAllStats() {
         return stats;
     }
-    public void addExperience(int amount) {
-        levelSystem.addExperience(amount);
-    }
 
-    public int getLevel() {
-        return levelSystem.getLevel();
-    }
-
-    public int getXp() {
-        return levelSystem.getXp();
-    }
-
-    public int getXpToNextLevel() {
-        return levelSystem.getXpToNextLevel();
-    }
-
-    public int getStatPoints() {
-        return levelSystem.getStatPoints();
-    }
     public LevelSystem getLevelSystem() {
         return levelSystem;
     }
@@ -79,4 +59,5 @@ public class PlayerStats {
         levelSystem.readFromNbt(tag);
     }
 }
+
 

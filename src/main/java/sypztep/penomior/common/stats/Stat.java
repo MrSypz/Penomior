@@ -2,7 +2,6 @@ package sypztep.penomior.common.stats;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import sypztep.penomior.common.component.UniqueStatsComponent;
 
 public abstract class Stat {
     protected int baseValue;
@@ -44,12 +43,9 @@ public abstract class Stat {
         this.increasePerPoint = increasePerPoint;
     }
 
-    /**
-     * DON'T CALL THIS METHOD. CALL {@link LevelSystem#useStatPoint(StatTypes, int, PlayerStats, UniqueStatsComponent)} instead.
-     *
-     * @param points the number of points to increase
-     */
-    protected abstract void increase(int points);
+    public void increase(int points) {
+        this.currentValue += points * increasePerPoint;
+    }
     public abstract void applyPrimaryEffect(PlayerEntity player);
     public abstract void applySecondaryEffect(PlayerEntity player);
 

@@ -8,11 +8,6 @@ public class LuckStat extends Stat {
     }
 
     @Override
-    public void increase(int points) {
-        this.currentValue += points * increasePerPoint;
-    }
-
-    @Override
     public void applyPrimaryEffect(PlayerEntity player) {
 
     }

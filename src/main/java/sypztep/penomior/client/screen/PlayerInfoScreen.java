@@ -237,7 +237,7 @@ public class PlayerInfoScreen extends Screen {
         }
 
         // Draw Remaining Stat Points
-        int remainingPoints = playerStats.getPlayerStats().getStatPoints();
+        int remainingPoints = playerStats.getPlayerStats().getLevelSystem().getStatPoints();
         String remainingText = "Remaining Stat Points: " + remainingPoints;
         int remainingTextY = y + 20;
         context.drawTextWithShadow(this.textRenderer, remainingText, labelX, remainingTextY, 0xFFFFFF);

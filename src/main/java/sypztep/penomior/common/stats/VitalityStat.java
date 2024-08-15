@@ -11,11 +11,6 @@ public class VitalityStat extends Stat {
     }
 
     @Override
-    public void increase(int points) {
-        this.currentValue += points * increasePerPoint;
-    }
-
-    @Override
     public void applyPrimaryEffect(PlayerEntity player) {
         double baseHealth = player.getAttributeBaseValue(EntityAttributes.GENERIC_MAX_HEALTH);
         double additionalHealth = baseHealth * (0.05 * this.currentValue);
