@@ -2,6 +2,7 @@ package sypztep.penomior;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.resource.ResourceType;
@@ -44,6 +45,7 @@ public class Penomior implements ModInitializer {
         EntityHurtCallback.EVENT.register(new HurtDurationEvent());
         EntityKnockbackCallback.EVENT.register(new KnockBackThresoEvent());
         PlayerAttackCallback.EVENT.register(new PlayerAttackPercentageEvent());
+        ServerLivingEntityEvents.AFTER_DEATH.register(new HardCodeEXP());
 
         ServerPlayNetworking.registerGlobalReceiver(RefinePayloadC2S.ID, new RefinePayloadC2S.Receiver());
         //Data Driven

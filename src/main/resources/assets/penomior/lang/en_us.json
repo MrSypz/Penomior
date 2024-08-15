@@ -1,6 +1,7 @@
 {
   "penomior.gui.player_info.header": "Player Stats",
-  "penomior.gui.player_info.header_stats": "Stats",
+  "penomior.gui.player_info.header_level": "Stats",
+
   "item.penomior.refine_weapon_stone": "Refine Weapon stone",
   "item.penomior.refine_armor_stone": "Refine Armor stone",
   "item.penomior.moonlight_crescent": "Moonlight Crescent",

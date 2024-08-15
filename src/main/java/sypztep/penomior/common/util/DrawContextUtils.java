@@ -5,9 +5,53 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import org.joml.Matrix4f;
+import sypztep.penomior.client.object.ListElement;
+import sypztep.penomior.common.stats.StatTypes;
+
+import java.util.Map;
 
 public final class DrawContextUtils {
+    // Utility method to draw simple text with an optional icon
+    public static void drawTextWithIcon(DrawContext context, TextRenderer textRenderer, ListElement listElement, int x, int y, float scale, float iconscale, int alpha) {
+        final int ICON_SIZE = 16;
+        String text = listElement.text();
+        Identifier icon = listElement.icon();
+
+        MatrixStack matrixStack = context.getMatrices();
+        matrixStack.push();
+        matrixStack.scale(scale, scale, 1.0F);
+
+        // Calculate position for text considering scaling
+        int textX = (int) (x / scale);
+        int textY = (int) (y / scale);
+
+        // Render icon if present
+        if (icon != null) {
+            matrixStack.push();
+            matrixStack.translate((x - ICON_SIZE) / scale - 10, (y + (textRenderer.fontHeight * scale) / 2 - (float) ICON_SIZE / 2), 0);
+            matrixStack.scale(iconscale, iconscale, 1.0F);
+            context.drawGuiTexture(icon, 0, 0, ICON_SIZE, ICON_SIZE); // Adjust x, y, width, height
+            matrixStack.pop();
+        }
+
+        // Draw text
+        AnimationUtils.drawFadeText(context, textRenderer, text, textX, textY, alpha);
+
+        matrixStack.pop();
+    }
+
+    public static void drawText(DrawContext context, TextRenderer textRenderer, Text text, int x, int y, float scale, int alpha) {
+        MatrixStack matrixStack = context.getMatrices();
+        matrixStack.push();
+        matrixStack.scale(scale, scale, 1.0F);
+        int textX = (int) (x / scale);
+        int textY = (int) (y / scale);
+        AnimationUtils.drawFadeText(context, textRenderer, text, textX, textY, alpha);
+        matrixStack.pop();
+    }
     public static void drawBoldText(DrawContext context, TextRenderer renderer, String string, int i, int j, int color,int bordercolor) {
         context.drawText(renderer, string, i+1, j, bordercolor, false);
         context.drawText(renderer, string, i-1, j, bordercolor, false);
@@ -15,11 +59,12 @@ public final class DrawContextUtils {
         context.drawText(renderer, string, i, j-1, bordercolor, false);
         context.drawText(renderer, string, i, j, color, false);
     }
-    public static void drawFilledPolygon(DrawContext context, int x, int y, int[] xPoints, int[] yPoints, int color) {
-        // Ensure that the number of points is at least 3
-        if (xPoints.length < 3 || yPoints.length < 3 || xPoints.length != yPoints.length) {
-            return; // A polygon cannot be formed with fewer than 3 points or mismatched arrays
+    public static void drawHexagonStatsPolygon(DrawContext context, int xOffset, int yOffset, Map<StatTypes, Integer> statValues, int maxStatValue, int radius, int color) {
+        // Ensure that there are exactly 6 stat types
+        if (statValues.size() != 6) {
+            return; // A hexagon needs exactly 6 points
         }
+
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShader(GameRenderer::getPositionColorProgram);
@@ -33,29 +78,36 @@ public final class DrawContextUtils {
         float green = (color >> 8 & 255) / 255.0F;
         float blue = (color & 255) / 255.0F;
 
-        int centerX = x;
-        int centerY = y;
-        for (int i = 0; i < xPoints.length; i++) {
-            centerX += xPoints[i];
-            centerY += yPoints[i];
+        float[] xPoints = new float[6];
+        float[] yPoints = new float[6];
+
+        int index = 0;
+        for (StatTypes statType : StatTypes.values()) {
+            int value = statValues.get(statType);
+            float normalizedValue = (float) value / maxStatValue;
+
+            double angle = Math.toRadians(60 * index);
+            xPoints[index] = xOffset + (float) (radius * normalizedValue * Math.cos(angle));
+            yPoints[index] = yOffset + (float) (radius * normalizedValue * Math.sin(angle));
+            index++;
         }
-        centerX /= xPoints.length;
-        centerY /= yPoints.length;
 
         // Start the polygon at the center point
-        bufferBuilder.vertex(matrix, centerX, centerY, 0.0F).color(red, green, blue, alpha);
+        bufferBuilder.vertex(matrix, xOffset, yOffset, 0.0F).color(red, green, blue, alpha);
 
-        // Add all points around the polygon
-        for (int i = 0; i < xPoints.length; i++) {
+        // Add all points around the hexagon
+        for (int i = 0; i < 6; i++) {
             bufferBuilder.vertex(matrix, xPoints[i], yPoints[i], 0.0F).color(red, green, blue, alpha);
         }
 
-        // Close the polygon by connecting to the first point again
+        // Close the hexagon by connecting to the first point again
         bufferBuilder.vertex(matrix, xPoints[0], yPoints[0], 0.0F).color(red, green, blue, alpha);
 
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
         RenderSystem.disableBlend();
     }
+
+
     public static void drawBorder(DrawContext context, int color, int thickness) {
         int width = context.getScaledWindowWidth();
         int height = context.getScaledWindowHeight();

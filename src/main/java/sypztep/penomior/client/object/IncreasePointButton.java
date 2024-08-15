@@ -1,5 +1,6 @@
 package sypztep.penomior.client.object;
 
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import sypztep.penomior.common.component.UniqueStatsComponent;
 import sypztep.penomior.common.stats.StatTypes;
@@ -19,10 +20,14 @@ public class IncreasePointButton extends ActionWidgetButton {
         increaseStatPoint();
     }
 
+    @Override
+    protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.renderWidget(context, mouseX, mouseY, delta);
+    }
+
     private void increaseStatPoint() {
-        System.out.println("Button clicked!");
-        if (playerStats.getPlayerStats().getStatPoints() > 0) {
-            playerStats.getPlayerStats().getStat(statType).increase(1);
+        if (playerStats.getPlayerStats().getStatPoints() > 0) { //TODO : make it calculate the value + increasement to make it not negative value
+            playerStats.getPlayerStats().useStatPoint(statType,1);
         }
     }
 }

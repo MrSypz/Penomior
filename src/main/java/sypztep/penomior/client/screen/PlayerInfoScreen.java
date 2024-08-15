@@ -9,16 +9,14 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import sypztep.penomior.Penomior;
-import sypztep.penomior.client.object.Animation;
-import sypztep.penomior.client.object.IncreasePointButton;
-import sypztep.penomior.client.object.ListElement;
-import sypztep.penomior.client.object.ScrollableTextList;
+import sypztep.penomior.client.object.*;
 import sypztep.penomior.common.component.UniqueStatsComponent;
 import sypztep.penomior.common.init.ModEntityAttributes;
 import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.penomior.common.stats.StatTypes;
 import sypztep.penomior.common.util.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,23 +28,29 @@ public class PlayerInfoScreen extends Screen {
 
     private Animation verticalAnimation;
     private Animation fadeAnimation;
-    private IncreasePointButton increaseStrengthButton;
     private final UniqueStatsComponent playerStats;
-//    private SmoothProgressBar progessBar;
+    private List<IncreasePointButton> increaseButtons;
+
+    private SmoothProgressBar progessBar;
+
+    private final int buttonWidth = 16;
+    private final int buttonHeight = 16;
+    private final int statLabelWidth = 30;
+    private final int statValueWidth = 30;
+    private final int statRowHeight = 25;
+    private final int startX = 50;
+    private final int startY = 50;
 
     private final ScrollableTextList playerInfo;
-    private final ScrollableTextList playerStatsInfo;
 
     public PlayerInfoScreen(MinecraftClient client) {
         super(Text.literal("Hello"));
         assert client.player != null;
         this.playerStats = ModEntityComponents.UNIQUESTATS.get(client.player);
         Map<String, Object> infoKeys = createPlayerInfoKey(client);
-        Map<String, Object> playerStatsKey = createPlayerStatsKey(client);
         List<ListElement> listInfo = createListItems();
-        List<ListElement> listStats = createPlayerStatsList();
+
         this.playerInfo = new ScrollableTextList(listInfo, infoKeys);
-        this.playerStatsInfo = new ScrollableTextList(listStats, playerStatsKey);
     }
 
     public void updateValues(MinecraftClient client) {
@@ -74,19 +78,12 @@ public class PlayerInfoScreen extends Screen {
         values.put("dp", armor + (2.0f + armorToughness / 4.0f));
         values.put("nhrg", client.player.getAttributeValue(ModEntityAttributes.GENERIC_HEALTH_REGEN) * 100f);
         values.put("eva", ModEntityComponents.STATS.get(client.player).getEvasion());
-        return values;
-    }
-    private Map<String, Object> createPlayerStatsKey(MinecraftClient client) {
-        Map<String, Object> values = new HashMap<>();
-        assert client.player != null;
-
-        values.put("str", playerStats.getPlayerStats().getStat(StatTypes.STRENGTH).getCurrentValue());
-        values.put("agi", playerStats.getPlayerStats().getStat(StatTypes.AGILITY).getCurrentValue());
-        values.put("vit", playerStats.getPlayerStats().getStat(StatTypes.VITALITY).getCurrentValue());
-        values.put("int", playerStats.getPlayerStats().getStat(StatTypes.INTELLIGENCE).getCurrentValue());
-        values.put("dex", playerStats.getPlayerStats().getStat(StatTypes.DEXTERITY).getCurrentValue());
-        values.put("luk", playerStats.getPlayerStats().getStat(StatTypes.LUCK).getCurrentValue());
-
+        values.put("str", playerStats.getPlayerStats().getStat(StatTypes.STRENGTH).getValue());
+        values.put("agi", playerStats.getPlayerStats().getStat(StatTypes.AGILITY).getValue());
+        values.put("vit", playerStats.getPlayerStats().getStat(StatTypes.VITALITY).getValue());
+        values.put("int", playerStats.getPlayerStats().getStat(StatTypes.INTELLIGENCE).getValue());
+        values.put("dex", playerStats.getPlayerStats().getStat(StatTypes.DEXTERITY).getValue());
+        values.put("luk", playerStats.getPlayerStats().getStat(StatTypes.LUCK).getValue());
         return values;
     }
 
@@ -103,11 +100,7 @@ public class PlayerInfoScreen extends Screen {
                 new ListElement("Max Health: %maxhp"),
                 new ListElement("Defense: %dp"),
                 new ListElement("Nature Health Regen: %nhrg"),
-                new ListElement("Evasion: %eva")
-        );
-    }
-    private List<ListElement> createPlayerStatsList() {
-        return List.of(
+                new ListElement("Evasion: %eva"),
                 new ListElement("STATS", Penomior.id("hud/container/icon_10")),
                 new ListElement("Strength: %str"),
                 new ListElement("Agility: %agi"),
@@ -117,12 +110,25 @@ public class PlayerInfoScreen extends Screen {
                 new ListElement("Luck: %luk")
         );
     }
+
     @Override
     protected void init() {
         super.init();
         this.verticalAnimation = new Animation(ANIMATION_DURATION, false); // Single play for vertical animation
         this.fadeAnimation = new Animation(ANIMATION_DURATION, false); // Single play for fade animation
-//        this.progessBar = new SmoothProgressBar(ANIMATION_DURATION * 1.4f, false, 200, 20, 0xFF00FF00, 0xFF1E1E1E);
+        this.progessBar = new SmoothProgressBar(ANIMATION_DURATION * 1.4f, false, 200, 20, 0xFF00FF00, 0xFF1E1E1E);
+        increaseButtons = new ArrayList<>(); // Initialize the list to hold buttons
+
+        int y = startY;
+        for (StatTypes statType : StatTypes.values()) {
+            int buttonX = startX + statLabelWidth + statValueWidth + 10; // Some spacing
+            int buttonY = y;
+            IncreasePointButton increaseButton = new IncreasePointButton(buttonX, buttonY, buttonWidth, buttonHeight, Text.of("+"), playerStats, statType);
+            this.addDrawableChild(increaseButton);
+            increaseButtons.add(increaseButton);
+
+            y += statRowHeight; // Move to the next row
+        }
     }
 
     @Override
@@ -133,7 +139,7 @@ public class PlayerInfoScreen extends Screen {
 
         verticalAnimation.update(delta);
         fadeAnimation.update(delta);
-//        progessBar.update(delta);
+        progessBar.update(delta);
 
         // Get screen dimensions from the Screen class
         int screenWidth = this.width;
@@ -141,7 +147,7 @@ public class PlayerInfoScreen extends Screen {
 
         // Calculate positions and sizes based on screen dimensions
         float contentSectionWidthRatio = 0.25f; // 25% of screen width
-        float contentSectionHeightRatio = 0.5f; // 50% of screen height
+        float contentSectionHeightRatio = 0.75f; // 50% of screen height
 
         int contentWidth = (int) (screenWidth * contentSectionWidthRatio);
         int contentHeight = (int) (screenHeight * contentSectionHeightRatio);
@@ -154,48 +160,98 @@ public class PlayerInfoScreen extends Screen {
         DrawContextUtils.fillScreen(context, 0xFF121212);
 
         // Draw content section
-        drawContentSection(context, xOffset, yOffset, contentWidth, contentHeight, delta,mouseX,mouseY);
-        drawContentStats(context, xOffset, yOffset + screenHeight, contentWidth, contentHeight / 2, delta,mouseX,mouseY);
-        // Draw header section
-        drawHeaderSection(context, xOffset + 100, yOffset, fadeAnimation.getProgress(),"penomior.gui.player_info.header");
-        drawHeaderSection(context, xOffset + 100, yOffset + contentHeight + 30, fadeAnimation.getProgress(),"penomior.gui.player_info.header_stats");
-        // TODO:use player stat point to render!
-        int[] xPoints = {100, 150, 200};
-        int[] yPoints = {100, 50, 100};
+        drawStatsSection(context, xOffset, yOffset, contentWidth, contentHeight, delta);
 
-        // Example usage of drawFilledPolygon
-        DrawContextUtils.drawFilledPolygon(context, xOffset, yOffset, xPoints, yPoints, ColorUtils.rgbaToHex(31,37,66,255)); // Green fill with 4-pixel border
-//        increaseStrengthButton.render(context,mouseX,mouseY,delta);
+        renderStatsAndButtons(context, screenWidth, yOffset, mouseX, mouseY, delta);
+
+        // Draw header section
+        drawHeaderSection(context, xOffset + 100, yOffset, fadeAnimation.getProgress(), "penomior.gui.player_info.header");
+        drawHeaderSection(context, (int) (screenWidth * 0.025f) + 80, yOffset, fadeAnimation.getProgress(), "penomior.gui.player_info.header_level");
+        // TODO:use player stat point to render!
+        //stat values
+        Map<StatTypes, Integer> statValues = new HashMap<>();
+        statValues.put(StatTypes.STRENGTH, playerStats.getPlayerStats().getStat(StatTypes.STRENGTH).getValue());
+        statValues.put(StatTypes.AGILITY, playerStats.getPlayerStats().getStat(StatTypes.AGILITY).getValue());
+        statValues.put(StatTypes.VITALITY, playerStats.getPlayerStats().getStat(StatTypes.VITALITY).getValue());
+        statValues.put(StatTypes.INTELLIGENCE, playerStats.getPlayerStats().getStat(StatTypes.INTELLIGENCE).getValue());
+        statValues.put(StatTypes.DEXTERITY, playerStats.getPlayerStats().getStat(StatTypes.DEXTERITY).getValue());
+        statValues.put(StatTypes.LUCK, playerStats.getPlayerStats().getStat(StatTypes.LUCK).getValue());
+
+        // Retrieve stat values
+        int maxStatValue = 100;
+        // Draw the hexagon
+        DrawContextUtils.drawHexagonStatsPolygon(
+                context,
+                500,
+                300,
+                statValues,
+                maxStatValue,
+                50, // Radius of the hexagon
+                ColorUtils.rgbaToHex(31, 37, 66, 255) // Example fill color
+        );
+
 
         // Define the size and position of the progress bar
 //        int barWidth = 200;
 //        int barHeight = 20;
 //        int x = (screenWidth - barWidth) / 2;
 //        int y = (screenHeight - barHeight) / 2;
-
+//
 //        progessBar.setProgress(0.51f);
-
-        // Render the progress bar
+//
+////         Render the progress bar
 //        progessBar.render(context, x, y);
     }
-    private void drawContentStats(DrawContext context, int xOffset, float yOffset, int contentWidth, int contentHeight, float deltatick,int mouseX,int mouseY) {
-        this.playerStatsInfo.render(context, this.textRenderer, xOffset + 25, (int) yOffset + 75, contentWidth, contentHeight, 0.5f, 1f, AnimationUtils.getAlpha(fadeAnimation.getProgress()), deltatick,mouseX,mouseY);
+
+    private void drawStatsSection(DrawContext context, int xOffset, float yOffset, int contentWidth, int contentHeight, float deltatick) {
+        this.playerInfo.render(context, this.textRenderer, xOffset + 25, (int) (yOffset + 55), contentWidth, contentHeight, 0.5f, 1f, AnimationUtils.getAlpha(fadeAnimation.getProgress()), deltatick);
+    }
+    private void renderStatsAndButtons(DrawContext context, int screenWidth, int yOffset, int mouseX, int mouseY, float delta) {
+        int rectX = (int) (screenWidth * 0.025f); // X position of the rectangle
+        int rectY = yOffset + 25;                 // Y position of the rectangle
+        int y = rectY + 10;                       // Start slightly below the top of the rectangle to add padding
+        int labelX = rectX + 10;                  // Start slightly inside the left edge of the rectangle
+
+        int buttonIndex = 0;
+        for (StatTypes statType : StatTypes.values()) {
+            int labelY = y + (buttonHeight - this.textRenderer.fontHeight) / 2;
+
+            // Draw Stat Label
+            context.drawTextWithShadow(this.textRenderer, Text.of(statType.getAka() + ":"), labelX, labelY, 0xFFFFFF);
+
+            // Draw Stat Value
+            int valueX = labelX + statLabelWidth;
+            int perPoint = playerStats.getPlayerStats().getStat(statType).getIncreasePerPoint();
+            context.drawTextWithShadow(this.textRenderer, Text.of(perPoint + " SP"), valueX, labelY, 0xFFFFFF);
+
+            // Position and render the corresponding button
+            IncreasePointButton button = increaseButtons.get(buttonIndex);
+            int buttonX = valueX + statLabelWidth; // Position the button to the right of the stat value
+            button.setX(buttonX);
+            button.setY(y); // Align the button with the current row
+            button.render(context, mouseX, mouseY, delta);
+
+            // Increment Y for the next stat row
+            y += statRowHeight;
+            buttonIndex++;
+        }
+
+        // Draw Remaining Stat Points
+        int remainingPoints = playerStats.getPlayerStats().getStatPoints();
+        String remainingText = "Remaining Stat Points: " + remainingPoints;
+        int remainingTextY = y + 20;
+        context.drawTextWithShadow(this.textRenderer, remainingText, labelX, remainingTextY, 0xFFFFFF);
+        context.drawTextWithShadow(this.textRenderer, "Level Progess: " + playerStats.getXp(), labelX, remainingTextY + 20, 0xFFFFFF);
+//        Penomior.LOGGER.info(String.valueOf(playerStats.getXp()));
     }
 
-    private void drawContentSection(DrawContext context, int xOffset, float yOffset, int contentWidth, int contentHeight, float deltatick,int mouseX,int mouseY) {
-        this.playerInfo.render(context, this.textRenderer, xOffset + 25, (int) (yOffset + 55), contentWidth, contentHeight, 0.5f,1f, AnimationUtils.getAlpha(fadeAnimation.getProgress()), deltatick,mouseX,mouseY);
-    }
 
     private void drawHeaderSection(DrawContext context, int x, float verticalOffset, float fadeProgress, String text) {
         int textWidth = this.textRenderer.getWidth(Text.translatable(text));
-
         int centeredX = x - (textWidth / 2);
-
         AnimationUtils.drawFadeText(context, this.textRenderer, Text.translatable(text), centeredX, (int) verticalOffset, AnimationUtils.getAlpha(fadeProgress));
-
-        int lineY1 = (int) (verticalOffset - 4);  // Adjust as needed
-        int lineY2 = (int) (verticalOffset + 10); // Adjust as needed
-
+        int lineY1 = (int) (verticalOffset - 4);
+        int lineY2 = (int) (verticalOffset + 10);
         DrawContextUtils.renderHorizontalLineWithCenterGradient(
                 context, centeredX - 16, lineY1, textWidth + 32, 1, 400,
                 ColorUtils.rgbaToHex(255, 255, 255, 255), ColorUtils.rgbaToHex(0, 0, 0, 0), fadeProgress
@@ -210,22 +266,12 @@ public class PlayerInfoScreen extends Screen {
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
         boolean isAnyScrolled = false;
         int scrollAmount = (int) (verticalAmount * 25);
-        // Check if the mouse is over the playerInfo list and scroll it
         if (playerInfo.isMouseOver(mouseX, mouseY, playerInfo.getX(), playerInfo.getY() - 30, playerInfo.getWidth(), playerInfo.getHeight())) {
             playerInfo.scroll(scrollAmount, mouseX, mouseY + 30);
             isAnyScrolled = true;
         }
-
-        // Check if the mouse is over the playerStatsInfo list and scroll it
-        if (playerStatsInfo.isMouseOver(mouseX, mouseY, playerStatsInfo.getX(), playerStatsInfo.getY() - 160, playerStatsInfo.getWidth(), playerStatsInfo.getHeight())) {
-            playerStatsInfo.scroll(scrollAmount, mouseX, mouseY + 160);
-            isAnyScrolled = true;
-        }
-
-        // Return true if any of the scrollable areas were scrolled, or pass to superclass
         return isAnyScrolled || super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
-
 
 
     @Override

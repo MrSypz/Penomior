@@ -10,10 +10,10 @@ public class PlayerStats {
     private final LevelSystem levelSystem;
 
     public PlayerStats() {
-        stats = new EnumMap<>(StatTypes.class);
-        levelSystem = new LevelSystem();
+        this.stats = new EnumMap<>(StatTypes.class);
+        this.levelSystem = new LevelSystem();
         for (StatTypes statType : StatTypes.values()) {
-            stats.put(statType, statType.createStat(1));
+            this.stats.put(statType, statType.createStat(0));
         }
     }
 
@@ -21,7 +21,7 @@ public class PlayerStats {
         return stats.get(statType);
     }
 
-    public void allocatePoints(StatTypes statType, int points) {
+    protected void allocatePoints(StatTypes statType, int points) {
         Stat stat = getStat(statType);
         if (stat != null) {
             stat.increase(points);
@@ -55,6 +55,9 @@ public class PlayerStats {
 
     public int getStatPoints() {
         return levelSystem.getStatPoints();
+    }
+    public LevelSystem getLevelSystem() {
+        return levelSystem;
     }
 
     public void useStatPoint(StatTypes statType, int points) {

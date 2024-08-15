@@ -3,15 +3,11 @@ package sypztep.penomior.client.object;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import sypztep.penomior.common.component.UniqueStatsComponent;
-import sypztep.penomior.common.stats.StatTypes;
 import sypztep.penomior.common.util.AnimationUtils;
 import sypztep.penomior.common.util.DrawContextUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +37,7 @@ public class ScrollableTextList {
         this.values = newValues;
     }
 
-    public void render(DrawContext context, TextRenderer textRenderer, int x, int y, int width, int height, float scale, float iconscale, int alpha, float deltaTick,int mouseX,int mouseY) {
+    public void render(DrawContext context, TextRenderer textRenderer, int x, int y, int width, int height, float scale, float iconscale, int alpha, float deltaTick) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -70,7 +66,7 @@ public class ScrollableTextList {
         matrixStack.push();
         matrixStack.scale(scale, scale, 1.0F);
         // Container for text
-        DrawContextUtils.drawRect(context, (int) (x / scale), y, (int) (width / scale), (int) (height / scale), 0xFF1E1E1E);
+        DrawContextUtils.drawRect(context, (int) (x / scale), y, (int) (width / scale), (int) (height / scale) + 10, 0xFF1E1E1E);
         // Render text items with icons and optional buttons
         for (ListElement listElement : items) {
             String itemText = listElement.text();
