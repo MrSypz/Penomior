@@ -17,6 +17,8 @@ public abstract class ActionWidgetButton extends ClickableWidget {
     @Override
     protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
         DrawContextUtils.drawRect(context,getX(),getY(),getWidth(),getHeight(), 0xF0292929);
+        DrawContextUtils.renderHorizontalLine(context,getX() + 4 ,getY() + getHeight() / 2,9,1,400,0xFFFFFFFF);
+        DrawContextUtils.renderVerticalLine(context,getX() + getWidth() / 2 ,getY() + 4,9,1,400,0xFFFFFFFF);
     }
 
     @Override
