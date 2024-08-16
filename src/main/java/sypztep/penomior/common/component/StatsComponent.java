@@ -9,7 +9,6 @@ import sypztep.penomior.common.init.ModEntityComponents;
 public class StatsComponent implements AutoSyncedComponent {
     private final LivingEntity obj;
     private int accuracy, evasion;
-    private float healthRegen;
 
     public StatsComponent(LivingEntity obj) {
         this.obj = obj;
@@ -19,18 +18,12 @@ public class StatsComponent implements AutoSyncedComponent {
     public void readFromNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         accuracy = tag.getInt("Accuracy");
         evasion = tag.getInt("Evasion");
-        healthRegen = tag.getFloat("HealthRegen");
     }
 
     @Override
     public void writeToNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         tag.putInt("Accuracy", accuracy);
         tag.putInt("Evasion", evasion);
-        tag.putFloat("HealthRegen", healthRegen);
-    }
-
-    public float getHealthRegen() {
-        return healthRegen;
     }
 
     public int getAccuracy() {
@@ -48,11 +41,6 @@ public class StatsComponent implements AutoSyncedComponent {
 
     public void setAccuracy(int accuracy) {
         this.accuracy = accuracy;
-        sync();
-    }
-
-    public void setHealthRegen(float healthRegen) {
-        this.healthRegen = healthRegen;
         sync();
     }
 
