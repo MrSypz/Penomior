@@ -1,12 +1,10 @@
-package sypztep.penomior.common.stats;
+package sypztep.penomior.common.stats.element;
 
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
+import sypztep.penomior.common.stats.Stat;
 
-public class DexterityStat extends Stat {
-
-    public DexterityStat(int baseValue) {
+public class AgilityStat extends Stat {
+    public AgilityStat(int baseValue) {
         super(baseValue);
     }
 
@@ -21,3 +19,4 @@ public class DexterityStat extends Stat {
     }
 
 }
+
