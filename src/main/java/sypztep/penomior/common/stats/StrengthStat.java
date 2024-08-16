@@ -1,6 +1,7 @@
 package sypztep.penomior.common.stats;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Identifier;
 
 public class StrengthStat extends Stat {
     public StrengthStat(int baseValue) {
@@ -9,13 +10,14 @@ public class StrengthStat extends Stat {
 
 
     @Override
-    public void applyPrimaryEffect(PlayerEntity player) {
+    public void applyPrimaryEffect(ServerPlayerEntity player) {
 
     }
 
     @Override
-    public void applySecondaryEffect(PlayerEntity player) {
+    public void applySecondaryEffect(ServerPlayerEntity  player) {
 
     }
+
 }
 

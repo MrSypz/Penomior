@@ -13,6 +13,7 @@ import sypztep.penomior.client.object.*;
 import sypztep.penomior.common.component.UniqueStatsComponent;
 import sypztep.penomior.common.init.ModEntityAttributes;
 import sypztep.penomior.common.init.ModEntityComponents;
+import sypztep.penomior.common.stats.Stat;
 import sypztep.penomior.common.stats.StatTypes;
 import sypztep.penomior.common.util.*;
 
@@ -76,7 +77,7 @@ public class PlayerInfoScreen extends Screen {
         values.put("hp", client.player.getHealth());
         values.put("maxhp", client.player.getAttributeValue(EntityAttributes.GENERIC_MAX_HEALTH));
         values.put("dp", armor + (2.0f + armorToughness / 4.0f));
-        values.put("nhrg", client.player.getAttributeValue(ModEntityAttributes.GENERIC_HEALTH_REGEN) * 100f);
+        values.put("nhrg", client.player.getAttributeValue(ModEntityAttributes.GENERIC_HEALTH_REGEN));
         values.put("eva", ModEntityComponents.STATS.get(client.player).getEvasion());
         values.put("str", playerStats.getPlayerStats().getStat(StatTypes.STRENGTH).getValue());
         values.put("agi", playerStats.getPlayerStats().getStat(StatTypes.AGILITY).getValue());
@@ -167,29 +168,6 @@ public class PlayerInfoScreen extends Screen {
         // Draw header section
         drawHeaderSection(context, xOffset + 100, yOffset, fadeAnimation.getProgress(), "penomior.gui.player_info.header");
         drawHeaderSection(context, (int) (screenWidth * 0.025f) + 80, yOffset, fadeAnimation.getProgress(), "penomior.gui.player_info.header_level");
-        // TODO:use player stat point to render!
-        //stat values
-        Map<StatTypes, Integer> statValues = new HashMap<>();
-        statValues.put(StatTypes.STRENGTH, playerStats.getPlayerStats().getStat(StatTypes.STRENGTH).getValue());
-        statValues.put(StatTypes.AGILITY, playerStats.getPlayerStats().getStat(StatTypes.AGILITY).getValue());
-        statValues.put(StatTypes.VITALITY, playerStats.getPlayerStats().getStat(StatTypes.VITALITY).getValue());
-        statValues.put(StatTypes.INTELLIGENCE, playerStats.getPlayerStats().getStat(StatTypes.INTELLIGENCE).getValue());
-        statValues.put(StatTypes.DEXTERITY, playerStats.getPlayerStats().getStat(StatTypes.DEXTERITY).getValue());
-        statValues.put(StatTypes.LUCK, playerStats.getPlayerStats().getStat(StatTypes.LUCK).getValue());
-
-        // Retrieve stat values
-        int maxStatValue = 100;
-        // Draw the hexagon
-        DrawContextUtils.drawHexagonStatsPolygon(
-                context,
-                500,
-                300,
-                statValues,
-                maxStatValue,
-                50, // Radius of the hexagon
-                ColorUtils.rgbaToHex(31, 37, 66, 255) // Example fill color
-        );
-
 
         // Define the size and position of the progress bar
 //        int barWidth = 200;
@@ -213,6 +191,7 @@ public class PlayerInfoScreen extends Screen {
         int labelX = rectX + 10;                  // Start slightly inside the left edge of the rectangle
 
         int buttonIndex = 0;
+
         for (StatTypes statType : StatTypes.values()) {
             int labelY = y + (buttonHeight - this.textRenderer.fontHeight) / 2;
 

@@ -36,6 +36,10 @@ public class UniqueStatsComponent implements AutoSyncedComponent {
         playerStats.getLevelSystem().addExperience(amount);
         sync();
     }
+    public void setStatPoints(int amount) {
+        playerStats.getLevelSystem().setStatPoints(amount);
+        sync();
+    }
     public int getLevel() {
         return playerStats.getLevelSystem().getLevel();
     }
@@ -44,10 +48,6 @@ public class UniqueStatsComponent implements AutoSyncedComponent {
     }
     public int getNextXpLevel() {
         return playerStats.getLevelSystem().getXpToNextLevel();
-    }
-    public void increase(StatTypes types) {//didn't sync
-        this.playerStats.getLevelSystem().useStatPoint(types,1,playerStats);
-        sync();
     }
     public int getFailstack() {
         return failstack;

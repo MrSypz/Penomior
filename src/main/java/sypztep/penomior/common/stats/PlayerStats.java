@@ -1,6 +1,7 @@
 package sypztep.penomior.common.stats;
 
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -28,20 +29,25 @@ public class PlayerStats {
         }
     }
 
-    public void resetStats() {
-        stats.values().forEach(Stat::reset);
-    }
+    public void useStatPoint(StatTypes types, int points) {
+        int perPoint = this.getStat(types).getIncreasePerPoint();
+        int statPoints = this.getLevelSystem().getStatPoints();
 
+        if (statPoints >= perPoint * points) { // Check if the player has enough points
+            this.getLevelSystem().subtractStatPoints(perPoint * points); // Subtract the required points
+            allocatePoints(types, points); // Increase the stat by the specified points
+        }
+    }
+    public void resetStats(ServerPlayerEntity player) {
+        stats.values().forEach(stat -> stat.reset(player, levelSystem));
+    }
+    @Deprecated
     public Map<StatTypes, Stat> getAllStats() {
         return stats;
     }
 
     public LevelSystem getLevelSystem() {
         return levelSystem;
-    }
-
-    public void useStatPoint(StatTypes statType, int points) {
-        levelSystem.useStatPoint(statType, points, this);
     }
 
     //------------------------utility---------------------

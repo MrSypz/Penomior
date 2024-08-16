@@ -14,10 +14,12 @@ import sypztep.penomior.common.api.iframe.EntityKnockbackCallback;
 import sypztep.penomior.common.api.iframe.PlayerAttackCallback;
 import sypztep.penomior.common.command.RefineCommand;
 import sypztep.penomior.common.command.RefineSetCommand;
+import sypztep.penomior.common.command.SetPointCommand;
 import sypztep.penomior.common.event.HurtDurationEvent;
 import sypztep.penomior.common.event.KnockBackThresoEvent;
 import sypztep.penomior.common.event.PlayerAttackPercentageEvent;
 import sypztep.penomior.common.init.*;
+import sypztep.penomior.common.payload.IncreaseStatsPayloadC2S;
 import sypztep.penomior.common.payload.RefinePayloadC2S;
 import sypztep.penomior.common.reloadlistener.MobStatsReloadListener;
 import sypztep.penomior.common.reloadlistener.PenomiorItemReloadListener;
@@ -42,12 +44,14 @@ public class Penomior implements ModInitializer {
         ModLootableModify.init();
         CommandRegistrationCallback.EVENT.register(new RefineCommand());
         CommandRegistrationCallback.EVENT.register(new RefineSetCommand());
+        CommandRegistrationCallback.EVENT.register(new SetPointCommand());
         EntityHurtCallback.EVENT.register(new HurtDurationEvent());
         EntityKnockbackCallback.EVENT.register(new KnockBackThresoEvent());
         PlayerAttackCallback.EVENT.register(new PlayerAttackPercentageEvent());
         ServerLivingEntityEvents.AFTER_DEATH.register(new HardCodeEXP());
 
         ServerPlayNetworking.registerGlobalReceiver(RefinePayloadC2S.ID, new RefinePayloadC2S.Receiver());
+        ServerPlayNetworking.registerGlobalReceiver(IncreaseStatsPayloadC2S.ID, new IncreaseStatsPayloadC2S.Receiver());
         //Data Driven
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new MobStatsReloadListener());
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new PenomiorItemReloadListener());

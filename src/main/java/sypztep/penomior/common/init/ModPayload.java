@@ -2,6 +2,7 @@ package sypztep.penomior.common.init;
 
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import sypztep.penomior.client.payload.*;
+import sypztep.penomior.common.payload.IncreaseStatsPayloadC2S;
 import sypztep.penomior.common.payload.RefinePayloadC2S;
 
 public class ModPayload {
@@ -14,5 +15,6 @@ public class ModPayload {
     }
     private static void initClient() {
         PayloadTypeRegistry.playC2S().register(RefinePayloadC2S.ID, RefinePayloadC2S.CODEC); // Client to Server
+        PayloadTypeRegistry.playC2S().register(IncreaseStatsPayloadC2S.ID, IncreaseStatsPayloadC2S.CODEC); // Client to Server
     }
 }

@@ -1,6 +1,7 @@
 package sypztep.penomior.common.stats;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Identifier;
 
 public class AgilityStat extends Stat {
     public AgilityStat(int baseValue) {
@@ -8,13 +9,14 @@ public class AgilityStat extends Stat {
     }
 
     @Override
-    public void applyPrimaryEffect(PlayerEntity player) {
+    public void applyPrimaryEffect(ServerPlayerEntity player) {
 
     }
 
     @Override
-    public void applySecondaryEffect(PlayerEntity player) {
+    public void applySecondaryEffect(ServerPlayerEntity  player) {
 
     }
+
 }
 

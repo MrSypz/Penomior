@@ -1,6 +1,8 @@
 package sypztep.penomior.common.stats;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Identifier;
 
 public class IntelligenceStat extends Stat {
     public IntelligenceStat(int baseValue) {
@@ -8,12 +10,13 @@ public class IntelligenceStat extends Stat {
     }
 
     @Override
-    public void applyPrimaryEffect(PlayerEntity player) {
+    public void applyPrimaryEffect(ServerPlayerEntity player) {
 
     }
 
     @Override
-    public void applySecondaryEffect(PlayerEntity player) {
+    public void applySecondaryEffect(ServerPlayerEntity  player) {
 
     }
+
 }

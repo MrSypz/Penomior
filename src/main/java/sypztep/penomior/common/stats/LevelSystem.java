@@ -51,13 +51,15 @@ public class LevelSystem {
         return statPoints;
     }
 
-    public void useStatPoint(StatTypes types, int points, PlayerStats playerStats) {
-        if (statPoints >= points) {
-            statPoints -= points;
-            playerStats.allocatePoints(types, points);
-        }
+    public void setStatPoints(int statPoints) {
+        this.statPoints = statPoints;
     }
-
+    public void addStatPoints(int statPoints) {
+        this.statPoints += statPoints;
+    }
+    public void subtractStatPoints(int points) {
+        this.statPoints -= points;
+    }
     public void writeToNbt(NbtCompound tag) {
         tag.putInt("Level", level);
         tag.putInt("XP", xp);
