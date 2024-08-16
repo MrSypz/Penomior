@@ -2,6 +2,7 @@
 
 ## Overview
 This mod enhanced gameplay with Evasion and Accuracy attributes, and a refined system for improvement a user gears!.
+and Player Stats like 'MMORPG' does
 
 ## Features
 
@@ -34,15 +35,8 @@ This mod enhanced gameplay with Evasion and Accuracy attributes, and a refined s
 #### Refine Interface:
 To open a screen type **/refine**"
 
-## Future Development
-- current it under development but I'll have a plan for the future too
-- 0.2 -> item and armor extra stats
-- 0.3 -> trinkets support
 - TBA
 ### Planned Updates
-- 0.1 <- Current version
-- 0.2
-- 0.3
 - TBA
 
 #### Bug Fixes:
