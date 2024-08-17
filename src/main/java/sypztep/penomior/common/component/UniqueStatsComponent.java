@@ -6,7 +6,8 @@ import net.minecraft.registry.RegistryWrapper;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import sypztep.penomior.common.stats.PlayerStats;
 import sypztep.penomior.common.init.ModEntityComponents;
-import sypztep.penomior.common.stats.StatTypes;
+
+import java.text.DecimalFormat;
 
 public class UniqueStatsComponent implements AutoSyncedComponent {
     private final PlayerEntity obj;
@@ -42,6 +43,13 @@ public class UniqueStatsComponent implements AutoSyncedComponent {
     }
     public int getLevel() {
         return playerStats.getLevelSystem().getLevel();
+    }
+    public int getNextLevel() {
+        return getLevel() + 1;
+    }
+    public String getXpPercentage() {
+        DecimalFormat df = new DecimalFormat("0.00"); // Format to two decimal places
+        return df.format(playerStats.getLevelSystem().getXpPercentage()) + "%";
     }
     public int getXp() {
         return playerStats.getLevelSystem().getXp();
