@@ -109,6 +109,12 @@ public class ScrollableTextList {
 
                     // Draw text
                     AnimationUtils.drawFadeText(context, textRenderer, line, textX, textY, alpha);
+
+                    // Draw gradient line below main context text
+                    if (isMainContext) {
+                        int gradientY = currentY + textRenderer.fontHeight + 14;// Position the gradient line just below the text
+                        DrawContextUtils.renderHorizontalLineWithCenterGradient(context, (int) (x / scale), gradientY, (int) (width / scale), 1, 400,0xFFFFFFFF, 0); // Adjust colors as needed
+                    }
                 }
                 currentY += textRenderer.fontHeight;
 
@@ -178,15 +184,17 @@ public class ScrollableTextList {
         }
 
         private static String formatValue(Object value) {
-            if (value instanceof Integer) {
-                return String.format("%d", value);
-            } else if (value instanceof Float) {
-                return String.format("%.2f", value);
-            } else if (value instanceof Double) {
-                return String.format("%.2f", value);
-            } else {
-                return value.toString();
-            }
+            // Apply a color code (for example, green) before returning the formatted value
+            String colorCode = "§6"; // Change this to any other color code if needed
+            return switch (value) {
+                case Integer i -> colorCode + String.format("%d", value);
+                case Float v -> colorCode + String.format("%.2f", value);
+                case Double v -> colorCode + String.format("%.2f", value);
+                case null, default -> {
+                    assert value != null;
+                    yield colorCode + value;
+                }
+            };
         }
     }
 
