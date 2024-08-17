@@ -42,4 +42,17 @@ public class ModConfig implements ConfigData {
     public static boolean damageIndicator = true;
     @ConfigEntry.Category("feature-client")
     public static boolean missingArrowPassthough = true;
+    @ConfigEntry.Category("feature-client")
+    public static RenderStyle renderStyle = RenderStyle.SLATE;
+    @ConfigEntry.Category("feature-client")
+    @ConfigEntry.ColorPicker(allowAlpha = true)
+    public static int barColor = 0xFFFFFFFF;
+    @ConfigEntry.Category("feature-client")
+    @ConfigEntry.ColorPicker(allowAlpha = true)
+    public static int barBGColor = 0xFFAB5C00;
+
+    public enum RenderStyle {
+        BAR,
+        SLATE;
+    }
 }
