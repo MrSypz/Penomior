@@ -1,33 +1,32 @@
 package sypztep.penomior.client.object;
 
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import sypztep.penomior.common.component.UniqueStatsComponent;
 import sypztep.penomior.common.payload.IncreaseStatsPayloadC2S;
 import sypztep.penomior.common.stats.StatTypes;
 
+
 public class IncreasePointButton extends ActionWidgetButton {
-    private final UniqueStatsComponent playerStats;
     private final StatTypes statType;
 
-    public IncreasePointButton(int x, int y, int width, int height, Text message, UniqueStatsComponent playerStats, StatTypes statType) {
-        super(x, y, width, height, message);
-        this.playerStats = playerStats;
+    public IncreasePointButton(int x, int y, int width, int height, Text message, UniqueStatsComponent stats, StatTypes statType) {
+        super(x, y, width, height, message, stats);
         this.statType = statType;
     }
 
     @Override
     public void onClick(double mouseX, double mouseY) {
-        increaseStatPoint();
+        if (localStatPoints >= requiredStatPoints) {
+            performAction();
+        } else {
+            assert MinecraftClient.getInstance().player != null;
+            MinecraftClient.getInstance().player.sendMessage(Text.of("Not enough stat points!"), false);
+        }
     }
 
-    @Override
-    protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
-        super.renderWidget(context, mouseX, mouseY, delta);
-    }
-
-    private void increaseStatPoint() {
-        if (playerStats.getPlayerStats().getLevelSystem().getStatPoints() > 0) {
+    protected void performAction() {
+        if (localStatPoints > 0) {
             IncreaseStatsPayloadC2S.send(statType);
         }
     }
