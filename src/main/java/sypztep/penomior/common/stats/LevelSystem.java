@@ -9,6 +9,7 @@ public class LevelSystem {
     private int statPoints;
     private static final int BASE_XP = 100; // Base XP for level 1
     private static final double EXPONENT = 1.5; // Exponent for XP curve
+    private static final int MAX_LEVEL = 100; // Maximum level cap
 
     public LevelSystem() {
         this.level = 1;
@@ -22,17 +23,26 @@ public class LevelSystem {
     }
 
     public void addExperience(int amount) {
+        if (level >= MAX_LEVEL) {
+            // Optionally, handle the case where XP is added but the level cap is reached
+            return;
+        }
         xp += amount;
-        while (xp >= xpToNextLevel) {
+        while (xp >= xpToNextLevel && level < MAX_LEVEL) {
             levelUp();
         }
     }
 
     private void levelUp() {
+        if (level >= MAX_LEVEL) {
+            return; // Prevent leveling up if at max level
+        }
         xp -= xpToNextLevel;
         level++;
-        statPoints += 1; // Or add custom points
-        xpToNextLevel = calculateXpForNextLevel(level);
+        statPoints += 1;
+        if (level < MAX_LEVEL) {
+            xpToNextLevel = calculateXpForNextLevel(level);
+        }
     }
 
     public int getLevel() {
@@ -45,6 +55,12 @@ public class LevelSystem {
 
     public int getXpToNextLevel() {
         return xpToNextLevel;
+    }
+    public double getXpPercentage() {
+        if (this.xpToNextLevel == 0) {
+            return 0; // To avoid division by zero
+        }
+        return ((double) this.xp / this.xpToNextLevel) * 100;
     }
 
     public int getStatPoints() {
