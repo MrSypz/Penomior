@@ -1,5 +1,7 @@
 package sypztep.penomior.common.stats;
 
+import sypztep.penomior.common.stats.element.*;
+
 public enum StatTypes {
     STRENGTH("strength","Str", StrengthStat::new),
     AGILITY("agility","Agi", AgilityStat::new),
