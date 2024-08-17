@@ -10,12 +10,10 @@ public abstract class Stat {
     protected int increasePerPoint;
     protected int totalPointsUsed; // Track total points used
 
-    // Constructor with default increase per point of 1
     public Stat(int baseValue) {
         this(baseValue, 1);
     }
 
-    // Constructor with specified increase per point
     public Stat(int baseValue, int increasePerPoint) {
         this.baseValue = baseValue;
         this.currentValue = baseValue;
