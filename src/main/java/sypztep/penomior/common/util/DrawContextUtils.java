@@ -1,17 +1,11 @@
 package sypztep.penomior.common.util;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import org.joml.Matrix4f;
 import sypztep.penomior.client.object.ListElement;
-import sypztep.penomior.common.stats.StatTypes;
-
-import java.util.Map;
 
 public final class DrawContextUtils {
     // Utility method to draw simple text with an optional icon
@@ -59,54 +53,6 @@ public final class DrawContextUtils {
         context.drawText(renderer, string, i, j-1, bordercolor, false);
         context.drawText(renderer, string, i, j, color, false);
     }
-    public static void drawHexagonStatsPolygon(DrawContext context, int xOffset, int yOffset, Map<StatTypes, Integer> statValues, int maxStatValue, int radius, int color) {
-        // Ensure that there are exactly 6 stat types
-        if (statValues.size() != 6) {
-            return; // A hexagon needs exactly 6 points
-        }
-
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
-        MatrixStack matrixStack = context.getMatrices();
-        Matrix4f matrix = matrixStack.peek().getPositionMatrix();
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
-
-        float alpha = (color >> 24 & 255) / 255.0F;
-        float red = (color >> 16 & 255) / 255.0F;
-        float green = (color >> 8 & 255) / 255.0F;
-        float blue = (color & 255) / 255.0F;
-
-        float[] xPoints = new float[6];
-        float[] yPoints = new float[6];
-
-        int index = 0;
-        for (StatTypes statType : StatTypes.values()) {
-            int value = statValues.get(statType);
-            float normalizedValue = (float) value / maxStatValue;
-
-            double angle = Math.toRadians(60 * index);
-            xPoints[index] = xOffset + (float) (radius * normalizedValue * Math.cos(angle));
-            yPoints[index] = yOffset + (float) (radius * normalizedValue * Math.sin(angle));
-            index++;
-        }
-
-        // Start the polygon at the center point
-        bufferBuilder.vertex(matrix, xOffset, yOffset, 0.0F).color(red, green, blue, alpha);
-
-        // Add all points around the hexagon
-        for (int i = 0; i < 6; i++) {
-            bufferBuilder.vertex(matrix, xPoints[i], yPoints[i], 0.0F).color(red, green, blue, alpha);
-        }
-
-        // Close the hexagon by connecting to the first point again
-        bufferBuilder.vertex(matrix, xPoints[0], yPoints[0], 0.0F).color(red, green, blue, alpha);
-
-        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
-        RenderSystem.disableBlend();
-    }
-
 
     public static void drawBorder(DrawContext context, int color, int thickness) {
         int width = context.getScaledWindowWidth();
