@@ -28,7 +28,7 @@ import sypztep.tyrannus.common.util.CyclingItemSlotIcon;
 import java.util.*;
 
 @Environment(EnvType.CLIENT)
-public class RefineScreen
+public final class RefineScreen
         extends HandledScreen<RefineScreenHandler>
         implements ScreenHandlerListener {
     public static final Identifier TEXTURE = Penomior.id("gui/container/refine_screen.png");

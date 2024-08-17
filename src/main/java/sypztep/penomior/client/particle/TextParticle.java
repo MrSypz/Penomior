@@ -15,7 +15,7 @@ import sypztep.penomior.client.particle.util.Easing;
 
 import java.awt.*;
 
-public class TextParticle extends Particle {
+public final class TextParticle extends Particle {
     private String text;
     private float scale;
     private float maxSize;

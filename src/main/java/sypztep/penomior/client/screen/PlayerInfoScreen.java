@@ -22,7 +22,7 @@ import sypztep.penomior.common.util.*;
 import java.util.*;
 
 @Environment(EnvType.CLIENT)
-public class PlayerInfoScreen extends Screen {
+public final class PlayerInfoScreen extends Screen {
     // 1. Constants
     private static final float ANIMATION_DURATION = 12.0f; // Duration of the animation in seconds
     private static final float FINAL_Y_OFFSET = 50.0f; // Final vertical offset of the text

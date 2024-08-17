@@ -11,7 +11,7 @@ import sypztep.penomior.common.util.RefineUtil;
 
 import java.util.List;
 
-public class PenomiorTooltip implements ItemTooltipCallback {
+public final class PenomiorTooltip implements ItemTooltipCallback {
     @Override
     public void getTooltip(ItemStack stack, Item.TooltipContext tooltipContext, TooltipType tooltipType, List<Text> lines) {
         if (stack.get(ModDataComponents.PENOMIOR) != null) {

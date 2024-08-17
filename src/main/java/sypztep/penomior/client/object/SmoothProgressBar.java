@@ -3,7 +3,7 @@ package sypztep.penomior.client.object;
 import net.minecraft.client.gui.DrawContext;
 import sypztep.penomior.ModConfig;
 
-public class SmoothProgressBar extends Animation {
+public final class SmoothProgressBar extends Animation {
     private final int barWidth;  // Width of the progress bar
     private final int barHeight; // Height of the progress bar
     private final int barColor;  // Color of the filled part of the bar

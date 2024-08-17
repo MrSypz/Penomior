@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ScrollableTextList {
+public final class ScrollableTextList {
     private static final float SCROLL_SPEED = 1.2F; // Speed of the scrolling effect
     private static final int ICON_SIZE = 16; // Size of the icon
 
