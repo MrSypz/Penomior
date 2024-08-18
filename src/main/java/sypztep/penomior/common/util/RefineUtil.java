@@ -18,6 +18,8 @@ import sypztep.penomior.common.data.PenomiorItemEntry;
 import sypztep.penomior.common.init.ModDataComponents;
 import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.penomior.common.init.ModItems;
+import sypztep.penomior.common.tag.ModItemTags;
+import sypztep.penomior.data.provider.ModItemTagProvider;
 import sypztep.tyrannus.common.util.ItemStackHelper;
 
 import java.util.*;
@@ -149,20 +151,28 @@ public final class RefineUtil {
 
 
     private static boolean isItemInCorrectSlot(ItemStack stack, EquipmentSlot slot) {
+        if (stack.isIn(ModItemTags.IGNORE_MODIFIER_ITEM)) {
+            return true;
+        }
         for (AttributeModifierSlot attributeModifierSlot : AttributeModifierSlot.values()) {
             MutableBoolean mutableBoolean = new MutableBoolean(false);
+
             if (!stack.isOf(Items.SHIELD)) {
                 stack.applyAttributeModifier(attributeModifierSlot, (entityAttributeRegistryEntry, attributeModifier) -> {
-                    if (attributeModifierSlot.matches(slot))
+                    if (attributeModifierSlot.matches(slot)) {
                         mutableBoolean.setTrue();
+                    }
                 });
                 if (mutableBoolean.isTrue()) {
                     return true;
                 }
-            } else return true;
+            } else {
+                return true;
+            }
         }
         return false;
     }
+
 
     public static void getCalculateSuccessRate(ItemStack slotOutput, int failStack) {
         setSuccessRate(calculateSuccessRate(slotOutput, failStack));
