@@ -99,7 +99,7 @@ public final class PlayerInfoScreen extends Screen {
 
     private List<ListElement> createListItems() {
         List<ListElement> listElements = new ArrayList<>();
-        listElements.add(new ListElement("MELEE", Penomior.id("hud/container/icon_0")));
+        listElements.add(new ListElement("MELEE", Penomior.id("hud/container/icon_1")));
         listElements.add(new ListElement("Physical Damage: %phyd"));
         listElements.add(new ListElement("Meele Damage: %meeld"));
         listElements.add(new ListElement("Projectile Damage: %projd"));
@@ -108,7 +108,7 @@ public final class PlayerInfoScreen extends Screen {
         listElements.add(new ListElement("Critical Damage: %cdmg %"));
         listElements.add(new ListElement("Critical Chance: %ccn %"));
         listElements.add(new ListElement("Accuracy: %acc"));
-        listElements.add(new ListElement("MAGIC", Penomior.id("hud/contaier/icon")));
+        listElements.add(new ListElement("MAGIC", Penomior.id("hud/container/icon_0")));
         listElements.add(new ListElement("Magic Damage: %mdmg"));
         listElements.add(new ListElement("VITALITY", Identifier.ofVanilla("hud/heart/full")));
         listElements.add(new ListElement("Health: %hp"));
@@ -116,14 +116,14 @@ public final class PlayerInfoScreen extends Screen {
         listElements.add(new ListElement("Defense: %dp"));
         listElements.add(new ListElement("Nature Health Regen: %nhrg"));
         listElements.add(new ListElement("Evasion: %eva"));
-        listElements.add(new ListElement("STATS", Penomior.id("hud/container/icon_10")));
+        listElements.add(new ListElement("STATS", Identifier.ofVanilla("icon/accessibility")));
         listElements.add(new ListElement("Strength: %str"));
         listElements.add(new ListElement("Agility: %agi"));
         listElements.add(new ListElement("Vitality: %vit"));
         listElements.add(new ListElement("Intelligence: %int"));
         listElements.add(new ListElement("Dexterity: %dex"));
         listElements.add(new ListElement("Luck: %luk"));
-        listElements.add(new ListElement("RESISTANCE", Penomior.id("hud/container/icon_10")));
+        listElements.add(new ListElement("RESISTANCE", Penomior.id("hud/container/icon_2")));
         listElements.add(new ListElement("Magic Resistance: %mresis %"));
         listElements.add(new ListElement("Physical Resistance: %physis %"));
         listElements.add(new ListElement("Projectile Resistance: %projsis %"));
@@ -290,7 +290,7 @@ public final class PlayerInfoScreen extends Screen {
         AnimationUtils.drawFadeCenteredText(context, textRenderer, Text.of("" + remainingPoints), adjustedX, adjustedY, 0xF17633, AnimationUtils.getAlpha(fadeProgress));
 
         context.getMatrices().pop();
-        AnimationUtils.drawFadeCenteredText(context, textRenderer, Text.of(fuckyougramma), (int) (screenWidth * 0.5f), (int) (screenHeight * 0.5f) + 25, 0xFFFFFF, AnimationUtils.getAlpha(fadeProgress));
+        AnimationUtils.drawFadeCenteredText(context, textRenderer, Text.of(fuckyougramma),  (int) (screenWidth * 0.5f), (int) (screenHeight * 0.5f) + 25, 0xFFFFFF, AnimationUtils.getAlpha(fadeProgress));
     }
 
 
