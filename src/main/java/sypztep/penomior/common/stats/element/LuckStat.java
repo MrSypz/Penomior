@@ -46,7 +46,7 @@ public class LuckStat extends Stat {
 
         applyEffects(player, modifications);
         var statsComponent = ModEntityComponents.STATS.get(player);
-        if (this.currentValue != 0 && this.currentValue % 5 == 0) {
+        if (this.currentValue % 5 == 0) {
             statsComponent.addExtraAccuracy(1);
             statsComponent.addExtraEvasion(1);
         }

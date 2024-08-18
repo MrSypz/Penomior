@@ -14,7 +14,7 @@ import java.util.function.ToDoubleFunction;
 
 public abstract class Stat {
     protected int baseValue;
-    protected int currentValue;
+    protected int currentValue  ;
     protected int increasePerPoint;
     protected int totalPointsUsed; // Track total points used
 
