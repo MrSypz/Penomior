@@ -47,8 +47,6 @@ public class Penomior implements ModInitializer {
         EntityKnockbackCallback.EVENT.register(new KnockBackThresoEvent());
         PlayerAttackCallback.EVENT.register(new PlayerAttackPercentageEvent());
         ServerLivingEntityEvents.AFTER_DEATH.register(new XPDistributionEvent());
-        ServerLivingEntityEvents.ALLOW_DAMAGE.register(new DamageHandlerEvent());
-
 
         ServerPlayNetworking.registerGlobalReceiver(RefinePayloadC2S.ID, new RefinePayloadC2S.Receiver());
         ServerPlayNetworking.registerGlobalReceiver(IncreaseStatsPayloadC2S.ID, new IncreaseStatsPayloadC2S.Receiver());
