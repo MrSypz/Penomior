@@ -83,6 +83,7 @@ public abstract class LivingEntityMixin extends Entity implements MissingAccesso
             MutableInt accuracy = new MutableInt();
             MutableInt extraDamage = new MutableInt();
             MutableInt extraProtect = new MutableInt();
+            var stats = ModEntityComponents.STATS.get(target);
             List<NbtCompound> equippedNbt = RefineUtil.getNbtFromAllEquippedSlots(target);
             for (NbtCompound nbt : equippedNbt) {
                 evasion.add(nbt.getInt(PenomiorData.EVASION));
@@ -90,8 +91,8 @@ public abstract class LivingEntityMixin extends Entity implements MissingAccesso
                 extraDamage.add(nbt.getInt(PenomiorData.DAMAGE));
                 extraProtect.add(nbt.getInt(PenomiorData.PROTECTION));
             }
-            ModEntityComponents.STATS.get(target).setEvasion(evasion.intValue());
-            ModEntityComponents.STATS.get(target).setAccuracy(accuracy.intValue());
+            stats.setEvasion(evasion.intValue());
+            stats.setAccuracy(accuracy.intValue());
 
             EntityAttributeInstance armor = this.getAttributeInstance(EntityAttributes.GENERIC_ARMOR);
             EntityAttributeInstance attack = this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
