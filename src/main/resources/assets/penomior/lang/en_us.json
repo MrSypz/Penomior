@@ -10,6 +10,7 @@
 
   "penomior.text.missing" : "Miss",
   "penomior.text.back" : "Back Attack",
+  "penomior.text.critical" : "Critical!",
 
   "config.jade.plugin_penomior.stats_config": "Entity Stats",
 

@@ -1,0 +1,11 @@
+{
+  "values": [
+    "minecraft:fly_into_wall",
+    "minecraft:stalagmite",
+    "minecraft:mob_attack",
+    "minecraft:player_attack",
+    "minecraft:falling_block",
+    "minecraft:falling_anvil",
+    "minecraft:falling_stalactite"
+  ]
+}
