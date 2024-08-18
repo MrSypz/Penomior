@@ -64,13 +64,16 @@ public final class PlayerInfoScreen extends Screen {
 
     private Map<String, Object> createPlayerInfoKey(MinecraftClient client) {
         Map<String, Object> values = new HashMap<>();
-        Map<String, Double> attributeAmounts = ItemStackHelper.getAttributeAmounts(client.player);
+        Map<String, Double> attributeAmounts = ItemStackHelper.getAttributeAmounts(client.player, playerStats.getPlayerStats().getStat(StatTypes.STRENGTH).getValue() * 0.02);
 
         assert client.player != null;
-        double attackDamage = attributeAmounts.getOrDefault("attribute.name.generic.attack_damage", client.player.getAttributeBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
         double armor = client.player.getAttributeValue(EntityAttributes.GENERIC_ARMOR);
         double armorToughness = client.player.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS);
+        double attackDamage = attributeAmounts.getOrDefault("attribute.name.generic.attack_damage", client.player.getAttributeBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE)); // IDK why it not sync wtih server but who care :)
 
+        values.put("phyd", client.player.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
+        values.put("meeld", client.player.getAttributeValue(ModEntityAttributes.GENERIC_MELEE_ATTACK_DAMAGE));
+        values.put("projd", client.player.getAttributeValue(ModEntityAttributes.GENERIC_PROJECTILE_ATTACK_DAMAGE));
         values.put("ap", attackDamage);
         values.put("asp", client.player.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED));
         values.put("cdmg", client.player.getAttributeValue(ModEntityAttributes.GENERIC_CRIT_DAMAGE) * 100f);
@@ -87,17 +90,26 @@ public final class PlayerInfoScreen extends Screen {
         values.put("int", playerStats.getPlayerStats().getStat(StatTypes.INTELLIGENCE).getValue());
         values.put("dex", playerStats.getPlayerStats().getStat(StatTypes.DEXTERITY).getValue());
         values.put("luk", playerStats.getPlayerStats().getStat(StatTypes.LUCK).getValue());
+        values.put("mdmg", client.player.getAttributeValue(ModEntityAttributes.GENERIC_MAGIC_ATTACK_DAMAGE));
+        values.put("mresis", client.player.getAttributeValue(ModEntityAttributes.GENERIC_MAGIC_RESISTANCE) * 100f);
+        values.put("physis", client.player.getAttributeValue(ModEntityAttributes.GENERIC_PHYSICAL_RESISTANCE) * 100f);
+        values.put("projsis", client.player.getAttributeValue(ModEntityAttributes.GENERIC_PROJECTILE_RESISTANCE) * 100f);
         return values;
     }
 
     private List<ListElement> createListItems() {
         List<ListElement> listElements = new ArrayList<>();
         listElements.add(new ListElement("MELEE", Penomior.id("hud/container/icon_0")));
+        listElements.add(new ListElement("Physical Damage: %phyd"));
+        listElements.add(new ListElement("Meele Damage: %meeld"));
+        listElements.add(new ListElement("Projectile Damage: %projd"));
         listElements.add(new ListElement("Attack Power: %ap"));
         listElements.add(new ListElement("Attack Speed: %asp"));
         listElements.add(new ListElement("Critical Damage: %cdmg %"));
         listElements.add(new ListElement("Critical Chance: %ccn %"));
         listElements.add(new ListElement("Accuracy: %acc"));
+        listElements.add(new ListElement("MAGIC", Penomior.id("hud/contaier/icon")));
+        listElements.add(new ListElement("Magic Damage: %mdmg"));
         listElements.add(new ListElement("VITALITY", Identifier.ofVanilla("hud/heart/full")));
         listElements.add(new ListElement("Health: %hp"));
         listElements.add(new ListElement("Max Health: %maxhp"));
@@ -111,6 +123,10 @@ public final class PlayerInfoScreen extends Screen {
         listElements.add(new ListElement("Intelligence: %int"));
         listElements.add(new ListElement("Dexterity: %dex"));
         listElements.add(new ListElement("Luck: %luk"));
+        listElements.add(new ListElement("RESISTANCE", Penomior.id("hud/container/icon_10")));
+        listElements.add(new ListElement("Magic Resistance: %mresis %"));
+        listElements.add(new ListElement("Physical Resistance: %physis %"));
+        listElements.add(new ListElement("Projectile Resistance: %projsis %"));
         return listElements;
     }
 
@@ -179,6 +195,7 @@ public final class PlayerInfoScreen extends Screen {
     private void drawStatsSection(DrawContext context, int xOffset, float yOffset, int contentWidth, int contentHeight, float deltatick) {
         this.playerInfo.render(context, this.textRenderer, xOffset + 25, (int) (yOffset + 55), contentWidth, contentHeight, 0.5f, 1f, AnimationUtils.getAlpha(fadeAnimation.getProgress()), deltatick);
     }
+
     private void renderStyledText(DrawContext context, int x, int y, int perPoint, float scale) {
         Text perPointText = Text.of(String.valueOf(perPoint)).copy().setStyle(Style.EMPTY.withColor((0xF17633)));
         Text pointText = Text.of(" Point").copy().setStyle(Style.EMPTY.withColor(Formatting.WHITE));
@@ -226,7 +243,7 @@ public final class PlayerInfoScreen extends Screen {
             float scale = 0.9f;
             // Draw Stat Label
             matrixStack.push();
-            matrixStack.scale(scale,scale,0);
+            matrixStack.scale(scale, scale, 0);
             context.drawTextWithShadow(this.textRenderer, Text.of(statType.getAka() + ":"), (int) (labelX / scale), (int) (labelY / scale), 0xFFFFFF);
             matrixStack.pop();
             DrawContextUtils.renderHorizontalLineWithCenterGradient(context, rectX, y + 20, maxWidth, 1, 1, 0xFFFFFFFF, 0x00FFFFFF);
@@ -235,7 +252,7 @@ public final class PlayerInfoScreen extends Screen {
             int valueX = labelX + statLabelWidth;
             int perPoint = playerStats.getPlayerStats().getStat(statType).getIncreasePerPoint();
             matrixStack.push();
-            matrixStack.scale(scale,scale,0);
+            matrixStack.scale(scale, scale, 0);
             renderStyledText(context, valueX, labelY, perPoint, scale);
 
             matrixStack.pop();
@@ -287,7 +304,7 @@ public final class PlayerInfoScreen extends Screen {
 
         texts = Arrays.asList(Text.of("Lvl Progress: " + playerStats.getXp() + "/" + playerStats.getNextXpLevel()),
                 Text.of(playerStats.getNextXpLevel() - playerStats.getXp() + " XP to Level " + playerStats.getNextLevel()),
-                Text.of("Level: " + playerStats.getLevel() + " "+ playerStats.getXpPercentage()));
+                Text.of("Level: " + playerStats.getLevel() + " " + playerStats.getXpPercentage()));
 
         cyclingTextIcon.render(context, textRenderer, delta, scaledLabelX, scaledLabelY + 20, 0xFFFFFF);  // Lvl Progession
 
