@@ -1,4 +1,4 @@
-package sypztep.penomior.mixin.vanilla.critattribute;
+package sypztep.penomior.mixin.vanilla.handlecrit;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.entity.Entity;

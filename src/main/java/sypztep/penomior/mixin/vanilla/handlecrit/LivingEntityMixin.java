@@ -1,4 +1,4 @@
-package sypztep.penomior.mixin.vanilla.critattribute;
+package sypztep.penomior.mixin.vanilla.handlecrit;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
