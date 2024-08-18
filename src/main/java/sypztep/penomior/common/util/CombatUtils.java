@@ -44,7 +44,7 @@ public final class CombatUtils {
         World world;
         ItemStack itemStack = damageSource.getWeaponStack();
 
-        float toughnessFactor = armorToughness * 2;
+        float toughnessFactor = 2.0f + armorToughness * 2;
         float adjustedArmor = armor - damageAmount / toughnessFactor;
         float effectiveArmor = Math.max(adjustedArmor, armor * 0.2f); // No upper cap here
         float baseArmorEffectiveness = effectiveArmor / 25.0f;
@@ -57,7 +57,6 @@ public final class CombatUtils {
         }
 
         float finalDamageFactor = 1.0f - armorEffectivenessFactor;
-
         return damageAmount * finalDamageFactor;
     }
 
@@ -131,12 +130,15 @@ public final class CombatUtils {
         }
         return value; // Return unmodified value if not a back attack
     }
+
     public static double getCritChance(LivingEntity living) {
         return living.getAttributeValue(ModEntityAttributes.GENERIC_CRIT_CHANCE);
     }
+
     public static boolean doCrit(LivingEntity living) {
         return living.getRandom().nextFloat() < getCritChance(living);
     }
+
     public static void applyParticle(Entity target) {
         if (target != null) {
             PlayerLookup.tracking((ServerWorld) target.getWorld(), target.getChunkPos())
