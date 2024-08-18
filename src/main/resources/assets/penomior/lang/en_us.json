@@ -25,13 +25,23 @@
 
   "text.autoconfig.penomior.category.gameplay": "IFrame Config",
   "text.autoconfig.penomior.category.refinement": "Refinement Config",
-  "text.autoconfig.penomior.category.combat": "Combat Config",
-  "text.autoconfig.penomior.category.feature": "Feature Config",
   "text.autoconfig.penomior.category.feature-client": "Client Feature Config",
+  "text.autoconfig.penomior.category.statconfig": "Stat Screen Config",
 
   "text.autoconfig.penomior.option.dmgReceiveExcludedEntities": "DamageReceiveExcludedEntities",
   "text.autoconfig.penomior.option.attackExcludedEntities": "AttackExcludedEntities",
   "text.autoconfig.penomior.option.iFrameDuration": "IFrame Duration",
   "text.autoconfig.penomior.option.attackCancelThreshold": "Attack Cancel Threshold",
-  "text.autoconfig.penomior.option.knockbackCancelThreshold": "Knockback Cancel Threshold"
+  "text.autoconfig.penomior.option.knockbackCancelThreshold": "Knockback Cancel Threshold",
+
+  "text.autoconfig.penomior.option.refineItemUnbreak": "Refine Items are Unbreak",
+
+  "text.autoconfig.penomior.option.missingIndicator": "Missing Particle Indicator",
+  "text.autoconfig.penomior.option.damageIndicator": "Damage Particle Indicator",
+  "text.autoconfig.penomior.option.xpnotify": "Xp Notify",
+  "text.autoconfig.penomior.option.lossxpnotify": "Loss Xp Notify",
+
+  "text.autoconfig.penomior.option.renderStyle": "Render Style",
+  "text.autoconfig.penomior.option.barColor": "ProgressBar Color",
+  "text.autoconfig.penomior.option.barBGColor": "Background ProgressBar Color"
 }

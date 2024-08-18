@@ -7,6 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import sypztep.penomior.ModConfig;
 import sypztep.penomior.common.component.UniqueStatsComponent;
 import sypztep.penomior.common.init.ModEntityComponents;
 
@@ -21,7 +22,8 @@ public class XPDistributionEvent implements ServerLivingEntityEvents.AfterDeath 
             Text message = Text.literal("You have lose :")
                     .formatted(Formatting.GOLD)
                     .append(Text.literal(getNewXP(stats) + " XP").formatted(Formatting.RED));
-            player.sendMessage(message, false);
+            if (ModConfig.lossxpnotify)
+                player.sendMessage(message, false);
             stats.getPlayerStats().getLevelSystem().subtractExperience(getNewXP(stats));
         }
         if (damageSource.getSource() instanceof ServerPlayerEntity player) {
@@ -36,8 +38,8 @@ public class XPDistributionEvent implements ServerLivingEntityEvents.AfterDeath 
                             .styled(style -> style.withColor(Formatting.GOLD).withBold(true)))
                     .append(Text.literal(" for your contribution!")
                             .styled(style -> style.withColor(Formatting.AQUA)));
-
-            player.sendMessage(message, false);
+            if (ModConfig.xpnotify)
+                player.sendMessage(message, false);
         }
     }
 

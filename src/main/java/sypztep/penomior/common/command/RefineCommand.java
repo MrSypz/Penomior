@@ -13,7 +13,7 @@ import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.server.command.CommandManager;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 import sypztep.penomior.common.screen.RefineScreenHandler;
 
 import static net.minecraft.server.command.CommandManager.literal;
@@ -36,8 +36,7 @@ public class RefineCommand implements CommandRegistrationCallback {
         return 1;
     }
 
-    @Nullable
-    protected static NamedScreenHandlerFactory createScreenHandlerFactory(World world, BlockPos pos) {
+    protected static @NotNull NamedScreenHandlerFactory createScreenHandlerFactory(World world, BlockPos pos) {
         return new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> new RefineScreenHandler(syncId, inventory, ScreenHandlerContext.create(world, pos)), Text.of("refiner"));
     }
 }

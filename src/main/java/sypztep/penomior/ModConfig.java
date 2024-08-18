@@ -30,24 +30,25 @@ public class ModConfig implements ConfigData {
     @ConfigEntry.Category("gameplay")
     public static int iFrameDuration = 10;
     @ConfigEntry.Category("refinement")
-    public static boolean refineItemUnbreak = false;
+    public static boolean refineItemUnbreak = true;
 
-    @ConfigEntry.Category("combat")
-    public static boolean backattack = true;
-    @ConfigEntry.Category("feature")
-    public static boolean inDev = false;
     @ConfigEntry.Category("feature-client")
     public static boolean missingIndicator = true;
     @ConfigEntry.Category("feature-client")
     public static boolean damageIndicator = true;
     @ConfigEntry.Category("feature-client")
+    public static boolean xpnotify = false;
+    @ConfigEntry.Category("feature-client")
+    public static boolean lossxpnotify = true;
+    @ConfigEntry.Category("feature")
     public static boolean missingArrowPassthough = true;
-    @ConfigEntry.Category("feature-client")
+
+    @ConfigEntry.Category("statconfig")
     public static RenderStyle renderStyle = RenderStyle.SLATE;
-    @ConfigEntry.Category("feature-client")
+    @ConfigEntry.Category("statconfig")
     @ConfigEntry.ColorPicker(allowAlpha = true)
     public static int barColor = 0xFFFFFFFF;
-    @ConfigEntry.Category("feature-client")
+    @ConfigEntry.Category("statconfig")
     @ConfigEntry.ColorPicker(allowAlpha = true)
     public static int barBGColor = 0xFFAB5C00;
 
