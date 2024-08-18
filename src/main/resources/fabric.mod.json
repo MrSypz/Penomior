@@ -28,6 +28,9 @@
     ],
     "modmenu": [
       "sypztep.penomior.common.compat.ModMenuIntegration"
+    ],
+    "fabric-datagen": [
+      "sypztep.penomior.data.ModDataGenerator"
     ]
   },
   "mixins": [

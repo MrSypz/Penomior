@@ -1,0 +1,6 @@
+// 1.21	2024-08-17T18:44:51.5384155	Penomior/Tags for minecraft:damage_type
+4537d0dffb60ca744fc248006c8802f6ba9e4c8f data\penomior\tags\damage_type\melee_damage.json
+86dfef270bc4d9c3413fad496e2acf5af270258a data\penomior\tags\damage_type\fire_damage.json
+e004f95e2e9e9348d2e1282954a41b8767f49b1a data\penomior\tags\damage_type\projectile_damage.json
+86e83a945bb54a5a38a646083f026d6d65e4c76d data\penomior\tags\damage_type\magic_damage.json
+c47bfdb74f9547c3a3181ae788eea70005adea27 data\penomior\tags\damage_type\physical_damage.json
