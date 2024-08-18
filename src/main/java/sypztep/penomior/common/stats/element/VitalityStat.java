@@ -1,6 +1,5 @@
 package sypztep.penomior.common.stats.element;
 
-import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -8,6 +7,10 @@ import net.minecraft.util.Identifier;
 import sypztep.penomior.Penomior;
 import sypztep.penomior.common.init.ModEntityAttributes;
 import sypztep.penomior.common.stats.Stat;
+import sypztep.penomior.common.util.AttributeModification;
+
+import java.util.List;
+
 
 public class VitalityStat extends Stat {
     public VitalityStat(int baseValue) {
@@ -16,38 +19,32 @@ public class VitalityStat extends Stat {
 
     @Override
     public void applyPrimaryEffect(ServerPlayerEntity player) {
-        EntityAttributeInstance attributeInstance = player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
-
-        if (attributeInstance != null) {
-            double baseHealth = player.getAttributeBaseValue(EntityAttributes.GENERIC_MAX_HEALTH);
-            double additionalHealth = baseHealth * (0.05 * this.currentValue);
-
-            EntityAttributeModifier existingModifier = attributeInstance.getModifier(getPrimaryId());
-            if (existingModifier != null) {
-                attributeInstance.removeModifier(existingModifier);
-            }
-
-            EntityAttributeModifier mod = new EntityAttributeModifier(getPrimaryId(), additionalHealth, EntityAttributeModifier.Operation.ADD_VALUE);
-            attributeInstance.addPersistentModifier(mod);
-        }
+        applyEffect(
+                player,
+                EntityAttributes.GENERIC_MAX_HEALTH,
+                getPrimaryId(),
+                EntityAttributeModifier.Operation.ADD_VALUE,
+                baseValue -> baseValue * (0.05 * this.currentValue)
+        );
     }
 
     @Override
     public void applySecondaryEffect(ServerPlayerEntity player) {
-        EntityAttributeInstance attributeInstance = player.getAttributeInstance(ModEntityAttributes.GENERIC_HEALTH_REGEN);
-//
-        if (attributeInstance != null) {
-            double baseCritChance = player.getAttributeBaseValue(ModEntityAttributes.GENERIC_HEALTH_REGEN);
-            double additionalCritChance = (baseCritChance + 0.25f) * (0.02 * this.currentValue) ;
-
-            EntityAttributeModifier existingModifier = attributeInstance.getModifier(getSecondaryId());
-            if (existingModifier != null) {
-                attributeInstance.removeModifier(existingModifier);
-            }
-
-            EntityAttributeModifier mod = new EntityAttributeModifier(getSecondaryId(), additionalCritChance, EntityAttributeModifier.Operation.ADD_VALUE);
-            attributeInstance.addPersistentModifier(mod);
-        }
+        List<AttributeModification> modifications = List.of(
+                new AttributeModification(
+                        ModEntityAttributes.GENERIC_HEALTH_REGEN,
+                        getSecondaryId(),
+                        EntityAttributeModifier.Operation.ADD_VALUE,
+                        baseValue -> (0.02 * this.currentValue)
+                ),
+                new AttributeModification(
+                        ModEntityAttributes.GENERIC_PHYSICAL_RESISTANCE,
+                        getSecondaryId(),
+                        EntityAttributeModifier.Operation.ADD_VALUE,
+                        baseValue -> (0.005 * this.currentValue)
+                )
+        );
+        applyEffects(player, modifications);
     }
 
     @Override
