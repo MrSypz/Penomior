@@ -6,7 +6,6 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
@@ -19,7 +18,6 @@ import sypztep.penomior.common.init.ModDataComponents;
 import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.penomior.common.init.ModItems;
 import sypztep.penomior.common.tag.ModItemTags;
-import sypztep.penomior.data.provider.ModItemTagProvider;
 import sypztep.tyrannus.common.util.ItemStackHelper;
 
 import java.util.*;
@@ -57,10 +55,12 @@ public final class RefineUtil {
     public static void setDurability(ItemStack stack, int durability) {
         stack.apply(ModDataComponents.PENOMIOR, NbtComponent.DEFAULT, applied -> applied.apply(compound -> compound.putInt(PenomiorData.DURABILITY, durability)));
     }
+
     public static void setExtraDamage(ItemStack stack, int refinelvl, int maxLvl, int startExtraDamage, int endExtraDamage) {
         int refine = refineValue(refinelvl, maxLvl, startExtraDamage, endExtraDamage);
         stack.apply(ModDataComponents.PENOMIOR, NbtComponent.DEFAULT, applied -> applied.apply(compound -> compound.putInt(PenomiorData.DAMAGE, refine)));
     }
+
     public static void setExtraProtect(ItemStack stack, int refinelvl, int maxLvl, int startProtect, int endProtect) {
         int refine = refineValue(refinelvl, maxLvl, startProtect, endProtect);
         stack.apply(ModDataComponents.PENOMIOR, NbtComponent.DEFAULT, applied -> applied.apply(compound -> compound.putInt(PenomiorData.PROTECTION, refine)));
@@ -90,9 +90,11 @@ public final class RefineUtil {
     public static int getDurability(ItemStack stack) {
         return ItemStackHelper.getNbtCompound(stack, ModDataComponents.PENOMIOR).getInt(PenomiorData.DURABILITY);
     }
+
     public static int getExtraDamage(ItemStack stack) {
         return ItemStackHelper.getNbtCompound(stack, ModDataComponents.PENOMIOR).getInt(PenomiorData.DAMAGE);
     }
+
     public static int getExtraProtect(ItemStack stack) {
         return ItemStackHelper.getNbtCompound(stack, ModDataComponents.PENOMIOR).getInt(PenomiorData.PROTECTION);
     }
@@ -138,6 +140,7 @@ public final class RefineUtil {
         }
         return nbtList;
     }
+
     public static List<ItemStack> getItemStackFromAllEquippedSlots(LivingEntity living) {
         List<ItemStack> itemStacks = new ArrayList<>();
         for (EquipmentSlot slot : EquipmentSlot.values()) {
@@ -156,17 +159,12 @@ public final class RefineUtil {
         }
         for (AttributeModifierSlot attributeModifierSlot : AttributeModifierSlot.values()) {
             MutableBoolean mutableBoolean = new MutableBoolean(false);
-
-            if (!stack.isOf(Items.SHIELD)) {
-                stack.applyAttributeModifier(attributeModifierSlot, (entityAttributeRegistryEntry, attributeModifier) -> {
-                    if (attributeModifierSlot.matches(slot)) {
-                        mutableBoolean.setTrue();
-                    }
-                });
-                if (mutableBoolean.isTrue()) {
-                    return true;
+            stack.applyAttributeModifier(attributeModifierSlot, (entityAttributeRegistryEntry, attributeModifier) -> {
+                if (attributeModifierSlot.matches(slot)) {
+                    mutableBoolean.setTrue();
                 }
-            } else {
+            });
+            if (mutableBoolean.isTrue()) {
                 return true;
             }
         }
@@ -214,10 +212,12 @@ public final class RefineUtil {
             RefineUtil.setExtraProtect(stack, refineLvl, maxLvl, startProtect, endProtect);
         });
     }
+
     public static void setBroken(ItemStack stack) {
         if (stack.get(ModDataComponents.PENOMIOR) != null)
-            RefineUtil.setDurability(stack,0);
+            RefineUtil.setDurability(stack, 0);
     }
+
     public static boolean isBroken(ItemStack stack) {
         return (stack.get(ModDataComponents.PENOMIOR) != null && RefineUtil.getDurability(stack) <= 0);
     }
@@ -228,6 +228,7 @@ public final class RefineUtil {
             RefineUtil.setDurability(stack, itemData.maxDurability());
         }
     }
+
     public static void processRefinement(ItemStack slotOutput, int failStack, int currentRefineLvl, int maxLvl, int startAccuracy, int endAccuracy, int startEvasion, int endEvasion, int startDamage, int endDamage, int startProtect, int endProtect, ServerPlayerEntity serverPlayer, PlayerEntity player) {
         if (RefineUtil.handleRefine(slotOutput, failStack)) { // Random Success Rate
             handleSuccess(slotOutput, currentRefineLvl, maxLvl, startAccuracy, endAccuracy, startEvasion, endEvasion, startDamage, endDamage, startProtect, endProtect, serverPlayer, player);
@@ -237,7 +238,7 @@ public final class RefineUtil {
 //        this.decrementStack();
     }
 
-    public static  void handleSuccess(ItemStack slotOutput, int currentRefineLvl, int maxLvl, int startAccuracy, int endAccuracy, int startEvasion, int endEvasion, int startDamage, int endDamage, int startProtect, int endProtect, ServerPlayerEntity serverPlayer, PlayerEntity player) {
+    public static void handleSuccess(ItemStack slotOutput, int currentRefineLvl, int maxLvl, int startAccuracy, int endAccuracy, int startEvasion, int endEvasion, int startDamage, int endDamage, int startProtect, int endProtect, ServerPlayerEntity serverPlayer, PlayerEntity player) {
         int newRefineLvl = currentRefineLvl + 1;
         RefineUtil.setRefineLvl(slotOutput, newRefineLvl);
         updateStats(slotOutput, newRefineLvl, maxLvl, startAccuracy, endAccuracy, startEvasion, endEvasion, startDamage, endDamage, startProtect, endProtect);
@@ -245,7 +246,7 @@ public final class RefineUtil {
         AddRefineSoundPayloadS2C.send(serverPlayer, player.getId(), RefineUtil.RefineSound.SUCCESS.select());
     }
 
-    public static  void handleFailure(ItemStack slotOutput, int failStack, int currentRefineLvl, int maxLvl, int startAccuracy, int endAccuracy, int startEvasion, int endEvasion, int startDamage, int endDamage, int startProtect, int endProtect, ServerPlayerEntity serverPlayer, PlayerEntity player) {
+    public static void handleFailure(ItemStack slotOutput, int failStack, int currentRefineLvl, int maxLvl, int startAccuracy, int endAccuracy, int startEvasion, int endEvasion, int startDamage, int endDamage, int startProtect, int endProtect, ServerPlayerEntity serverPlayer, PlayerEntity player) {
         if (currentRefineLvl > 16) { // 17 - 20
             int newRefineLvl = Math.max(currentRefineLvl - 1, 0);
             RefineUtil.setRefineLvl(slotOutput, newRefineLvl);
@@ -264,18 +265,18 @@ public final class RefineUtil {
         RefineUtil.setExtraProtect(slotOutput, refineLvl, maxLvl, startProtect, endProtect);
     }
 
-    public static void processRepair(ItemStack materialInput, ItemStack slotOutput,int maxDurability, int durability, int repairPoint, ServerPlayerEntity serverPlayer, PlayerEntity player) {
+    public static void processRepair(ItemStack materialInput, ItemStack slotOutput, int maxDurability, int durability, int repairPoint, ServerPlayerEntity serverPlayer, PlayerEntity player) {
         if (durability >= 100) {
             return; // No need to repair if durability is already at or above 100
         }
         if (materialInput.isOf(ModItems.MOONLIGHT_CRESCENT)) {
-            repairItem(slotOutput,maxDurability, durability, repairPoint, serverPlayer, player);
+            repairItem(slotOutput, maxDurability, durability, repairPoint, serverPlayer, player);
         } else if (materialInput.isOf(slotOutput.getItem())) {
-            repairItem(slotOutput,maxDurability, durability, 10, serverPlayer, player);
+            repairItem(slotOutput, maxDurability, durability, 10, serverPlayer, player);
         }
     }
 
-    public static  void repairItem(ItemStack slotOutput,int maxDurability, int durability, int repairPoint, ServerPlayerEntity serverPlayer, PlayerEntity player) {
+    public static void repairItem(ItemStack slotOutput, int maxDurability, int durability, int repairPoint, ServerPlayerEntity serverPlayer, PlayerEntity player) {
         int newDurability = Math.min(durability + repairPoint, maxDurability);
         RefineUtil.setDurability(slotOutput, newDurability);
         AddRefineSoundPayloadS2C.send(serverPlayer, player.getId(), RefineUtil.RefineSound.REPAIR.select());
