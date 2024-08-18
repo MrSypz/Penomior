@@ -78,6 +78,8 @@ public final class CombatUtils {
                 amount = calculatePhysicalDamage(attacker, amount);
             }
         }
+        if (source.isIn(ModDamageTags.PROJECTILE_DAMAGE))
+            return amount;
 
         // Apply back attack multiplier
         return applyBackAttackModifier(target, source, amount);
@@ -107,7 +109,7 @@ public final class CombatUtils {
 
     private static float calculatePhysicalDamage(LivingEntity target, float value) {
         float physicalResistance = (float) target.getAttributeValue(ModEntityAttributes.GENERIC_PHYSICAL_RESISTANCE);
-        return Math.max(value * physicalResistance, 0);
+        return Math.max(value - value * physicalResistance, 0);
     }
 
     private static float applyBackAttackModifier(LivingEntity target, DamageSource source, float value) {
@@ -128,5 +130,20 @@ public final class CombatUtils {
             }
         }
         return value; // Return unmodified value if not a back attack
+    }
+    public static double getCritChance(LivingEntity living) {
+        return living.getAttributeValue(ModEntityAttributes.GENERIC_CRIT_CHANCE);
+    }
+    public static boolean doCrit(LivingEntity living) {
+        return living.getRandom().nextFloat() < getCritChance(living);
+    }
+    public static void applyParticle(Entity target) {
+        if (target != null) {
+            PlayerLookup.tracking((ServerWorld) target.getWorld(), target.getChunkPos())
+                    .forEach(foundPlayer -> AddTextParticlesPayload.send(
+                            foundPlayer, target.getId(),
+                            AddTextParticlesPayload.TextParticle.CRITICAL
+                    ));
+        }
     }
 }
