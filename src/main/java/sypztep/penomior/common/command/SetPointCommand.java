@@ -21,21 +21,25 @@ public class SetPointCommand implements CommandRegistrationCallback {
                         .executes(context -> reset(context))));
     }
 
-    private static int execute(CommandContext<ServerCommandSource> context,int amount) {
+    private static int execute(CommandContext<ServerCommandSource> context, int amount) {
         ServerPlayerEntity player = context.getSource().getPlayer();
         assert player != null;
         var playerStats = ModEntityComponents.UNIQUESTATS.get(player);
-            playerStats.getPlayerStats().getLevelSystem().setStatPoints(amount);
-            playerStats.sync();
+        playerStats.getPlayerStats().getLevelSystem().setStatPoints(amount);
+        playerStats.sync();
 
         return 1;
     }
+
     private static int reset(CommandContext<ServerCommandSource> context) {
         ServerPlayerEntity player = context.getSource().getPlayer();
         assert player != null;
         var playerStats = ModEntityComponents.UNIQUESTATS.get(player);
-            playerStats.getPlayerStats().resetStats(player);
-            playerStats.sync();
+        var playerStatsCombat = ModEntityComponents.STATS.get(player);
+        playerStats.getPlayerStats().resetStats(player);
+        playerStats.sync();
+        playerStatsCombat.resetExtras();
+
         return 1;
     }
 }
