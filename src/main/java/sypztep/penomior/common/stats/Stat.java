@@ -1,8 +1,16 @@
 package sypztep.penomior.common.stats;
 
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeInstance;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
+import sypztep.penomior.common.util.AttributeModification;
+
+import java.util.List;
+import java.util.function.ToDoubleFunction;
 
 public abstract class Stat {
     protected int baseValue;
@@ -54,6 +62,48 @@ public abstract class Stat {
 
     public abstract void applyPrimaryEffect(ServerPlayerEntity player);
     public abstract void applySecondaryEffect(ServerPlayerEntity player);
+    protected void applyEffect(ServerPlayerEntity player, RegistryEntry<EntityAttribute> attribute, Identifier modifierId, EntityAttributeModifier.Operation operation, ToDoubleFunction<Double> effectFunction) {
+        EntityAttributeInstance attributeInstance = player.getAttributeInstance(attribute);
+        if (attributeInstance != null) {
+            double baseValue = player.getAttributeBaseValue(attribute);
+            double effectValue = effectFunction.applyAsDouble(baseValue);
+
+            if (modifierId == null) {
+                throw new IllegalArgumentException("modifierId cannot be null");
+            }
+            // Remove existing modifier
+            EntityAttributeModifier existingModifier = attributeInstance.getModifier(modifierId);
+            if (existingModifier != null) {
+                attributeInstance.removeModifier(existingModifier);
+            }
+
+            // Apply new modifier with the specified operation
+            EntityAttributeModifier mod = new EntityAttributeModifier(modifierId, effectValue, operation);
+            attributeInstance.addPersistentModifier(mod);
+        }
+    }
+    protected void applyEffects(ServerPlayerEntity player, List<AttributeModification> modifications) {
+        for (AttributeModification modification : modifications) {
+            EntityAttributeInstance attributeInstance = player.getAttributeInstance(modification.attribute());
+            if (attributeInstance != null) {
+                double baseValue = player.getAttributeBaseValue(modification.attribute());
+                double effectValue = modification.effectFunction().applyAsDouble(baseValue);
+
+                if (modification.modifierId() == null) {
+                    throw new IllegalArgumentException("modifierId cannot be null");
+                }
+                // Remove existing modifier
+                EntityAttributeModifier existingModifier = attributeInstance.getModifier(modification.modifierId());
+                if (existingModifier != null) {
+                    attributeInstance.removeModifier(existingModifier);
+                }
+
+                // Apply new modifier with the specified operation
+                EntityAttributeModifier mod = new EntityAttributeModifier(modification.modifierId(), effectValue, modification.operation());
+                attributeInstance.addPersistentModifier(mod);
+            }
+        }
+    }
 
     // Reset the stat to its base value and clean up attribute instances
     public void reset(ServerPlayerEntity player, LevelSystem levelSystem) {
@@ -68,15 +118,11 @@ public abstract class Stat {
     }
 
 
-    /**
-     * Method to get the modifier ID. Subclasses should override this to provide a specific ID.
-     */
     protected Identifier getPrimaryId() {
-        // Default ID or throw an exception if not overridden
-        throw new UnsupportedOperationException("Subclasses must override getPrimaryId() to provide a specific modifier ID.");
+        return null;
     }
-    protected Identifier getSecondaryId() {
-        throw new UnsupportedOperationException("Subclasses must override getSecondaryId() to provide a specific modifier ID.");
+    protected Identifier getSecondaryId(){
+        return null;
     }
 }
 
