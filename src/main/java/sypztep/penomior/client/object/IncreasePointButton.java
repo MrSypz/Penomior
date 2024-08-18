@@ -7,7 +7,7 @@ import sypztep.penomior.common.payload.IncreaseStatsPayloadC2S;
 import sypztep.penomior.common.stats.StatTypes;
 
 
-public class IncreasePointButton extends ActionWidgetButton {
+public final class IncreasePointButton extends ActionWidgetButton {
     private final StatTypes statType;
 
     public IncreasePointButton(int x, int y, int width, int height, Text message, UniqueStatsComponent stats, StatTypes statType) {
