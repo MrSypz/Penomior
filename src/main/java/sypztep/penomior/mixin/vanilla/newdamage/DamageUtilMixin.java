@@ -10,10 +10,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import sypztep.penomior.common.util.CombatUtils;
 
 @Mixin(DamageUtil.class)
-public class DamageUtilMixin {
+public abstract class DamageUtilMixin {
+
     @Inject(method = "getDamageLeft", at = @At("HEAD"), cancellable = true)
     private static void newDamageLeftCalculate(LivingEntity armorWearer, float damageAmount, DamageSource damageSource, float armor, float armorToughness, CallbackInfoReturnable<Float> cir) {
-//        cir.setReturnValue(CombatUtils.newDamageLeftCalculate(armorWearer,damageAmount,damageSource,armor,armorToughness));
-    //TODO: Change the method that calculate damage
+        cir.setReturnValue(CombatUtils.newDamageLeft(armorWearer,damageAmount,damageSource,armor,armorToughness));
     }
 }
