@@ -5,7 +5,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import sypztep.penomior.client.object.ListElement;
+import sypztep.penomior.client.widget.ListElement;
 
 public final class DrawContextUtils {
     // Utility method to draw simple text with an optional icon
