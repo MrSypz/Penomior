@@ -3,12 +3,15 @@ package sypztep.penomior.common.stats.element;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import sypztep.penomior.Penomior;
 import sypztep.penomior.common.init.ModEntityAttributes;
 import sypztep.penomior.common.stats.Stat;
 import sypztep.penomior.common.util.AttributeModification;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -46,6 +49,27 @@ public class VitalityStat extends Stat {
         );
         applyEffects(player, modifications);
     }
+    @Override
+    public List<Text> getEffectDescription(int additionalPoints) {
+        List<Text> description = new ArrayList<>();
+
+        description.add(Text.literal("Primary Effect:").styled(style -> style.withBold(true).withColor(Formatting.GOLD)));
+        description.add(Text.literal("- Max Health: ")
+                .append(Text.literal("+ " + (5 * additionalPoints) + "%").styled(style -> style.withColor(Formatting.GREEN)))
+                .styled(style -> style.withColor(Formatting.GRAY)));
+
+        description.add(Text.literal("Secondary Effect:").styled(style -> style.withBold(true).withColor(Formatting.GOLD)));
+        description.add(Text.literal("- Health Regen: ")
+                .append(Text.literal("+ " + (0.02 * additionalPoints) + "%").styled(style -> style.withColor(Formatting.GREEN)))
+                .styled(style -> style.withColor(Formatting.GRAY)));
+        description.add(Text.literal("- Physical Resistance: ")
+                .append(Text.literal("+ " + (0.5 * additionalPoints) + "%").styled(style -> style.withColor(Formatting.GREEN)))
+                .styled(style -> style.withColor(Formatting.GRAY)));
+
+        return description;
+    }
+
+
 
     @Override
     protected Identifier getPrimaryId() {

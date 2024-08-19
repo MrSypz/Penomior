@@ -14,7 +14,7 @@ public enum StatTypes {
     private final String aka;
     private final StatSupplier supplier;
 
-    StatTypes(String name,String aka, StatSupplier supplier) {
+    StatTypes(String name, String aka, StatSupplier supplier) {
         this.name = name;
         this.aka = aka;
         this.supplier = supplier;

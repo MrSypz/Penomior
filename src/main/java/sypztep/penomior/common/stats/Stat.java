@@ -6,6 +6,7 @@ import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import sypztep.penomior.common.util.AttributeModification;
 
@@ -116,7 +117,8 @@ public abstract class Stat {
         applyPrimaryEffect(player);
         applySecondaryEffect(player);
     }
-
+    // Method to get the effect of a stat point
+    public abstract List<Text> getEffectDescription(int additionalPoints);
 
     protected Identifier getPrimaryId() {
         return null;

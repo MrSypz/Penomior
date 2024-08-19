@@ -46,6 +46,8 @@ public class ModConfig implements ConfigData {
     @ConfigEntry.Category("statconfig")
     public static RenderStyle renderStyle = RenderStyle.SLATE;
     @ConfigEntry.Category("statconfig")
+    public static boolean tooltipinfo = true;
+    @ConfigEntry.Category("statconfig")
     @ConfigEntry.ColorPicker(allowAlpha = true)
     public static int barColor = 0xFFFFFFFF;
     @ConfigEntry.Category("statconfig")
@@ -54,6 +56,6 @@ public class ModConfig implements ConfigData {
 
     public enum RenderStyle {
         BAR,
-        SLATE;
+        SLATE
     }
 }

@@ -45,6 +45,7 @@
   "text.autoconfig.penomior.option.lossxpnotify": "Loss Xp Notify",
 
   "text.autoconfig.penomior.option.renderStyle": "Render Style",
+  "text.autoconfig.penomior.option.tooltipinfo": "Tooltip Information",
   "text.autoconfig.penomior.option.barColor": "ProgressBar Color",
   "text.autoconfig.penomior.option.barBGColor": "Background ProgressBar Color"
 }
