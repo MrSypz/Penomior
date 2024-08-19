@@ -25,7 +25,7 @@ public final class IncreasePointButton extends ActionWidgetButton {
         }
     }
 
-    protected void performAction() {
+    private void performAction() {
         if (localStatPoints > 0) {
             IncreaseStatsPayloadC2S.send(statType);
         }

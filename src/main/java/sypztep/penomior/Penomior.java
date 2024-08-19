@@ -18,6 +18,7 @@ import sypztep.penomior.common.command.SetPointCommand;
 import sypztep.penomior.common.event.*;
 import sypztep.penomior.common.init.*;
 import sypztep.penomior.common.payload.IncreaseStatsPayloadC2S;
+import sypztep.penomior.common.payload.RefineButtonPayloadC2S;
 import sypztep.penomior.common.payload.RefinePayloadC2S;
 import sypztep.penomior.common.reloadlistener.MobStatsReloadListener;
 import sypztep.penomior.common.reloadlistener.PenomiorItemReloadListener;
@@ -50,6 +51,7 @@ public class Penomior implements ModInitializer {
 
         ServerPlayNetworking.registerGlobalReceiver(RefinePayloadC2S.ID, new RefinePayloadC2S.Receiver());
         ServerPlayNetworking.registerGlobalReceiver(IncreaseStatsPayloadC2S.ID, new IncreaseStatsPayloadC2S.Receiver());
+        ServerPlayNetworking.registerGlobalReceiver(RefineButtonPayloadC2S.ID, new RefineButtonPayloadC2S.Receiver());
         //Data Driven
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new MobStatsReloadListener());
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new PenomiorItemReloadListener());

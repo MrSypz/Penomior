@@ -155,6 +155,9 @@ public final class PlayerInfoScreen extends Screen {
 
             y += statRowHeight; // Move to the next row
         }
+        texts = Arrays.asList(Text.of("Lvl Progress: " + playerStats.getXp() + "/" + playerStats.getNextXpLevel()),
+                Text.of(playerStats.getNextXpLevel() - playerStats.getXp() + " XP to Level " + playerStats.getNextLevel()),
+                Text.of("Level: " + playerStats.getLevel() + " " + playerStats.getXpPercentage()));
     }
 
     @Override
@@ -277,7 +280,8 @@ public final class PlayerInfoScreen extends Screen {
     @Override
     public void tick() {
         super.tick();
-        cyclingTextIcon.updateTexts(texts);
+        if (!texts.isEmpty())
+            cyclingTextIcon.updateTexts(texts);
     }
 
     private void renderMiddleSection(DrawContext context, int screenWidth, int screenHeight, float fadeProgress) {
@@ -305,10 +309,6 @@ public final class PlayerInfoScreen extends Screen {
         context.getMatrices().scale(0.8f, 0.8f, 1.0f);
         int scaledLabelX = (int) (labelX / 0.8f); // Adjust X position for scaling
         int scaledLabelY = (int) (labelY / 0.8f); // Adjust Y position for scaling
-
-        texts = Arrays.asList(Text.of("Lvl Progress: " + playerStats.getXp() + "/" + playerStats.getNextXpLevel()),
-                Text.of(playerStats.getNextXpLevel() - playerStats.getXp() + " XP to Level " + playerStats.getNextLevel()),
-                Text.of("Level: " + playerStats.getLevel() + " " + playerStats.getXpPercentage()));
 
         cyclingTextIcon.render(context, textRenderer, delta, scaledLabelX, scaledLabelY + 20, 0xFFFFFF);  // Lvl Progession
 

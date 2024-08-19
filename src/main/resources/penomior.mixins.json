@@ -9,19 +9,20 @@
     "refinerank.broken.ItemStackMixin",
     "vanilla.attackIframe.LivingEntityMixin",
     "vanilla.attackIframe.PlayerEntityMixin",
-    "vanilla.handlecrit.LivingEntityMixin",
-    "vanilla.handlecrit.PlayerEntityMixin",
     "vanilla.damagemodifier.LivingEntityMixin",
     "vanilla.evasionaccuracy.LivingEntityMixin",
     "vanilla.evasionaccuracy.ServerWorldMixin",
     "vanilla.extraattribute.EntityAttributesMixin",
     "vanilla.extraattribute.LivingEntityMixin",
+    "vanilla.handlecrit.LivingEntityMixin",
+    "vanilla.handlecrit.PlayerEntityMixin",
     "vanilla.naturehealthregen.LivingEntityMixin",
     "vanilla.newdamage.DamageUtilMixin",
     "vanilla.projectileclipthrough.PersistentProjectileEntityMixin",
     "vanilla.projectileclipthrough.TridentEntityMixin"
   ],
   "client": [
+    "qol.statwidget.InventoryScreenMixin",
     "refinerank.client.DrawContextMixin"
   ],
   "injectors": {
