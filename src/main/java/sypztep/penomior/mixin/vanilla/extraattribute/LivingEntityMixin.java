@@ -15,13 +15,19 @@ public class LivingEntityMixin {
         DefaultAttributeContainer.Builder builder = cir.getReturnValue();
         builder.add(ModEntityAttributes.GENERIC_CRIT_DAMAGE);
         builder.add(ModEntityAttributes.GENERIC_CRIT_CHANCE);
+
         builder.add(ModEntityAttributes.GENERIC_HEALTH_REGEN);
+
         builder.add(ModEntityAttributes.GENERIC_MAGIC_RESISTANCE);
         builder.add(ModEntityAttributes.GENERIC_PHYSICAL_RESISTANCE);
         builder.add(ModEntityAttributes.GENERIC_PROJECTILE_RESISTANCE);
+
         builder.add(ModEntityAttributes.GENERIC_MAGIC_ATTACK_DAMAGE);
         builder.add(ModEntityAttributes.GENERIC_MELEE_ATTACK_DAMAGE);
         builder.add(ModEntityAttributes.GENERIC_PROJECTILE_ATTACK_DAMAGE);
+
+        builder.add(ModEntityAttributes.GENERIC_PLAYER_VERS_ENTITY_DAMAGE);
+        builder.add(ModEntityAttributes.GENERIC_PLAYER_VERS_PLAYER_DAMAGE);
 
         cir.setReturnValue(builder);
     }
