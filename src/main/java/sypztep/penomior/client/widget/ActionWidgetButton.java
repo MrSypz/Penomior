@@ -1,4 +1,4 @@
-package sypztep.penomior.client.object;
+package sypztep.penomior.client.widget;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;

@@ -1,4 +1,4 @@
-package sypztep.penomior.client.object;
+package sypztep.penomior.client.widget;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;

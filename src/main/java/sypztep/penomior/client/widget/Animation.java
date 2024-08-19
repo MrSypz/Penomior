@@ -1,4 +1,4 @@
-package sypztep.penomior.client.object;
+package sypztep.penomior.client.widget;
 
 public class Animation {
     protected final float duration; // Duration of the animation in seconds
