@@ -76,6 +76,8 @@ public final class CombatUtils {
             if (source.isIn(ModDamageTags.PHYSICAL_DAMAGE)) {
                 amount = calculatePhysicalDamage(attacker, amount);
             }
+            amount = calculatePlayerVersPlayer(attacker, amount);
+            amount = calculatePlayerVersEntity(attacker, amount);
         }
         if (source.isIn(ModDamageTags.PROJECTILE_DAMAGE))
             return amount;
@@ -98,6 +100,14 @@ public final class CombatUtils {
         float amplifiedDamage = value + value * projectileAttackMultiplier;
         float finalDamage = amplifiedDamage - projectileResistance;
         return Math.max(finalDamage, 0);
+    }
+    private static float calculatePlayerVersPlayer(LivingEntity target, float value) {
+        float pvpAttackMultiplier = (float) target.getAttributeValue(ModEntityAttributes.GENERIC_PLAYER_VERS_PLAYER_DAMAGE);
+        return Math.max(value + value * pvpAttackMultiplier,0);
+    }
+    private static float calculatePlayerVersEntity(LivingEntity target, float value) {
+        float pveAttackMultiplier = (float) target.getAttributeValue(ModEntityAttributes.GENERIC_PLAYER_VERS_ENTITY_DAMAGE);
+        return Math.max(value + value * pveAttackMultiplier,0);
     }
 
     private static float calculateMeleeDamage(LivingEntity target, float value) {
@@ -124,7 +134,6 @@ public final class CombatUtils {
                             AddTextParticlesPayload.send(foundPlayer, target.getId(), AddTextParticlesPayload.TextParticle.BACKATTACK)
                     );
                 }
-                // Apply back attack multiplier
                 return value * 1.5F;
             }
         }
