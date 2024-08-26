@@ -8,6 +8,7 @@ import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import sypztep.penomior.common.init.ModEntityComponents;
 
 public class SetPointCommand implements CommandRegistrationCallback {
@@ -18,7 +19,7 @@ public class SetPointCommand implements CommandRegistrationCallback {
                         .then(CommandManager.argument("level", IntegerArgumentType.integer())
                                 .executes(context -> execute(context, IntegerArgumentType.getInteger(context, "level")))))
                 .then(CommandManager.literal("reset").requires(source -> source.hasPermissionLevel(3))
-                        .executes(context -> reset(context))));
+                        .executes(SetPointCommand::reset)));
     }
 
     private static int execute(CommandContext<ServerCommandSource> context, int amount) {
@@ -27,6 +28,8 @@ public class SetPointCommand implements CommandRegistrationCallback {
         var playerStats = ModEntityComponents.UNIQUESTATS.get(player);
         playerStats.getPlayerStats().getLevelSystem().setStatPoints(amount);
         playerStats.sync();
+
+        player.sendMessage(Text.literal("Stat points set to " + amount), false);
 
         return 1;
     }
@@ -40,6 +43,7 @@ public class SetPointCommand implements CommandRegistrationCallback {
         playerStats.sync();
         playerStatsCombat.resetExtras();
 
+        player.sendMessage(Text.literal("Stats have been reset."), false);
         return 1;
     }
 }

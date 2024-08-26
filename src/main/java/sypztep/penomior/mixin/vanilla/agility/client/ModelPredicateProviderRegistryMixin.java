@@ -16,7 +16,6 @@ public class ModelPredicateProviderRegistryMixin {
 	private static float modelQuickerDraw(float original) {
 		ClientPlayerEntity entity = MinecraftClient.getInstance().player;
         assert entity != null;
-		System.out.println(entity.getAttributeValue(ModEntityAttributes.GENERIC_PLAYER_DRAWSPEED));
         return (float) (original + entity.getAttributeValue(ModEntityAttributes.GENERIC_PLAYER_DRAWSPEED));
 	}
 }

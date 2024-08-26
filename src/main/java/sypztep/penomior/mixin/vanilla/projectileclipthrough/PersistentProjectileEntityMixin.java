@@ -20,8 +20,6 @@ public abstract class PersistentProjectileEntityMixin extends ProjectileEntity {
         super(entityType, world);
     }
 
-    @Shadow public abstract void setVelocity(double x, double y, double z, float power, float uncertainty);
-
     @Inject(method = "onEntityHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/PersistentProjectileEntity;deflect(Lnet/minecraft/entity/ProjectileDeflection;Lnet/minecraft/entity/Entity;Lnet/minecraft/entity/Entity;Z)Z"), cancellable = true)
     private void onEntityHit(EntityHitResult entityHitResult, CallbackInfo ci) {
         if (ModConfig.missingArrowPassthough &&

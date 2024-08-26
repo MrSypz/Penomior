@@ -63,6 +63,8 @@ dependencies {
     }
     modImplementation include("com.github.MrSypz:Tyrannus:${project.tyrannus_version}")
 
+//    modImplementation "dev.emi:trinkets:${trinkets_version}"
+
     modRuntimeOnly "maven.modrinth:sodium:${sodium_version}"
     modApi "com.terraformersmc:modmenu:${project.modmenu_version}"
 
