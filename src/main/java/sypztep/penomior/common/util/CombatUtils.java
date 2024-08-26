@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import sypztep.penomior.Penomior;
 import sypztep.penomior.client.payload.AddTextParticlesPayload;
 import sypztep.penomior.common.component.StatsComponent;
 import sypztep.penomior.common.init.ModEntityAttributes;
@@ -40,25 +41,46 @@ public final class CombatUtils {
     }
 
     public static float newDamageLeft(LivingEntity livingEntity, float damageAmount, DamageSource damageSource, float armor, float armorToughness) {
-        float armorEffectivenessFactor;
         World world;
         ItemStack itemStack = damageSource.getWeaponStack();
+        float effectiveArmor;
+        float armorPenetration;  // Default to no armor penetration
+        float delta = 0.0f;  // Initialize delta to track armor reduction
 
-        float toughnessFactor = 2.0f + armorToughness * 2;
-        float adjustedArmor = armor - damageAmount / toughnessFactor;
-        float effectiveArmor = Math.max(adjustedArmor, armor * 0.2f); // No upper cap here
-        float baseArmorEffectiveness = effectiveArmor / 25.0f;
-
+        // Step 1: Calculate armor penetration if the weapon stack is present and in a server world
         if (itemStack != null && (world = livingEntity.getWorld()) instanceof ServerWorld) {
             ServerWorld serverWorld = (ServerWorld) world;
-            armorEffectivenessFactor = EnchantmentHelper.getArmorEffectiveness(serverWorld, itemStack, livingEntity, damageSource, baseArmorEffectiveness);
-        } else {
-            armorEffectivenessFactor = baseArmorEffectiveness;
+            armorPenetration = EnchantmentHelper.getArmorEffectiveness(serverWorld, itemStack, livingEntity, damageSource, armor);
+            delta = armor - armorPenetration;  // Calculate the amount of armor reduced by penetration
+            Penomior.LOGGER.info("Armor Penetration: {} ({}% reduction)", delta, delta * 100);
         }
 
-        float finalDamageFactor = 1.0f - armorEffectivenessFactor;
-        return damageAmount * finalDamageFactor;
+        // Step 2: Calculate effective armor after applying armor penetration (reduce by delta)
+        effectiveArmor = armor - delta;
+        Penomior.LOGGER.info("Original Armor: {}", armor);
+        Penomior.LOGGER.info("Delta (Armor Reduction): {}", delta);
+        Penomior.LOGGER.info("Effective Armor after Penetration: {}", effectiveArmor);
+
+        // Step 3: Calculate damage reduction based on effective armor
+        float armorReduction = effectiveArmor / (effectiveArmor + 100); // Example formula for armor reduction scaling
+        float damageAfterArmor = damageAmount * (1 - armorReduction);
+        Penomior.LOGGER.info("Damage after Armor Reduction: {}", damageAfterArmor);
+        Penomior.LOGGER.info("Armor Reduction Percentage: {}%", armorReduction * 100);
+
+        // Step 4: Apply flat damage reduction (armorToughness / 2 as flat DR)
+        float flatDamageReduction = armorToughness * 0.01f;
+        float damageAfterFlatDR = damageAfterArmor - flatDamageReduction;
+        Penomior.LOGGER.info("Flat Damage Reduction: {}", flatDamageReduction);
+
+        // Ensure damage doesn't go below zero after flat DR
+        damageAfterFlatDR = Math.max(damageAfterFlatDR, 0);
+        Penomior.LOGGER.info("Final Damage after Flat DR: {}", damageAfterFlatDR);
+
+        // Return the final damage
+        return damageAfterFlatDR;
     }
+
+
 
     public static float damageModifier(LivingEntity target, float amount, DamageSource source) {
         // Determine if the damage is of a specific type and apply appropriate modifiers
