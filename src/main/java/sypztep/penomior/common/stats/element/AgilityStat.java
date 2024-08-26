@@ -30,7 +30,6 @@ public class AgilityStat extends Stat {
         var evasion = ModEntityComponents.STATS.get(player);
         evasion.addExtraEvasion(1);
 
-        //TODO: make a bow draw much faster 0.5% = 0.005f
         applyEffect(player, ModEntityAttributes.GENERIC_PLAYER_DRAWSPEED, getSecondaryId(), EntityAttributeModifier.Operation.ADD_VALUE,
                 baseValue -> (0.005 * this.currentValue));
     }
