@@ -3,6 +3,7 @@ package sypztep.penomior.client.widget;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import sypztep.penomior.common.util.AnimationUtils;
 import sypztep.penomior.common.util.DrawContextUtils;
@@ -69,15 +70,15 @@ public final class ScrollableTextList {
         DrawContextUtils.drawRect(context, (int) (x / scale), y, (int) (width / scale), (int) (height / scale) + 10, 0xFF1E1E1E);
         // Render text items with icons and optional buttons
         for (ListElement listElement : items) {
-            String itemText = listElement.text();
+            Text itemText = listElement.text();
             Identifier icon = listElement.icon(); // Get icon for the item
-            boolean isMainContext = itemText.equals(itemText.toUpperCase()); // Main context is upper case like 'HELLO'
+            boolean isMainContext = itemText.getString().equals(itemText.getString().toUpperCase()); // Main context is upper case like 'HELLO'
             int offsetX = isMainContext ? 50 : 0; // Additional x-offset for main context text
 
             if (currentY >= y + height / scale) break; // Stop rendering if the content is out of view
 
             // Prepend "● " if not main context
-            String displayText = isMainContext ? itemText : "● " + itemText;
+            String displayText = isMainContext ? itemText.getString() : "● " + itemText.getString();
 
             // Format the text with values
             String formattedText = StringFormatter.format(displayText, values);
@@ -169,14 +170,10 @@ public final class ScrollableTextList {
 
     public static class StringFormatter {
         public static String format(String template, Map<String, Object> values) {
-            List<Map.Entry<String, Object>> sortedEntries = values.entrySet()
-                    .stream()
-                    .sorted((e1, e2) -> Integer.compare(e2.getKey().length(), e1.getKey().length()))
-                    .toList();
-
-            for (Map.Entry<String, Object> entry : sortedEntries) {
-                String placeholder = "%" + entry.getKey();
-                Object value = entry.getValue();
+            for (Map.Entry<String, Object> entry : values.entrySet()) {
+                String key = entry.getKey(); // Key to replace
+                Object value = entry.getValue(); // Value to replace with
+                String placeholder = "$" + key; // Placeholder format use '$' instead of %
                 String replacement = formatValue(value);
                 template = template.replace(placeholder, replacement);
             }
@@ -184,19 +181,19 @@ public final class ScrollableTextList {
         }
 
         private static String formatValue(Object value) {
-            // Apply a color code (for example, green) before returning the formatted value
             String colorCode = "§6"; // Change this to any other color code if needed
             return switch (value) {
-                case Integer i -> colorCode + String.format("%d", value);
-                case Float v -> colorCode + String.format("%.2f", value);
-                case Double v -> colorCode + String.format("%.2f", value);
-                case null, default -> {
-                    assert value != null;
-                    yield colorCode + value;
-                }
+                case Integer i -> colorCode + String.format("%d", i);
+                case Float v -> colorCode + String.format("%.2f", v);
+                case Double v -> colorCode + String.format("%.2f", v);
+                case String s -> colorCode + s; // If the value is a string
+                case null, default -> colorCode + "N/A"; // Handle null or unexpected types
             };
         }
     }
+
+
+
 
     public int getX() {
         return x;

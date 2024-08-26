@@ -7,6 +7,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import sypztep.penomior.Penomior;
+import sypztep.penomior.common.init.ModEntityAttributes;
 import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.penomior.common.stats.Stat;
 
@@ -29,7 +30,9 @@ public class AgilityStat extends Stat {
         var evasion = ModEntityComponents.STATS.get(player);
         evasion.addExtraEvasion(1);
 
-        //TODO: make a bow draw much faster 0.5% = 0.05f
+        //TODO: make a bow draw much faster 0.5% = 0.005f
+        applyEffect(player, ModEntityAttributes.GENERIC_PLAYER_DRAWSPEED, getSecondaryId(), EntityAttributeModifier.Operation.ADD_VALUE,
+                baseValue -> (0.005 * this.currentValue));
     }
 
     @Override
@@ -47,15 +50,19 @@ public class AgilityStat extends Stat {
                 .styled(style -> style.withColor(Formatting.GRAY)));
         description.add(Text.literal("- Bow Draw Speed: ")
                 .append(Text.literal("+ " + (0.5 * additionalPoints) + "% per AGI").styled(style -> style.withColor(Formatting.GREEN)))
-                .styled(style -> style.withColor(Formatting.GRAY))
-                .append(Text.literal(" -> currently in development").styled(style -> style.withColor(Formatting.RED))));
+                .styled(style -> style.withColor(Formatting.GRAY)));
 
         return description;
     }
 
     @Override
     protected Identifier getPrimaryId() {
-        return Penomior.id("strength_primary");
+        return Penomior.id("agility_primary");
+    }
+
+    @Override
+    protected Identifier getSecondaryId() {
+        return Penomior.id("agility_secondary");
     }
 }
 

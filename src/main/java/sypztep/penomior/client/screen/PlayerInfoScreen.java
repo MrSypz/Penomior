@@ -72,8 +72,9 @@ public final class PlayerInfoScreen extends Screen {
         double attackDamage = attributeAmounts.getOrDefault("attribute.name.generic.attack_damage", client.player.getAttributeBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE)); // IDK why it not sync wtih server but who care :)
 
         values.put("phyd", client.player.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
-        values.put("meeld", client.player.getAttributeValue(ModEntityAttributes.GENERIC_MELEE_ATTACK_DAMAGE));
+        values.put("meleed", client.player.getAttributeValue(ModEntityAttributes.GENERIC_MELEE_ATTACK_DAMAGE));
         values.put("projd", client.player.getAttributeValue(ModEntityAttributes.GENERIC_PROJECTILE_ATTACK_DAMAGE));
+        values.put("drawspeed", client.player.getAttributeValue(ModEntityAttributes.GENERIC_PLAYER_DRAWSPEED) * 100f);
         values.put("ap", attackDamage);
         values.put("asp", client.player.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED));
         values.put("pvp", client.player.getAttributeValue(ModEntityAttributes.GENERIC_PLAYER_VERS_PLAYER_DAMAGE) * 100f);
@@ -101,38 +102,42 @@ public final class PlayerInfoScreen extends Screen {
 
     private List<ListElement> createListItems() {
         List<ListElement> listElements = new ArrayList<>();
-        listElements.add(new ListElement("MELEE", Penomior.id("hud/container/icon_1")));
-        listElements.add(new ListElement("Physical Damage: %phyd"));
-        listElements.add(new ListElement("Meele Damage: %meeld"));
-        listElements.add(new ListElement("Projectile Damage: %projd"));
-        listElements.add(new ListElement("Attack Power: %ap"));
-        listElements.add(new ListElement("Attack Speed: %asp"));
-        listElements.add(new ListElement("Accuracy: %acc"));
-        listElements.add(new ListElement("Critical Damage: %cdmg %"));
-        listElements.add(new ListElement("Critical Chance: %ccn %"));
-        listElements.add(new ListElement("PVE Damage : %pve %"));
-        listElements.add(new ListElement("PVP Damage : %pve %"));
-        listElements.add(new ListElement("MAGIC", Penomior.id("hud/container/icon_0")));
-        listElements.add(new ListElement("Magic Damage: %mdmg"));
-        listElements.add(new ListElement("VITALITY", Identifier.ofVanilla("hud/heart/full")));
-        listElements.add(new ListElement("Health: %hp"));
-        listElements.add(new ListElement("Max Health: %maxhp"));
-        listElements.add(new ListElement("Defense: %dp"));
-        listElements.add(new ListElement("Nature Health Regen: %nhrg"));
-        listElements.add(new ListElement("Evasion: %eva"));
-        listElements.add(new ListElement("STATS", Identifier.ofVanilla("icon/accessibility")));
-        listElements.add(new ListElement("Strength: %str"));
-        listElements.add(new ListElement("Agility: %agi"));
-        listElements.add(new ListElement("Vitality: %vit"));
-        listElements.add(new ListElement("Intelligence: %int"));
-        listElements.add(new ListElement("Dexterity: %dex"));
-        listElements.add(new ListElement("Luck: %luk"));
-        listElements.add(new ListElement("RESISTANCE", Penomior.id("hud/container/icon_2")));
-        listElements.add(new ListElement("Magic Resistance: %mresis %"));
-        listElements.add(new ListElement("Physical Resistance: %physis %"));
-        listElements.add(new ListElement("Projectile Resistance: %projsis %"));
+
+        listElements.add(new ListElement(Text.translatable("penomior.info.header_1"), Penomior.id("hud/container/icon_1")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.physical")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.melee_damage")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.projectile_damage")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.bow_draw_speed")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.attack_power")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.attack_speed")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.accuracy")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.critical_damage")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.critical_chance")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.pve_damage")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.pvp_damage")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.header_2"), Penomior.id("hud/container/icon_0")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.magic_damage")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.header_3"), Identifier.ofVanilla("hud/heart/full")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.health")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.max_health")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.defense")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.nature_health_regen")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.evasion")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.header_4"), Identifier.ofVanilla("icon/accessibility")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.strength")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.agility")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.vitality")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.intelligence")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.dexterity")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.luck")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.header_5"), Penomior.id("hud/container/icon_2")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.magic_resistance")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.physical_resistance")));
+        listElements.add(new ListElement(Text.translatable("penomior.info.projectile_resistance")));
+
         return listElements;
     }
+
 
     @Override
     protected void init() {

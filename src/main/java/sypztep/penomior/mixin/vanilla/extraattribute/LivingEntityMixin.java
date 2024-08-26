@@ -29,6 +29,8 @@ public class LivingEntityMixin {
         builder.add(ModEntityAttributes.GENERIC_PLAYER_VERS_ENTITY_DAMAGE);
         builder.add(ModEntityAttributes.GENERIC_PLAYER_VERS_PLAYER_DAMAGE);
 
+        builder.add(ModEntityAttributes.GENERIC_PLAYER_DRAWSPEED);
+
         cir.setReturnValue(builder);
     }
 

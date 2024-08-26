@@ -7,6 +7,7 @@
     "refinerank.ItemMixin",
     "refinerank.broken.BowItemMixin",
     "refinerank.broken.ItemStackMixin",
+    "vanilla.agility.BowItemMixin",
     "vanilla.attackIframe.LivingEntityMixin",
     "vanilla.attackIframe.PlayerEntityMixin",
     "vanilla.damagemodifier.LivingEntityMixin",
@@ -23,7 +24,8 @@
   ],
   "client": [
     "qol.statwidget.InventoryScreenMixin",
-    "refinerank.client.DrawContextMixin"
+    "refinerank.client.DrawContextMixin",
+    "vanilla.agility.client.ModelPredicateProviderRegistryMixin"
   ],
   "injectors": {
     "defaultRequire": 1

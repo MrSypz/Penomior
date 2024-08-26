@@ -11,7 +11,7 @@ public final class DrawContextUtils {
     // Utility method to draw simple text with an optional icon
     public static void drawTextWithIcon(DrawContext context, TextRenderer textRenderer, ListElement listElement, int x, int y, float scale, float iconscale, int alpha) {
         final int ICON_SIZE = 16;
-        String text = listElement.text();
+        Text text = listElement.text();
         Identifier icon = listElement.icon();
 
         MatrixStack matrixStack = context.getMatrices();

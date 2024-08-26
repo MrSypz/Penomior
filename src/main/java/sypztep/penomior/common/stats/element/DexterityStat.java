@@ -66,8 +66,6 @@ public class DexterityStat extends Stat {
         return description;
     }
 
-
-
     @Override
     protected Identifier getSecondaryId() {
         return Penomior.id("dexterity_secondary");

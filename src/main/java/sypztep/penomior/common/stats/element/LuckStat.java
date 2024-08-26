@@ -77,9 +77,6 @@ public class LuckStat extends Stat {
         return description;
     }
 
-
-
-
     @Override
     protected Identifier getPrimaryId() {
         return Penomior.id("luck_primary");

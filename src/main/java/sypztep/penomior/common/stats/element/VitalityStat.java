@@ -69,8 +69,6 @@ public class VitalityStat extends Stat {
         return description;
     }
 
-
-
     @Override
     protected Identifier getPrimaryId() {
         return Penomior.id("vitality_primary");

@@ -24,6 +24,8 @@ public class ModEntityAttributes {
     public static final RegistryEntry<EntityAttribute> GENERIC_PLAYER_VERS_ENTITY_DAMAGE = register("generic.player_vers_entity_damage", new ClampedEntityAttribute("attribute.name.generic.player_vers_entity_damage", 0, 0.0, 4.0).setTracked(true));
     public static final RegistryEntry<EntityAttribute> GENERIC_PLAYER_VERS_PLAYER_DAMAGE = register("generic.player_vers_player_damage", new ClampedEntityAttribute("attribute.name.generic.player_vers_player_damage", 0, 0.0, 4.0).setTracked(true));
 
+    public static final RegistryEntry<EntityAttribute> GENERIC_PLAYER_DRAWSPEED = register("generic.player_drawspeed", new ClampedEntityAttribute("attribute.name.generic.player_drawspeed", 0, 0.0, 2.0).setTracked(true));
+
 
     private static RegistryEntry<EntityAttribute> register(String id, EntityAttribute attribute) {
         return Registry.registerReference(Registries.ATTRIBUTE, Penomior.id(id), attribute);
