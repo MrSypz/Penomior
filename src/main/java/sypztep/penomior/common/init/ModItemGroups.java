@@ -13,8 +13,8 @@ public class ModItemGroups {
             content.addAfter(ModItems.LOSS_FRAGMENT, ModItems.LAHAV_FRAGMENT);
             content.addAfter(ModItems.LAHAV_FRAGMENT, ModItems.REFINE_ARMORENFORGE_STONE);
             content.addAfter(ModItems.REFINE_ARMORENFORGE_STONE, ModItems.REFINE_WEAPONENFORGE_STONE);
-            content.addAfter(ModItems.REFINE_WEAPONENFORGE_STONE, ModItems.MAHILNANT);
-            content.addAfter(ModItems.MAHILNANT, ModItems.MOONLIGHT_CRESCENT);
+            content.addAfter(ModItems.REFINE_WEAPONENFORGE_STONE, ModItems.MOONLIGHT_CRESCENT);
+//            content.addAfter(ModItems.MAHILNANT, ModItems.MOONLIGHT_CRESCENT);
         });
     }
 }

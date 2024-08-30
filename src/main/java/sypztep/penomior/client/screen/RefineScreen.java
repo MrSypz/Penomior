@@ -37,10 +37,12 @@ public final class RefineScreen
     private final CyclingItemSlotIcon armorSlotIcon = new CyclingItemSlotIcon(0);
     private static final List<ItemStack> WEAPON_STONE = List.of(
             ModItems.REFINE_WEAPON_STONE.getDefaultStack(),
+            ModItems.REFINE_WEAPONENFORGE_STONE.getDefaultStack(),
             ModItems.MOONLIGHT_CRESCENT.getDefaultStack()
             );
     private static final List<ItemStack> ARMOR_STONE = List.of(
             ModItems.REFINE_ARMOR_STONE.getDefaultStack(),
+            ModItems.REFINE_ARMORENFORGE_STONE.getDefaultStack(),
             ModItems.MOONLIGHT_CRESCENT.getDefaultStack()
     );
 
@@ -95,7 +97,9 @@ public final class RefineScreen
         if (bl) {
             context.getMatrices().push();
             context.getMatrices().scale(scale, scale, 0);
-            context.drawCenteredTextWithShadow(this.textRenderer, Text.of("Rate: " + formattedSuccessRate), x + 80, y - 35, 0xE0E0E0);
+            if (RefineUtil.getRefineLvl(stack) != 20)
+                context.drawCenteredTextWithShadow(this.textRenderer, Text.of("Rate: " + formattedSuccessRate), x + 80, y - 35, 0xE0E0E0);
+            else context.drawCenteredTextWithShadow(this.textRenderer, Text.of("Reach to max Refine Lvl!"), x + 80, y - 35, 0xE0E0E0);
             if (bl2)
                 context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("???").formatted(Formatting.OBFUSCATED), 201, 78, 0xE0E0E0);
             else context.drawCenteredTextWithShadow(this.textRenderer, Text.of("Durability: " + RefineUtil.getDurability(stack)), 200, 78, 0xE0E0E0);

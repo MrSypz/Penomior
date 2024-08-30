@@ -9,7 +9,6 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
-import sypztep.penomior.client.payload.AddRefineSoundPayloadS2C;
 import sypztep.penomior.client.payload.RefinePayloadS2C;
 import sypztep.penomior.common.data.PenomiorItemEntry;
 import sypztep.penomior.common.init.ModDataComponents;
@@ -90,15 +89,28 @@ public class RefineScreenHandler extends ScreenHandler {
             int currentDurability = RefineUtil.getDurability(slotOutput);
 
             // Determine if refinement is possible based on item type and material
-            if (!isRefined && !isArmor) {
-                canRefine = material.isOf(ModItems.REFINE_WEAPON_STONE) && currentRefineLvl < 14;
-            } else if (!isRefined) {
-                canRefine = material.isOf(ModItems.REFINE_ARMOR_STONE) && currentRefineLvl < 14;
-            } else if (!isArmor) {
-                canRefine = material.isOf(ModItems.REFINE_WEAPON_STONE) && currentRefineLvl < 14;
-            } else {
-                canRefine = material.isOf(ModItems.REFINE_ARMOR_STONE) && currentRefineLvl < 14;
+            if (!isRefined) {
+                if (!isArmor) {
+                    canRefine = material.isOf(ModItems.REFINE_WEAPON_STONE);
+                } else {
+                    canRefine = material.isOf(ModItems.REFINE_ARMOR_STONE);
+                }
+            } else if (currentDurability > 20){
+                if (!isArmor) {
+                    if (currentRefineLvl < 15) {
+                        canRefine = material.isOf(ModItems.REFINE_WEAPON_STONE);
+                    } else if (currentRefineLvl < 20) { //15 -> 19
+                        canRefine = material.isOf(ModItems.REFINE_WEAPONENFORGE_STONE);
+                    }
+                } else {
+                    // Armor refinement logic
+                    if (currentRefineLvl < 15) {
+                        canRefine = material.isOf(ModItems.REFINE_ARMOR_STONE);
+                    } else if (currentRefineLvl < 20)
+                        canRefine = material.isOf(ModItems.REFINE_ARMORENFORGE_STONE);
+                }
             }
+            // Additional condition for repairable items
             if (isRepairMaterial(material) && currentDurability < 100 && isRefined) {
                 canRefine = true;
             }
@@ -127,7 +139,7 @@ public class RefineScreenHandler extends ScreenHandler {
     }
 
     private boolean isRefineMaterial(ItemStack stack) {
-        return stack.isOf(ModItems.REFINE_WEAPON_STONE) || stack.isOf(ModItems.REFINE_ARMOR_STONE) || isRepairMaterial(stack);
+        return stack.isOf(ModItems.REFINE_WEAPON_STONE) || stack.isOf(ModItems.REFINE_ARMOR_STONE) || stack.isOf(ModItems.REFINE_ARMORENFORGE_STONE) || stack.isOf(ModItems.REFINE_WEAPONENFORGE_STONE) || isRepairMaterial(stack);
     }
 
     private boolean isRepairMaterial(ItemStack stack) {

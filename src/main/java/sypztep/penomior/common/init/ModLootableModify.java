@@ -20,9 +20,14 @@ public class ModLootableModify {
             if (source.isBuiltin()) {
                 LootPool.Builder lootPool = LootPool.builder()
                         .rolls(UniformLootNumberProvider.create(1,10));
+                LootPool.Builder builder = LootPool.builder()
+                        .rolls(UniformLootNumberProvider.create(1,3));
                 if (LootTables.TRIAL_CHAMBERS_REWARD_OMINOUS_RARE_CHEST.equals(id)) {
                     lootPool.with(ItemEntry.builder(ModItems.MOONLIGHT_CRESCENT));
                     tableBuilder.pool(lootPool);
+                    builder.with(ItemEntry.builder(ModItems.LOSS_FRAGMENT));
+                    builder.with(ItemEntry.builder(ModItems.LAHAV_FRAGMENT));
+                    tableBuilder.pool(builder);
                 }
             }
             if (source.isBuiltin() && isHostileMobLootTable(id)) {
