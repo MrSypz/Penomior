@@ -4,6 +4,11 @@
 
   "item.penomior.refine_weapon_stone": "Refine Weapon stone",
   "item.penomior.refine_armor_stone": "Refine Armor stone",
+  "item.penomior.loss_fragment": "Loss Fragment",
+  "item.penomior.lahav_fragment": "Lahav Fragment",
+  "item.penomior.refine_weapon_enforge_stone": "Refine Weapon Enforge stone",
+  "item.penomior.refine_armor_enforge_stone": "Refine Armor Enforge stone",
+  "item.penomior.mahilnant": "Mahilnant",
   "item.penomior.moonlight_crescent": "Moonlight Crescent",
 
   "penomior.refinebutton_tooltip": "Refine",
@@ -48,6 +53,7 @@
   "text.autoconfig.penomior.option.tooltipinfo": "Tooltip Information",
   "text.autoconfig.penomior.option.barColor": "ProgressBar Color",
   "text.autoconfig.penomior.option.barBGColor": "Background ProgressBar Color",
+
   "penomior.info.header_1": "MELEE",
   "penomior.info.physical": "Physical: $phyd",
   "penomior.info.melee_damage": "Melee Damage: $meleed",
