@@ -25,27 +25,45 @@ public class PenomiorItemReloadListener implements SimpleSynchronousResourceRelo
     @Override
     public void reload(ResourceManager manager) {
         PenomiorItemEntry.PENOMIOR_ITEM_ENTRY_MAP.clear();
-        manager.findAllResources("refine", path -> path.getNamespace().equals(Penomior.MODID) && path.getPath().endsWith(".json")).forEach((identifier, resources) -> {
+        manager.findAllResources("refine", path -> path.getPath().endsWith(".json")).forEach((identifier, resources) -> {
             for (Resource resource : resources) {
                 try (InputStream stream = resource.getInputStream()) {
                     JsonObject object = JsonParser.parseReader(new JsonReader(new InputStreamReader(stream))).getAsJsonObject();
-                    Identifier itemId = Identifier.of(identifier.getPath().substring(identifier.getPath().indexOf("/") + 1, identifier.getPath().length() - 5).replace("/", ":"));
+
+                    // Extract metadata
+                    JsonObject arg = object.getAsJsonObject("arg");
+                    boolean isVanilla = arg.has("vanilla") && arg.get("vanilla").getAsBoolean();
+
+                    // Extract item ID
+                    String namespace = identifier.getNamespace(); // e.g., "minecraft" or "pointblank"
+                    String pathStr = identifier.getPath().substring(identifier.getPath().indexOf("/") + 1, identifier.getPath().length() - 5).replace("/", ":");
+                    Identifier itemId = Identifier.of(namespace,pathStr);
+                    if (isVanilla) {
+                        itemId = Identifier.ofVanilla(itemId.getPath());
+                    }
                     Item item = Registries.ITEM.get(itemId);
 
+                    // Log the item being processed
+                    Penomior.LOGGER.info("Processing item: {}", itemId);
+
                     if (item == Registries.ITEM.get(Registries.ITEM.getDefaultId()) && !itemId.equals(Registries.ITEM.getDefaultId())) {
+                        Penomior.LOGGER.warn("Item with ID {} could not be found, skipping.", itemId);
                         continue;
                     }
-                    int maxLvl = object.get("maxLvl").getAsInt();
-                    int startAccuracy = object.get("startAccuracy").getAsInt();
-                    int endAccuracy = object.get("endAccuracy").getAsInt();
-                    int startEvasion = object.get("startEvasion").getAsInt();
-                    int endEvasion = object.get("endEvasion").getAsInt();
-                    int maxDurability = object.get("maxDurability").getAsInt();
-                    int starDamage = object.get("starDamage").getAsInt();
-                    int endDamage = object.get("endDamage").getAsInt();
-                    int startProtection = object.get("startProtection").getAsInt();
-                    int endProtection = object.get("endProtection").getAsInt();
-                    int repairpoint = object.get("repairpoint").getAsInt();
+                    // Extract properties from itemProperties object
+                    JsonObject itemProperties = object.getAsJsonObject("itemProperties");
+                    int maxLvl = itemProperties.get("maxLvl").getAsInt();
+                    int startAccuracy = itemProperties.get("startAccuracy").getAsInt();
+                    int endAccuracy = itemProperties.get("endAccuracy").getAsInt();
+                    int startEvasion = itemProperties.get("startEvasion").getAsInt();
+                    int endEvasion = itemProperties.get("endEvasion").getAsInt();
+                    int maxDurability = itemProperties.get("maxDurability").getAsInt();
+                    int starDamage = itemProperties.get("starDamage").getAsInt();
+                    int endDamage = itemProperties.get("endDamage").getAsInt();
+                    int startProtection = itemProperties.get("startProtection").getAsInt();
+                    int endProtection = itemProperties.get("endProtection").getAsInt();
+                    int repairpoint = itemProperties.get("repairpoint").getAsInt();
+
 
                     PenomiorItemEntry entry = new PenomiorItemEntry(
                             maxLvl,

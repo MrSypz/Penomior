@@ -27,7 +27,7 @@ public class MobStatsReloadListener implements SimpleSynchronousResourceReloadLi
     @Override
     public void reload(ResourceManager manager) {
         MobStatsEntry.MOBSTATS_MAP.clear();
-        manager.findAllResources("mobstats", path -> path.getNamespace().equals(Penomior.MODID) && path.getPath().endsWith(".json")).forEach((identifier, resources) -> {
+        manager.findAllResources("mobstats", path -> path.getPath().endsWith(".json")).forEach((identifier, resources) -> {
             for (Resource resource : resources) {
                 try (InputStream stream = resource.getInputStream()) {
                     JsonObject object = JsonParser.parseReader(new JsonReader(new InputStreamReader(stream))).getAsJsonObject();

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Updater</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script>
+        async function updateJsonFiles(event) {
+            event.preventDefault();
+
+            const files = document.getElementById('files').files;
+            const output = document.getElementById('output');
+            output.innerHTML = '';
+
+            const zip = new JSZip();
+
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    try {
+                        const oldJson = JSON.parse(e.target.result);
+
+                        // Define new structure
+                        const newData = {
+                            arg: {
+                                vanilla: true
+                            },
+                            itemProperties: oldJson
+                        };
+
+                        // Add to zip
+                        zip.file(file.name, JSON.stringify(newData, null, 2));
+
+                        // Check if all files are processed
+                        if (Object.keys(zip.files).length === files.length) {
+                            const content = await zip.generateAsync({ type: 'blob' });
+                            const link = document.createElement('a');
+                            link.href = URL.createObjectURL(content);
+                            link.download = 'updated_json_files.zip';
+                            link.textContent = 'Download zip file';
+                            output.appendChild(link);
+                            output.appendChild(document.createElement('br'));
+                        }
+                    } catch (error) {
+                        console.error('Error processing file:', error);
+                        const errorMessage = document.createElement('p');
+                        errorMessage.textContent = `Error processing ${file.name}: ${error.message}`;
+                        errorMessage.style.color = 'red';
+                        output.appendChild(errorMessage);
+                    }
+                };
+                reader.readAsText(file);
+            });
+        }
+    </script>
+</head>
+<body>
+<h1>Update JSON Files</h1>
+<form onsubmit="updateJsonFiles(event)">
+    <input type="file" id="files" multiple accept=".json">
+    <button type="submit">Update JSON</button>
+</form>
+<div id="output"></div>
+</body>
+</html>

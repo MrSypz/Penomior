@@ -7,10 +7,13 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.mutable.MutableBoolean;
+import sypztep.penomior.ModConfig;
 import sypztep.penomior.client.payload.AddRefineSoundPayloadS2C;
 import sypztep.penomior.common.data.PenomiorData;
 import sypztep.penomior.common.data.PenomiorItemEntry;
@@ -154,7 +157,7 @@ public final class RefineUtil {
 
 
     private static boolean isItemInCorrectSlot(ItemStack stack, EquipmentSlot slot) {
-        if (stack.isIn(ModItemTags.IGNORE_MODIFIER_ITEM)) {
+        if (stack.isIn(ModItemTags.IGNORE_MODIFIER_ITEM) || isExclusiveModItemID(stack)) {
             return true;
         }
         for (AttributeModifierSlot attributeModifierSlot : AttributeModifierSlot.values()) {
@@ -171,6 +174,11 @@ public final class RefineUtil {
         return false;
     }
 
+    private static boolean isExclusiveModItemID(ItemStack stack) {
+        Identifier itemId = Registries.ITEM.getId(stack.getItem());
+        String namespace = itemId.getNamespace();
+        return ModConfig.exclusiveModItemID.contains(namespace);
+    }
 
     public static void getCalculateSuccessRate(ItemStack slotOutput, int failStack) {
         setSuccessRate(calculateSuccessRate(slotOutput, failStack));

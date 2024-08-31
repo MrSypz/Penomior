@@ -1,4 +1,8 @@
 {
+  "arg": {
+    "vanilla": true
+  },
+  "itemProperties": {
     "maxLvl": 20,
     "startAccuracy": 0,
     "endAccuracy": 48,
@@ -10,4 +14,5 @@
     "startProtection": 0,
     "endProtection": 15,
     "repairpoint": 1
+  }
 }

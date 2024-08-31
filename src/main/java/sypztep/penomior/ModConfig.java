@@ -32,6 +32,11 @@ public class ModConfig implements ConfigData {
 
     @ConfigEntry.Category("refinement")
     public static boolean refineItemUnbreak = true;
+    @ConfigEntry.Category("refinement")
+    @Comment("exclusive item which is apply a stats to player by ignore the equipmentslot")
+    public static List<String> exclusiveModItemID = List.of(
+            "pointblank"
+    );
 
     @ConfigEntry.Category("feature-client")
     public static boolean missingIndicator = true;

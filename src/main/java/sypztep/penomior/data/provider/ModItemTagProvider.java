@@ -17,8 +17,7 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
 	@Override
 	protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
-		getOrCreateTagBuilder(ModItemTags.IGNORE_MODIFIER_ITEM)
-				.add(Items.SHIELD)
+		getOrCreateTagBuilder(ModItemTags.IGNORE_MODIFIER_ITEM).add(Items.SHIELD)
 				.add(Items.BOW)
 				.add(Items.CROSSBOW);
 	}
