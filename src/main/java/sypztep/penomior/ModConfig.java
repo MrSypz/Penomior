@@ -29,6 +29,7 @@ public class ModConfig implements ConfigData {
     @Comment("How many ticks of i-frames does an entity get when damaged, from 10 (default) 0.5 sec, to 2^31-1 (nothing can take damage)")
     @ConfigEntry.Category("gameplay")
     public static int iFrameDuration = 10;
+
     @ConfigEntry.Category("refinement")
     public static boolean refineItemUnbreak = true;
 
@@ -40,8 +41,16 @@ public class ModConfig implements ConfigData {
     public static boolean xpnotify = false;
     @ConfigEntry.Category("feature-client")
     public static boolean lossxpnotify = true;
+    @ConfigEntry.Category("feature-client")
+    public static boolean damageNumberIndicator = true;
+    @ConfigEntry.Category("feature-client")
+    @ConfigEntry.ColorPicker()
+    public static int damageColor = 0xFFFFFF;
+
     @ConfigEntry.Category("feature")
     public static boolean missingArrowPassthough = true;
+    @ConfigEntry.Category("feature")
+    public static boolean mobEvasion = true;
 
     @ConfigEntry.Category("statconfig")
     public static RenderStyle renderStyle = RenderStyle.SLATE;

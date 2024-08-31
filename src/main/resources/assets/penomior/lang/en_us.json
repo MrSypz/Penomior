@@ -35,6 +35,8 @@
   "text.autoconfig.penomior.category.statconfig": "Stat Screen Config",
 
   "text.autoconfig.penomior.option.missingArrowPassthough": "Passthough Projectile on Miss",
+  "text.autoconfig.penomior.option.mobEvasion": "Mob Evasion Stat",
+
 
   "text.autoconfig.penomior.option.dmgReceiveExcludedEntities": "DamageReceiveExcludedEntities",
   "text.autoconfig.penomior.option.attackExcludedEntities": "AttackExcludedEntities",
@@ -48,6 +50,8 @@
   "text.autoconfig.penomior.option.damageIndicator": "Damage Particle Indicator",
   "text.autoconfig.penomior.option.xpnotify": "Xp Notify",
   "text.autoconfig.penomior.option.lossxpnotify": "Loss Xp Notify",
+  "text.autoconfig.penomior.option.damageNumberIndicator": "Damage Number Indicator",
+  "text.autoconfig.penomior.option.damageColor": "Damage Color",
 
   "text.autoconfig.penomior.option.renderStyle": "Render Style",
   "text.autoconfig.penomior.option.tooltipinfo": "Tooltip Information",

@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import sypztep.penomior.ModConfig;
 import sypztep.penomior.common.component.StatsComponent;
 import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.penomior.common.data.MobStatsEntry;
@@ -17,7 +18,7 @@ public abstract class ServerWorldMixin {
 
     @Inject(method = "spawnEntity", at = @At("HEAD"))
     private void applyMobStats(Entity entity, CallbackInfoReturnable<Boolean> info) {
-        if (entity instanceof MobEntity mobEntity) {
+        if (entity instanceof MobEntity mobEntity && ModConfig.mobEvasion) {
             EntityType<?> mobEntityType = mobEntity.getType();
             for (EntityType<?> entityType : MobStatsEntry.MOBSTATS_MAP.keySet()) {
                 if (mobEntityType.equals(entityType)) {

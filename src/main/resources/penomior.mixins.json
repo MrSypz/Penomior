@@ -23,6 +23,7 @@
     "vanilla.projectileclipthrough.TridentEntityMixin"
   ],
   "client": [
+    "qol.damagenumber.LivingEntityMixin",
     "qol.statwidget.InventoryScreenMixin",
     "refinerank.client.DrawContextMixin",
     "vanilla.agility.client.ModelPredicateProviderRegistryMixin"
