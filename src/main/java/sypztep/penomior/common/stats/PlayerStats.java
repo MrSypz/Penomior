@@ -41,10 +41,6 @@ public class PlayerStats {
     public void resetStats(ServerPlayerEntity player) {
         stats.values().forEach(stat -> stat.reset(player, levelSystem));
     }
-    @Deprecated
-    public Map<StatTypes, Stat> getAllStats() {
-        return stats;
-    }
 
     public LevelSystem getLevelSystem() {
         return levelSystem;

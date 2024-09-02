@@ -26,7 +26,7 @@ public class SetPointCommand implements CommandRegistrationCallback {
         ServerPlayerEntity player = context.getSource().getPlayer();
         assert player != null;
         var playerStats = ModEntityComponents.UNIQUESTATS.get(player);
-        playerStats.getPlayerStats().getLevelSystem().setStatPoints(amount);
+        playerStats.setStatPoints(amount);
         playerStats.sync();
 
         player.sendMessage(Text.literal("Stat points set to " + amount), false);

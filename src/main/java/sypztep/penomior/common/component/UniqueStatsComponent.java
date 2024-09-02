@@ -4,8 +4,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
-import sypztep.penomior.common.stats.PlayerStats;
 import sypztep.penomior.common.init.ModEntityComponents;
+import sypztep.penomior.common.stats.PlayerStats;
 
 import java.text.DecimalFormat;
 
