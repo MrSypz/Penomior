@@ -45,13 +45,16 @@
   "text.autoconfig.penomior.option.knockbackCancelThreshold": "Knockback Cancel Threshold",
 
   "text.autoconfig.penomior.option.refineItemUnbreak": "Refine Items are Unbreak",
+  "text.autoconfig.penomior.option.exclusiveModItemID": "exclusiveModItem",
 
   "text.autoconfig.penomior.option.missingIndicator": "Missing Particle Indicator",
   "text.autoconfig.penomior.option.damageIndicator": "Damage Particle Indicator",
   "text.autoconfig.penomior.option.xpnotify": "Xp Notify",
   "text.autoconfig.penomior.option.lossxpnotify": "Loss Xp Notify",
   "text.autoconfig.penomior.option.damageNumberIndicator": "Damage Number Indicator",
-  "text.autoconfig.penomior.option.damageColor": "Damage Color",
+  "text.autoconfig.penomior.option.normalDamageColor": "Color for Normal Damage",
+  "text.autoconfig.penomior.option.magicDamageColor": "Color for Magic Damage",
+  "text.autoconfig.penomior.option.trueDamageColor": "Color for True Damage",
 
   "text.autoconfig.penomior.option.renderStyle": "Render Style",
   "text.autoconfig.penomior.option.tooltipinfo": "Tooltip Information",

@@ -24,6 +24,7 @@
   ],
   "client": [
     "qol.damagenumber.LivingEntityMixin",
+    "qol.playerlvl.EntityRendererMixin",
     "qol.statwidget.InventoryScreenMixin",
     "refinerank.client.DrawContextMixin",
     "vanilla.agility.client.ModelPredicateProviderRegistryMixin"
