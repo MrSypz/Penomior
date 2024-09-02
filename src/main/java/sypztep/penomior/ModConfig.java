@@ -50,7 +50,15 @@ public class ModConfig implements ConfigData {
     public static boolean damageNumberIndicator = true;
     @ConfigEntry.Category("feature-client")
     @ConfigEntry.ColorPicker()
-    public static int damageColor = 0xFFFFFF;
+    public static int normalDamageColor = 0xD43333;
+
+    @ConfigEntry.Category("feature-client")
+    @ConfigEntry.ColorPicker()
+    public static int magicDamageColor = 0x3A57D6; // Blue color code
+
+    @ConfigEntry.Category("feature-client")
+    @ConfigEntry.ColorPicker()
+    public static int trueDamageColor = 0x8A2BE2; // Purple color code
 
     @ConfigEntry.Category("feature")
     public static boolean missingArrowPassthough = true;
