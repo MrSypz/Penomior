@@ -1,22 +1,28 @@
 package sypztep.penomior.common.event;
 
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import sypztep.penomior.ModConfig;
 import sypztep.penomior.common.component.UniqueStatsComponent;
+import sypztep.penomior.common.data.MobStatsEntry;
 import sypztep.penomior.common.init.ModEntityComponents;
+import sypztep.penomior.common.util.XPDistributionUtil;
+
+import java.util.Map;
 
 public class XPDistributionEvent implements ServerLivingEntityEvents.AfterDeath {
 
     @Override
     public void afterDeath(LivingEntity entity, DamageSource damageSource) {
         UniqueStatsComponent stats;
-        //Handle Death
+        //ตาย
         if (entity instanceof PlayerEntity player) {
             stats = ModEntityComponents.UNIQUESTATS.get(player);
             Text message = Text.literal("You have lose :")
@@ -26,20 +32,22 @@ public class XPDistributionEvent implements ServerLivingEntityEvents.AfterDeath 
                 player.sendMessage(message, false);
             stats.getPlayerStats().getLevelSystem().subtractExperience(getNewXP(stats));
         }
-        if (damageSource.getSource() instanceof ServerPlayerEntity player) {
-            stats = ModEntityComponents.UNIQUESTATS.get(player);
-            int xpRounded = 5; // XP to award for killing the target
-            stats.addExperience(xpRounded);
+        //ฆ่า
+        if (damageSource.getSource() instanceof ServerPlayerEntity) {
+            if (entity instanceof MobEntity mobEntity) {
+                EntityType<?> mobEntityType = mobEntity.getType();
+                for (EntityType<?> entityType : MobStatsEntry.MOBSTATS_MAP.keySet()) {
+                    if (mobEntityType.equals(entityType)) {
+                        MobStatsEntry entry = MobStatsEntry.MOBSTATS_MAP.get(entityType);
+                        if (entry == null)
+                            continue;
+                        distributeXP(entry);
+                    }
+                }
+            }
 
-            // Create and send a styled message to the player
-            Text message = Text.literal("You have been awarded ")
-                    .styled(style -> style.withColor(Formatting.AQUA))
-                    .append(Text.literal(xpRounded + " XP")
-                            .styled(style -> style.withColor(Formatting.GOLD).withBold(true)))
-                    .append(Text.literal(" for your contribution!")
-                            .styled(style -> style.withColor(Formatting.AQUA)));
-            if (ModConfig.xpnotify)
-                player.sendMessage(message, false);
+            // Clear damage map after processing
+            XPDistributionUtil.damageMap.clear();
         }
     }
 
@@ -49,5 +57,35 @@ public class XPDistributionEvent implements ServerLivingEntityEvents.AfterDeath 
         int totalExperience = currentXP + maxXP;
         int xpLoss = (int) (totalExperience * 0.05f);
         return Math.max(0, xpLoss);
+    }
+    private void distributeXP(MobStatsEntry data) {
+        int baseXP = data.exp(); // XP to award for the kill
+        Map<ServerPlayerEntity, Integer> damageMap = XPDistributionUtil.damageMap;
+
+        // Calculate total damage dealt
+        int totalDamage = damageMap.values().stream().mapToInt(Integer::intValue).sum();
+
+        // Distribute XP based on damage proportion
+        for (Map.Entry<ServerPlayerEntity, Integer> entry : damageMap.entrySet()) {
+            ServerPlayerEntity player = entry.getKey();
+            int damageDealt = entry.getValue();
+            double proportion = (double) damageDealt / totalDamage;
+            int xpAwarded = (int) (baseXP * proportion);
+
+            // Add XP to the player
+            UniqueStatsComponent stats = ModEntityComponents.UNIQUESTATS.get(player);
+            stats.addExperience(xpAwarded);
+
+            // Send message to player
+            Text message = Text.literal("You have been awarded ")
+                    .styled(style -> style.withColor(Formatting.AQUA))
+                    .append(Text.literal(xpAwarded + " XP")
+                            .styled(style -> style.withColor(Formatting.GOLD).withBold(true)))
+                    .append(Text.literal(" for your contribution!")
+                            .styled(style -> style.withColor(Formatting.AQUA)));
+            if (ModConfig.xpnotify) {
+                player.sendMessage(message, false);
+            }
+        }
     }
 }
