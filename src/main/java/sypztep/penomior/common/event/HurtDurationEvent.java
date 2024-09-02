@@ -5,11 +5,13 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import sypztep.penomior.ModConfig;
 import sypztep.penomior.Penomior;
 import sypztep.penomior.common.api.iframe.EntityHurtCallback;
+import sypztep.penomior.common.util.XPDistributionUtil;
 
 public class HurtDurationEvent implements EntityHurtCallback {
     @Override
@@ -18,6 +20,10 @@ public class HurtDurationEvent implements EntityHurtCallback {
             return ActionResult.PASS;
 
         Entity attacker = source.getAttacker();
+        if (attacker instanceof ServerPlayerEntity player) {
+            XPDistributionUtil.damageMap.merge(player, (int) amount, Integer::sum);
+        }
+
         if (attacker == null || isExcludedEntity(attacker, ModConfig.dmgReceiveExcludedEntities))
             return ActionResult.PASS;
 

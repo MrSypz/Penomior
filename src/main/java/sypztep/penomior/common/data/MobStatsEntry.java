@@ -5,6 +5,6 @@ import net.minecraft.entity.EntityType;
 import java.util.HashMap;
 import java.util.Map;
 
-public record MobStatsEntry(int evasion, int accuracy) {
+public record MobStatsEntry(int evasion, int accuracy, int exp) {
 	public static final Map<EntityType<?>, MobStatsEntry> MOBSTATS_MAP = new HashMap<>();
 }

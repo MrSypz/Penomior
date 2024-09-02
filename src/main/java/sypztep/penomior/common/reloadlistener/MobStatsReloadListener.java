@@ -43,8 +43,9 @@ public class MobStatsReloadListener implements SimpleSynchronousResourceReloadLi
 
                     int evasion = JsonHelper.getInt(object, "evasion");
                     int accuracy = JsonHelper.getInt(object, "accuracy");
+                    int exp = JsonHelper.getInt(object, "exp");
 
-                    MobStatsEntry.MOBSTATS_MAP.put(entityType, new MobStatsEntry(evasion, accuracy));
+                    MobStatsEntry.MOBSTATS_MAP.put(entityType, new MobStatsEntry(evasion, accuracy,exp));
                 } catch (Exception e) {
                     Penomior.LOGGER.error("Failed to load mob stats from '{}': {}", identifier, e.getMessage());
                     Penomior.LOGGER.error("Exception details: ", e);

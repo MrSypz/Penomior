@@ -30,11 +30,9 @@ public class PenomiorItemReloadListener implements SimpleSynchronousResourceRelo
                 try (InputStream stream = resource.getInputStream()) {
                     JsonObject object = JsonParser.parseReader(new JsonReader(new InputStreamReader(stream))).getAsJsonObject();
 
-                    // Extract metadata
                     JsonObject arg = object.getAsJsonObject("arg");
                     boolean isVanilla = arg.has("vanilla") && arg.get("vanilla").getAsBoolean();
 
-                    // Extract item ID
                     String namespace = identifier.getNamespace(); // e.g., "minecraft" or "pointblank"
                     String pathStr = identifier.getPath().substring(identifier.getPath().indexOf("/") + 1, identifier.getPath().length() - 5).replace("/", ":");
                     Identifier itemId = Identifier.of(namespace,pathStr);
@@ -43,7 +41,6 @@ public class PenomiorItemReloadListener implements SimpleSynchronousResourceRelo
                     }
                     Item item = Registries.ITEM.get(itemId);
 
-                    // Log the item being processed
                     Penomior.LOGGER.info("Processing item: {}", itemId);
 
                     if (item == Registries.ITEM.get(Registries.ITEM.getDefaultId()) && !itemId.equals(Registries.ITEM.getDefaultId())) {
