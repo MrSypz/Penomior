@@ -56,6 +56,12 @@
   "text.autoconfig.penomior.option.magicDamageColor": "Color for Magic Damage",
   "text.autoconfig.penomior.option.trueDamageColor": "Color for True Damage",
 
+  "text.autoconfig.penomior.option.maxLevel": "Max Level",
+  "text.autoconfig.penomior.option.exponentExp": "Exponent Exp",
+  "text.autoconfig.penomior.option.baseExp": "Base Exp",
+  "text.autoconfig.penomior.option.startStatpoints": "Start Stat Points",
+  "text.autoconfig.penomior.option.statPointLadder": "Stat Point Ladder",
+
   "text.autoconfig.penomior.option.renderStyle": "Render Style",
   "text.autoconfig.penomior.option.tooltipinfo": "Tooltip Information",
   "text.autoconfig.penomior.option.barColor": "ProgressBar Color",

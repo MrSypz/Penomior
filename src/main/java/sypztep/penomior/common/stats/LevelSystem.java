@@ -1,20 +1,21 @@
 package sypztep.penomior.common.stats;
 
 import net.minecraft.nbt.NbtCompound;
+import sypztep.penomior.ModConfig;
 
 public class LevelSystem {
     private int level;
     private int xp;
     private int xpToNextLevel;
     private int statPoints;
-    private static final int BASE_XP = 100; // Base XP for level 1
-    private static final double EXPONENT = 1.5; // Exponent for XP curve
-    private static final int MAX_LEVEL = 100; // Maximum level cap
+    private static final int BASE_XP = ModConfig.baseExp; // Base XP for level 1
+    private static final double EXPONENT = ModConfig.exponentExp; // Exponent for XP curve
+    private static final int MAX_LEVEL = ModConfig.maxLevel; // Maximum level cap
 
     public LevelSystem() {
         this.level = 1;
         this.xp = 0;
-        this.statPoints = 0;
+        this.statPoints = ModConfig.startStatpoints;
         this.xpToNextLevel = calculateXpForNextLevel(level);
     }
 
@@ -48,11 +49,18 @@ public class LevelSystem {
         }
         xp -= xpToNextLevel;
         level++;
-        statPoints += 1;
+        statPoints += getStatPointsForLevel(level);
         if (level < MAX_LEVEL) {
             xpToNextLevel = calculateXpForNextLevel(level);
         }
     }
+    private int getStatPointsForLevel(int level) {
+        if (level - 1 < ModConfig.statPointLadder.length) {
+            return ModConfig.statPointLadder[level - 1];
+        }
+        return  ModConfig.statPointLadder[ ModConfig.statPointLadder.length - 1];
+    }
+
 
     public int getLevel() {
         return level;
