@@ -1,15 +1,12 @@
 package sypztep.penomior.common.util;
 
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
 import sypztep.penomior.client.payload.AddTextParticlesPayload;
 import sypztep.penomior.common.component.StatsComponent;
 import sypztep.penomior.common.init.ModEntityAttributes;
@@ -19,12 +16,14 @@ import java.util.Random;
 
 public final class CombatUtils {
     // Constants
-    private static final double ACCURACY_COEFFICIENT = 0.2624;
-    private static final double EVASION_COEFFICIENT = -0.2101;
-    private static final double BASE_HIT_RATE = 60.713;
+    private static final int BASE_HIT_RATE = 80;
+    private static final int MAX_HIT_RATE = 95;
+    private static final int MIN_HIT_RATE = 5;
 
     public static double calculateHitRate(int totalAccuracy, int totalEvasion) {
-        return ACCURACY_COEFFICIENT * totalAccuracy + EVASION_COEFFICIENT * totalEvasion + BASE_HIT_RATE;
+        // Base formula: HitRate = 80 + (Attacker's Hit - Target's Flee)
+        int hitRate = BASE_HIT_RATE + (totalAccuracy - totalEvasion);
+        return MathHelper.clamp(hitRate,MIN_HIT_RATE,MAX_HIT_RATE);
     }
 
     public static boolean isAttackHits(StatsComponent attackerStats, StatsComponent targetStats) {
@@ -39,35 +38,7 @@ public final class CombatUtils {
         return !isAttackHits(attackerStats, targetStats);
     }
 
-    public static float newDamageLeft(LivingEntity livingEntity, float damageAmount, DamageSource damageSource, float armor, float armorToughness) {
-        World world;
-        ItemStack itemStack = damageSource.getWeaponStack();
-        float effectiveArmor;
-        float armorPenetration;
-        float delta = 0.0f;
-
-        if (itemStack != null && (world = livingEntity.getWorld()) instanceof ServerWorld) {
-            ServerWorld serverWorld = (ServerWorld) world;
-            armorPenetration = EnchantmentHelper.getArmorEffectiveness(serverWorld, itemStack, livingEntity, damageSource, armor);
-            delta = armor - armorPenetration;  // Calculate the amount of armor reduced by penetration
-        }
-
-        effectiveArmor = armor - delta;
-
-        float armorReduction = effectiveArmor / (effectiveArmor + 100); // Example formula for armor reduction scaling
-        float damageAfterArmor = damageAmount * (1 - armorReduction);
-
-        float flatDamageReduction = armorToughness * 0.01f;
-        float damageAfterFlatDR = damageAfterArmor - flatDamageReduction;
-
-        damageAfterFlatDR = Math.max(damageAfterFlatDR, 0);
-        return damageAfterFlatDR;
-    }
-
-
-
     public static float damageModifier(LivingEntity target, float amount, DamageSource source) {
-        // Determine if the damage is of a specific type and apply appropriate modifiers
         LivingEntity attacker = (LivingEntity) source.getAttacker();
         if (attacker != null) {
             if (source.isIn(ModDamageTags.MAGIC_DAMAGE)) {
@@ -88,7 +59,6 @@ public final class CombatUtils {
         if (source.isIn(ModDamageTags.PROJECTILE_DAMAGE))
             return amount;
 
-        // Apply back attack multiplier
         return applyBackAttackModifier(target, source, amount);
     }
 

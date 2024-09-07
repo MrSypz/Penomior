@@ -18,7 +18,6 @@
     "vanilla.handlecrit.LivingEntityMixin",
     "vanilla.handlecrit.PlayerEntityMixin",
     "vanilla.naturehealthregen.LivingEntityMixin",
-    "vanilla.newdamage.DamageUtilMixin",
     "vanilla.projectileclipthrough.PersistentProjectileEntityMixin",
     "vanilla.projectileclipthrough.TridentEntityMixin"
   ],
