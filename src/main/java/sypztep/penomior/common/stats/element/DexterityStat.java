@@ -1,8 +1,8 @@
 package sypztep.penomior.common.stats.element;
 
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -22,13 +22,13 @@ public class DexterityStat extends Stat {
     }
 
     @Override
-    public void applyPrimaryEffect(ServerPlayerEntity player) {
+    public void applyPrimaryEffect(LivingEntity player) {
         var accuracy = ModEntityComponents.STATS.get(player);
         accuracy.addExtraAccuracy(1);
     }
 
     @Override
-    public void applySecondaryEffect(ServerPlayerEntity  player) {
+    public void applySecondaryEffect(LivingEntity  player) {
         List<AttributeModification> modifications = List.of(
                 new AttributeModification(
                         ModEntityAttributes.GENERIC_PROJECTILE_ATTACK_DAMAGE,

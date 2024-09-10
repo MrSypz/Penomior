@@ -39,7 +39,7 @@ public class SetPointCommand implements CommandRegistrationCallback {
         assert player != null;
         var playerStats = ModEntityComponents.UNIQUESTATS.get(player);
         var playerStatsCombat = ModEntityComponents.STATS.get(player);
-        playerStats.getPlayerStats().resetStats(player);
+        playerStats.getLivingStats().resetStats(player);
         playerStats.sync();
         playerStatsCombat.resetExtras();
 

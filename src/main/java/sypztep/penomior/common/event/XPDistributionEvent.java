@@ -30,7 +30,7 @@ public class XPDistributionEvent implements ServerLivingEntityEvents.AfterDeath 
                     .append(Text.literal(getNewXP(stats) + " XP").formatted(Formatting.RED));
             if (ModConfig.lossxpnotify)
                 player.sendMessage(message, false);
-            stats.getPlayerStats().getLevelSystem().subtractExperience(getNewXP(stats));
+            stats.getLivingStats().getLevelSystem().subtractExperience(getNewXP(stats));
         }
         //ฆ่า
         if (damageSource.getSource() instanceof ServerPlayerEntity) {
