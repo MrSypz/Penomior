@@ -43,6 +43,7 @@ public abstract class EntityRendererMixin<T extends Entity> {
         if (d > 1024.0) {
             return;
         }
+        if (entity != this.dispatcher.targetedEntity) return;
         Vec3d vec3d = entity.getAttachments().getPointNullable(EntityAttachmentType.NAME_TAG, 0, entity.getYaw(tickDelta));
         if (vec3d == null) {
             return;
@@ -59,6 +60,9 @@ public abstract class EntityRendererMixin<T extends Entity> {
         Text lvl = Text.literal("Level : " + ModEntityComponents.UNIQUESTATS.get(entity).getLevel());
         float g = (float) -textRenderer.getWidth(lvl) / 2;
         textRenderer.draw(lvl, g, (float) -10, Colors.WHITE, false, matrix4f, vertexConsumers, bl ? TextRenderer.TextLayerType.SEE_THROUGH : TextRenderer.TextLayerType.NORMAL, j, light);
+        if (bl) {
+            textRenderer.draw(lvl, g, (float)-10, Colors.WHITE, false, matrix4f, vertexConsumers, TextRenderer.TextLayerType.NORMAL, 0, light);
+        }
         matrices.pop();
     }
 }
