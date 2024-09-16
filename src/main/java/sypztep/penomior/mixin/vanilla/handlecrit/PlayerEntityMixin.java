@@ -31,7 +31,9 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @ModifyVariable(method = "attack", at = @At("STORE"), ordinal = 2)
     private boolean doCrit(boolean original, Entity target) {
         if (!this.getWorld().isClient()) {
-            if (CombatUtils.getCritChance(this) > 0 && CombatUtils.doCrit(this) && target instanceof MissingAccessor accessor && !accessor.penomior$isMissing()) {
+            if (CombatUtils.doCrit(this)) {
+                if (target instanceof MissingAccessor accessor && accessor.penomior$isMissing())
+                    return false;
                 CombatUtils.applyParticle(target);
                 return target instanceof LivingEntity && !this.hasStatusEffect(StatusEffects.BLINDNESS);
             }

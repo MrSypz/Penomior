@@ -21,7 +21,6 @@ public abstract class LivingEntityMixin extends Entity {
     @ModifyVariable(method = "applyDamage", at = @At("HEAD"), ordinal = 0, argsOnly = true)
     private float applyDamageFirst(float amount, DamageSource source) {
         if (!this.getWorld().isClient()) {
-
             Entity projectileSource = source.getSource();
             if (projectileSource instanceof PersistentProjectileEntity projectile && CombatUtils.doCrit((LivingEntity) source.getAttacker()) && source.getAttacker() instanceof MissingAccessor accessor && !accessor.penomior$isMissing()) {
                 projectile.setCritical(true);

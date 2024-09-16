@@ -18,6 +18,6 @@ public class ModEntityComponents implements EntityComponentInitializer {
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
         registry.beginRegistration(LivingEntity.class, STATS).respawnStrategy(RespawnCopyStrategy.CHARACTER).end(StatsComponent::new);
-        registry.beginRegistration(PlayerEntity.class, UNIQUESTATS).respawnStrategy(RespawnCopyStrategy.ALWAYS_COPY).end(UniqueStatsComponent::new);
+        registry.beginRegistration(LivingEntity.class, UNIQUESTATS).respawnStrategy(RespawnCopyStrategy.ALWAYS_COPY).end(UniqueStatsComponent::new);
     }
 }

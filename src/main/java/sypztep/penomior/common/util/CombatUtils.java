@@ -121,7 +121,7 @@ public final class CombatUtils {
     }
 
     public static boolean doCrit(LivingEntity living) {
-        return living.getRandom().nextFloat() < getCritChance(living);
+        return living.getRandom().nextFloat() <= getCritChance(living);
     }
 
     public static void applyParticle(Entity target) {

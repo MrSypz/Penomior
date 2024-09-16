@@ -66,6 +66,10 @@ public class LevelSystem {
         return level;
     }
 
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
     public int getXp() {
         return xp;
     }
