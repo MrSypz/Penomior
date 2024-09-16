@@ -52,16 +52,16 @@ public abstract class LivingEntityMixin {
             previousHealth = newHealth;
             String health = String.format("%.2f", damage);
             if (source.isIn(ModDamageTags.MELEE_DAMAGE) || source.isIn(ModDamageTags.PROJECTILE_DAMAGE) || source.isIn(ModDamageTags.PHYSICAL_DAMAGE))
-                ParticleUtil.spawnTextParticle(entity, Text.of(health), new Color(ModConfig.normalDamageColor), -0.055f, -0.3f);
+                ParticleUtil.spawnTextParticle(entity, Text.of(health), new Color(ModConfig.normalDamageColor), -0.055f, -0.6f);
             else if (source.isIn(ModDamageTags.MAGIC_DAMAGE)) {
-                ParticleUtil.spawnTextParticle(entity, Text.of(health), new Color(ModConfig.magicDamageColor), -0.055f, -0.3f);
+                ParticleUtil.spawnTextParticle(entity, Text.of(health), new Color(ModConfig.magicDamageColor), -0.055f, -0.6f);
             } else if (source.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY) || source.isIn(DamageTypeTags.BYPASSES_ARMOR) && source.isIn(DamageTypeTags.BYPASSES_ENCHANTMENTS)) {
-                ParticleUtil.spawnTextParticle(entity, Text.of(health), new Color(ModConfig.trueDamageColor), -0.055f, -0.3f);
+                ParticleUtil.spawnTextParticle(entity, Text.of(health), new Color(ModConfig.trueDamageColor), -0.055f, -0.6f);
             }
         } else if (oldHealth != newHealth && Math.abs(damage) != entity.getMaxHealth() && damage < 0) {
             previousHealth = newHealth;
             String health = String.format("%.2f", damage * -1);
-            ParticleUtil.spawnTextParticle(entity, Text.of("+ " + health), new Color(0, 255, 0), -0.055f, -0.3f);
+            ParticleUtil.spawnTextParticle(entity, Text.of("+ " + health), new Color(0, 255, 0), -0.055f, -0.6f);
         }
     }
 }

@@ -116,14 +116,6 @@ public final class CombatUtils {
         return value; // Return unmodified value if not a back attack
     }
 
-    public static double getCritChance(LivingEntity living) {
-        return living.getAttributeValue(ModEntityAttributes.GENERIC_CRIT_CHANCE);
-    }
-
-    public static boolean doCrit(LivingEntity living) {
-        return living.getRandom().nextFloat() <= getCritChance(living);
-    }
-
     public static void applyParticle(Entity target) {
         if (target != null) {
             PlayerLookup.tracking((ServerWorld) target.getWorld(), target.getChunkPos())

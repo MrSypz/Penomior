@@ -33,6 +33,7 @@ import sypztep.penomior.common.data.PenomiorData;
 import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.penomior.common.util.CombatUtils;
 import sypztep.penomior.common.util.RefineUtil;
+import sypztep.penomior.common.util.interfaces.NewCriticalOverhaul;
 
 import java.util.*;
 import java.util.List;
