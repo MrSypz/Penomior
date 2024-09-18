@@ -1,8 +1,8 @@
 package sypztep.penomior.common.stats.element;
 
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -21,7 +21,7 @@ public class StrengthStat extends Stat {
 
 
     @Override
-    public void applyPrimaryEffect(ServerPlayerEntity player) {
+    public void applyPrimaryEffect(LivingEntity player) {
         applyEffect(player,
                 ModEntityAttributes.GENERIC_MELEE_ATTACK_DAMAGE,
                 getPrimaryId(),
@@ -31,7 +31,7 @@ public class StrengthStat extends Stat {
     }
 
     @Override
-    public void applySecondaryEffect(ServerPlayerEntity player) {
+    public void applySecondaryEffect(LivingEntity player) {
         List<AttributeModification> modifications = List.of(
                 new AttributeModification(
                         ModEntityAttributes.GENERIC_CRIT_CHANCE,

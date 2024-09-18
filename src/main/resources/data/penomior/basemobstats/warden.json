@@ -1,0 +1,11 @@
+{
+    "basestat": {
+        "str": 5,
+        "agi": 5,
+        "dex": 5,
+        "vit": 5,
+        "int": 5,
+        "luk": 5,
+        "lvl": 5
+    }
+}

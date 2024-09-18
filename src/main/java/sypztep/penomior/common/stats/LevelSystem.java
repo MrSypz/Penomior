@@ -51,7 +51,7 @@ public class LevelSystem {
         level++;
         statPoints += getStatPointsForLevel(level);
         if (level < MAX_LEVEL) {
-            xpToNextLevel = calculateXpForNextLevel(level);
+            updateNextLvl();
         }
     }
     private int getStatPointsForLevel(int level) {
@@ -60,10 +60,20 @@ public class LevelSystem {
         }
         return  ModConfig.statPointLadder[ ModConfig.statPointLadder.length - 1];
     }
+    public void updateNextLvl() {
+        xpToNextLevel = calculateXpForNextLevel(level);
+    }
 
+    public int getMaxLevel() {
+        return MAX_LEVEL;
+    }
 
     public int getLevel() {
         return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public int getXp() {

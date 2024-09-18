@@ -6,11 +6,11 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class PlayerStats {
+public class LivingStats {
     private final Map<StatTypes, Stat> stats;
     private final LevelSystem levelSystem;
 
-    public PlayerStats() {
+    public LivingStats() {
         this.stats = new EnumMap<>(StatTypes.class);
         this.levelSystem = new LevelSystem();
         for (StatTypes statType : StatTypes.values()) {

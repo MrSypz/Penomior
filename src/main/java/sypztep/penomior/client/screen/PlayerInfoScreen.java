@@ -64,7 +64,7 @@ public final class PlayerInfoScreen extends Screen {
 
     private Map<String, Object> createPlayerInfoKey(MinecraftClient client) {
         Map<String, Object> values = new HashMap<>();
-        Map<String, Double> attributeAmounts = ItemStackHelper.getAttributeAmounts(client.player, playerStats.getPlayerStats().getStat(StatTypes.STRENGTH).getValue() * 0.02);
+        Map<String, Double> attributeAmounts = ItemStackHelper.getAttributeAmounts(client.player, playerStats.getLivingStats().getStat(StatTypes.STRENGTH).getValue() * 0.02);
 
         assert client.player != null;
         double armor = client.player.getAttributeValue(EntityAttributes.GENERIC_ARMOR);
@@ -87,12 +87,12 @@ public final class PlayerInfoScreen extends Screen {
         values.put("dp", armor + (2.0f + armorToughness / 4.0f));
         values.put("nhrg", client.player.getAttributeValue(ModEntityAttributes.GENERIC_HEALTH_REGEN));
         values.put("eva", ModEntityComponents.STATS.get(client.player).getEvasion());
-        values.put("str", playerStats.getPlayerStats().getStat(StatTypes.STRENGTH).getValue());
-        values.put("agi", playerStats.getPlayerStats().getStat(StatTypes.AGILITY).getValue());
-        values.put("vit", playerStats.getPlayerStats().getStat(StatTypes.VITALITY).getValue());
-        values.put("int", playerStats.getPlayerStats().getStat(StatTypes.INTELLIGENCE).getValue());
-        values.put("dex", playerStats.getPlayerStats().getStat(StatTypes.DEXTERITY).getValue());
-        values.put("luk", playerStats.getPlayerStats().getStat(StatTypes.LUCK).getValue());
+        values.put("str", playerStats.getLivingStats().getStat(StatTypes.STRENGTH).getValue());
+        values.put("agi", playerStats.getLivingStats().getStat(StatTypes.AGILITY).getValue());
+        values.put("vit", playerStats.getLivingStats().getStat(StatTypes.VITALITY).getValue());
+        values.put("int", playerStats.getLivingStats().getStat(StatTypes.INTELLIGENCE).getValue());
+        values.put("dex", playerStats.getLivingStats().getStat(StatTypes.DEXTERITY).getValue());
+        values.put("luk", playerStats.getLivingStats().getStat(StatTypes.LUCK).getValue());
         values.put("mdmg", client.player.getAttributeValue(ModEntityAttributes.GENERIC_MAGIC_ATTACK_DAMAGE));
         values.put("mresis", client.player.getAttributeValue(ModEntityAttributes.GENERIC_MAGIC_RESISTANCE) * 100f);
         values.put("physis", client.player.getAttributeValue(ModEntityAttributes.GENERIC_PHYSICAL_RESISTANCE) * 100f);
@@ -237,7 +237,7 @@ public final class PlayerInfoScreen extends Screen {
         for (StatTypes statType : StatTypes.values()) {
             String label = statType.getAka() + ":";
             int labelWidth = this.textRenderer.getWidth(Text.of(label));
-            int valueWidth = this.textRenderer.getWidth(Text.of(playerStats.getPlayerStats().getStat(statType).getIncreasePerPoint() + " Point"));
+            int valueWidth = this.textRenderer.getWidth(Text.of(playerStats.getLivingStats().getStat(statType).getIncreasePerPoint() + " Point"));
 
             // Add padding to width calculation
             maxWidth = Math.max(maxWidth, labelWidth + valueWidth + 50); // 20 is padding
@@ -262,7 +262,7 @@ public final class PlayerInfoScreen extends Screen {
 
             // Draw Stat Value
             int valueX = labelX + statLabelWidth;
-            int perPoint = playerStats.getPlayerStats().getStat(statType).getIncreasePerPoint();
+            int perPoint = playerStats.getLivingStats().getStat(statType).getIncreasePerPoint();
             matrixStack.push();
             matrixStack.scale(scale, scale, 0);
             renderStyledText(context, valueX, labelY, perPoint, scale);
@@ -290,7 +290,7 @@ public final class PlayerInfoScreen extends Screen {
     }
 
     private void renderMiddleSection(DrawContext context, int screenWidth, int screenHeight, float fadeProgress) {
-        int remainingPoints = playerStats.getPlayerStats().getLevelSystem().getStatPoints();
+        int remainingPoints = playerStats.getLivingStats().getLevelSystem().getStatPoints();
         float scaleFactor = 2.5f;
         int adjustedX = (int) (screenWidth * 0.5f / scaleFactor);
         int adjustedY = (int) (screenHeight * 0.5f / scaleFactor);

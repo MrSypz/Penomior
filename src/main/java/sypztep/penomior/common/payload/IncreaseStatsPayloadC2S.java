@@ -36,8 +36,8 @@ public record IncreaseStatsPayloadC2S(StatTypes statType) implements CustomPaylo
         @Override
         public void receive(IncreaseStatsPayloadC2S payload, ServerPlayNetworking.Context context) {
             UniqueStatsComponent stats = ModEntityComponents.UNIQUESTATS.get(context.player());
-            Stat stat = stats.getPlayerStats().getStat(payload.statType);
-            stats.getPlayerStats().useStatPoint(payload.statType, 1);
+            Stat stat = stats.getLivingStats().getStat(payload.statType);
+            stats.getLivingStats().useStatPoint(payload.statType, 1);
             stat.applyPrimaryEffect(context.player());
             stat.applySecondaryEffect(context.player());
             stats.sync();

@@ -1,8 +1,8 @@
 package sypztep.penomior.common.stats.element;
 
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -20,13 +20,13 @@ public class AgilityStat extends Stat {
     }
 
     @Override
-    public void applyPrimaryEffect(ServerPlayerEntity player) {
+    public void applyPrimaryEffect(LivingEntity player) {
         applyEffect(player, EntityAttributes.GENERIC_ATTACK_SPEED, getPrimaryId(), EntityAttributeModifier.Operation.ADD_VALUE,
                 baseValue -> (0.01 * this.currentValue));
     }
 
     @Override
-    public void applySecondaryEffect(ServerPlayerEntity  player) {
+    public void applySecondaryEffect(LivingEntity  player) {
         var evasion = ModEntityComponents.STATS.get(player);
         evasion.addExtraEvasion(1);
 

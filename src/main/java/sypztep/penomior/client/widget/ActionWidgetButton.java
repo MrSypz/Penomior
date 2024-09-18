@@ -32,7 +32,7 @@ public abstract class ActionWidgetButton extends ClickableWidget {
 
     @Override
     protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
-        localStatPoints = stats.getPlayerStats().getLevelSystem().getStatPoints();
+        localStatPoints = stats.getLivingStats().getLevelSystem().getStatPoints();
 
         boolean hovered = isHovered() && localStatPoints > 0;
         int lineColor = (localStatPoints > 0) ? 0xFFFFFFFF : 0xFF888888; // Dim color if localStatPoints is 0

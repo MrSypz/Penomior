@@ -1,5 +1,6 @@
 package sypztep.penomior.common.stats;
 
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
@@ -52,25 +53,28 @@ public abstract class Stat {
         return increasePerPoint = 1 + (currentValue / 10);
     }
 
-    public void setIncreasePerPoint(int increasePerPoint) {
-        this.increasePerPoint = increasePerPoint;
-    }
-
     public void increase(int points) {
         this.currentValue += points;
-        this.totalPointsUsed += (points * increasePerPoint); // Track points used
+        this.totalPointsUsed += (points * increasePerPoint); // Track แต้มที่ใช้
+    }
+    //for monster
+    public void setPoints(int points) {
+        this.currentValue = points;
+    }
+    public void add(int points) {
+        this.currentValue += points;
     }
 
-    public abstract void applyPrimaryEffect(ServerPlayerEntity player);
-    public abstract void applySecondaryEffect(ServerPlayerEntity player);
-    protected void applyEffect(ServerPlayerEntity player, RegistryEntry<EntityAttribute> attribute, Identifier modifierId, EntityAttributeModifier.Operation operation, ToDoubleFunction<Double> effectFunction) {
-        EntityAttributeInstance attributeInstance = player.getAttributeInstance(attribute);
+    public abstract void applyPrimaryEffect(LivingEntity player);
+    public abstract void applySecondaryEffect(LivingEntity player);
+    protected void applyEffect(LivingEntity living, RegistryEntry<EntityAttribute> attribute, Identifier modifierId, EntityAttributeModifier.Operation operation, ToDoubleFunction<Double> effectFunction) {
+        EntityAttributeInstance attributeInstance = living.getAttributeInstance(attribute);
         if (attributeInstance != null) {
-            double baseValue = player.getAttributeBaseValue(attribute);
+            double baseValue = living.getAttributeBaseValue(attribute);
             double effectValue = effectFunction.applyAsDouble(baseValue);
 
             if (modifierId == null) {
-                throw new IllegalArgumentException("modifierId cannot be null");
+                throw new IllegalArgumentException("modifierId cannot be null report this on github");
             }
             // Remove existing modifier
             EntityAttributeModifier existingModifier = attributeInstance.getModifier(modifierId);
@@ -83,23 +87,21 @@ public abstract class Stat {
             attributeInstance.addPersistentModifier(mod);
         }
     }
-    protected void applyEffects(ServerPlayerEntity player, List<AttributeModification> modifications) {
+    protected void applyEffects(LivingEntity living, List<AttributeModification> modifications) {
         for (AttributeModification modification : modifications) {
-            EntityAttributeInstance attributeInstance = player.getAttributeInstance(modification.attribute());
+            EntityAttributeInstance attributeInstance = living.getAttributeInstance(modification.attribute());
             if (attributeInstance != null) {
-                double baseValue = player.getAttributeBaseValue(modification.attribute());
+                double baseValue = living.getAttributeBaseValue(modification.attribute());
                 double effectValue = modification.effectFunction().applyAsDouble(baseValue);
 
                 if (modification.modifierId() == null) {
-                    throw new IllegalArgumentException("modifierId cannot be null");
+                    throw new IllegalArgumentException("modifierId cannot be null report this on github");
                 }
-                // Remove existing modifier
                 EntityAttributeModifier existingModifier = attributeInstance.getModifier(modification.modifierId());
                 if (existingModifier != null) {
                     attributeInstance.removeModifier(existingModifier);
                 }
 
-                // Apply new modifier with the specified operation
                 EntityAttributeModifier mod = new EntityAttributeModifier(modification.modifierId(), effectValue, modification.operation());
                 attributeInstance.addPersistentModifier(mod);
             }
@@ -113,13 +115,10 @@ public abstract class Stat {
         this.currentValue = baseValue;
         this.totalPointsUsed = 0;
 
-        // Reapply the stat's effects
         applyPrimaryEffect(player);
         applySecondaryEffect(player);
     }
-    // Method to get the effect of a stat point
     public abstract List<Text> getEffectDescription(int additionalPoints);
-
     protected Identifier getPrimaryId() {
         return null;
     }

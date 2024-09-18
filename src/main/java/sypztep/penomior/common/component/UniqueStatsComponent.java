@@ -1,61 +1,65 @@
 package sypztep.penomior.common.component;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import sypztep.penomior.common.init.ModEntityComponents;
-import sypztep.penomior.common.stats.PlayerStats;
+import sypztep.penomior.common.stats.LevelSystem;
+import sypztep.penomior.common.stats.LivingStats;
 
 import java.text.DecimalFormat;
 
 public class UniqueStatsComponent implements AutoSyncedComponent {
-    private final PlayerEntity obj;
-    private final PlayerStats playerStats; // Add PlayerStats
+    private final LivingEntity obj;
+    private final LivingStats livingStats;
     private int failstack;
 
-    public UniqueStatsComponent(PlayerEntity obj) {
+    public UniqueStatsComponent(LivingEntity obj) {
         this.obj = obj;
-        this.playerStats = new PlayerStats();
+        this.livingStats = new LivingStats();
     }
 
     @Override
     public void readFromNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         failstack = tag.getInt("Failstack");
-        playerStats.readFromNbt(tag);
+        livingStats.readFromNbt(tag);
     }
 
     @Override
     public void writeToNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         tag.putInt("Failstack", failstack);
-        playerStats.writeToNbt(tag);
+        livingStats.writeToNbt(tag);
     }
-    public PlayerStats getPlayerStats() {
-        return playerStats;
+    public LivingStats getLivingStats() {
+        return livingStats;
     }
     public void addExperience(int amount) { // sync correctly
-        playerStats.getLevelSystem().addExperience(amount);
+        livingStats.getLevelSystem().addExperience(amount);
         sync();
     }
     public void setStatPoints(int amount) {
-        playerStats.getLevelSystem().setStatPoints(amount);
+        livingStats.getLevelSystem().setStatPoints(amount);
         sync();
     }
     public int getLevel() {
-        return playerStats.getLevelSystem().getLevel();
+        return livingStats.getLevelSystem().getLevel();
+    }
+    public LevelSystem getLevelSystem() {
+        return livingStats.getLevelSystem();
     }
     public int getNextLevel() {
         return getLevel() + 1;
     }
     public String getXpPercentage() {
-        DecimalFormat df = new DecimalFormat("0.00"); // Format to two decimal places
-        return df.format(playerStats.getLevelSystem().getXpPercentage()) + "%";
+        DecimalFormat df = new DecimalFormat("0.00");
+        return df.format(livingStats.getLevelSystem().getXpPercentage()) + "%";
     }
     public int getXp() {
-        return playerStats.getLevelSystem().getXp();
+        return livingStats.getLevelSystem().getXp();
     }
     public int getNextXpLevel() {
-        return playerStats.getLevelSystem().getXpToNextLevel();
+        return livingStats.getLevelSystem().getXpToNextLevel();
     }
     public int getFailstack() {
         return failstack;

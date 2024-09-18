@@ -52,10 +52,21 @@ public class StatsComponent implements AutoSyncedComponent {
         this.extraEvasion += evasion;
         sync();
     }
+
     public void addExtraAccuracy(int accuracy) {
         this.extraAccuracy += accuracy;
         sync();
     }
+    public void setExtraAccuracy(int extraAccuracy) {
+        this.extraAccuracy = extraAccuracy;
+        sync();
+    }
+
+    public void setExtraEvasion(int extraEvasion) {
+        this.extraEvasion = extraEvasion;
+        sync();
+    }
+
     public void resetExtras() {
         this.extraEvasion = 0;
         this.extraAccuracy = 0;
