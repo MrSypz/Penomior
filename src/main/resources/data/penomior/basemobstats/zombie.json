@@ -1,11 +1,11 @@
 {
     "basestat": {
-        "str": 20,
-        "agi": 40,
-        "dex": 30,
-        "vit": 0,
-        "int": 0,
-        "luk": 200,
+        "str": 5,
+        "agi": 5,
+        "dex": 5,
+        "vit": 5,
+        "int": 5,
+        "luk": 5,
         "lvl": 5
     }
 }
