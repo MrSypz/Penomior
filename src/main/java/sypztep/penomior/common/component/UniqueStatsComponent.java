@@ -5,13 +5,14 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import sypztep.penomior.common.init.ModEntityComponents;
+import sypztep.penomior.common.stats.LevelSystem;
 import sypztep.penomior.common.stats.LivingStats;
 
 import java.text.DecimalFormat;
 
 public class UniqueStatsComponent implements AutoSyncedComponent {
     private final LivingEntity obj;
-    private final LivingStats livingStats; // Add PlayerStats
+    private final LivingStats livingStats;
     private int failstack;
 
     public UniqueStatsComponent(LivingEntity obj) {
@@ -44,11 +45,14 @@ public class UniqueStatsComponent implements AutoSyncedComponent {
     public int getLevel() {
         return livingStats.getLevelSystem().getLevel();
     }
+    public LevelSystem getLevelSystem() {
+        return livingStats.getLevelSystem();
+    }
     public int getNextLevel() {
         return getLevel() + 1;
     }
     public String getXpPercentage() {
-        DecimalFormat df = new DecimalFormat("0.00"); // Format to two decimal places
+        DecimalFormat df = new DecimalFormat("0.00");
         return df.format(livingStats.getLevelSystem().getXpPercentage()) + "%";
     }
     public int getXp() {

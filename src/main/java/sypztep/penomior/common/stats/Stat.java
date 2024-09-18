@@ -53,13 +53,16 @@ public abstract class Stat {
         return increasePerPoint = 1 + (currentValue / 10);
     }
 
-    public void setIncreasePerPoint(int increasePerPoint) {
-        this.increasePerPoint = increasePerPoint;
-    }
-
     public void increase(int points) {
         this.currentValue += points;
         this.totalPointsUsed += (points * increasePerPoint); // Track แต้มที่ใช้
+    }
+    //for monster
+    public void setPoints(int points) {
+        this.currentValue = points;
+    }
+    public void add(int points) {
+        this.currentValue += points;
     }
 
     public abstract void applyPrimaryEffect(LivingEntity player);
@@ -71,7 +74,7 @@ public abstract class Stat {
             double effectValue = effectFunction.applyAsDouble(baseValue);
 
             if (modifierId == null) {
-                throw new IllegalArgumentException("modifierId cannot be null");
+                throw new IllegalArgumentException("modifierId cannot be null report this on github");
             }
             // Remove existing modifier
             EntityAttributeModifier existingModifier = attributeInstance.getModifier(modifierId);
@@ -92,7 +95,7 @@ public abstract class Stat {
                 double effectValue = modification.effectFunction().applyAsDouble(baseValue);
 
                 if (modification.modifierId() == null) {
-                    throw new IllegalArgumentException("modifierId cannot be null");
+                    throw new IllegalArgumentException("modifierId cannot be null report this on github");
                 }
                 EntityAttributeModifier existingModifier = attributeInstance.getModifier(modification.modifierId());
                 if (existingModifier != null) {

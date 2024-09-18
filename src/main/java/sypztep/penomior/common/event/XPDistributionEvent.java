@@ -34,8 +34,8 @@ public class XPDistributionEvent implements ServerLivingEntityEvents.AfterDeath 
         }
         //ฆ่า
         if (damageSource.getSource() instanceof ServerPlayerEntity) {
-            if (entity instanceof MobEntity mobEntity) {
-                EntityType<?> mobEntityType = mobEntity.getType();
+            if (entity instanceof MobEntity living) {
+                EntityType<?> mobEntityType = living.getType();
                 for (EntityType<?> entityType : MobStatsEntry.MOBSTATS_MAP.keySet()) {
                     if (mobEntityType.equals(entityType)) {
                         MobStatsEntry entry = MobStatsEntry.MOBSTATS_MAP.get(entityType);
@@ -45,8 +45,6 @@ public class XPDistributionEvent implements ServerLivingEntityEvents.AfterDeath 
                     }
                 }
             }
-
-            // Clear damage map after processing
             XPDistributionUtil.damageMap.clear();
         }
     }
@@ -59,24 +57,20 @@ public class XPDistributionEvent implements ServerLivingEntityEvents.AfterDeath 
         return Math.max(0, xpLoss);
     }
     private void distributeXP(MobStatsEntry data) {
-        int baseXP = data.exp(); // XP to award for the kill
+        int baseXP = data.exp();
         Map<ServerPlayerEntity, Integer> damageMap = XPDistributionUtil.damageMap;
 
-        // Calculate total damage dealt
         int totalDamage = damageMap.values().stream().mapToInt(Integer::intValue).sum();
 
-        // Distribute XP based on damage proportion
         for (Map.Entry<ServerPlayerEntity, Integer> entry : damageMap.entrySet()) {
             ServerPlayerEntity player = entry.getKey();
             int damageDealt = entry.getValue();
             double proportion = (double) damageDealt / totalDamage;
             int xpAwarded = (int) (baseXP * proportion);
 
-            // Add XP to the player
             UniqueStatsComponent stats = ModEntityComponents.UNIQUESTATS.get(player);
             stats.addExperience(xpAwarded);
 
-            // Send message to player
             Text message = Text.literal("You have been awarded ")
                     .styled(style -> style.withColor(Formatting.AQUA))
                     .append(Text.literal(xpAwarded + " XP")

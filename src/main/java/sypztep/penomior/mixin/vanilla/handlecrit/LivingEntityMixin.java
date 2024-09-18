@@ -32,10 +32,12 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
     public boolean mobisCrit;
     @Unique
     private final Random critRandom = new Random();
+
     @Shadow
     public abstract double getAttributeValue(RegistryEntry<EntityAttribute> attribute);
 
-    @Shadow public abstract ItemStack getStackInHand(Hand hand);
+    @Shadow
+    public abstract ItemStack getStackInHand(Hand hand);
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -51,7 +53,6 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
                 Entity projectileSource = source.getSource();
                 if (projectileSource instanceof PersistentProjectileEntity) {
                     invoker.storeCrit().setCritical(this.isCritical());
-                    CombatUtils.applyParticle(source.getSource());
                     return invoker.calCritDamage(amount);
                 }
             }
@@ -65,21 +66,22 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
         }
         return amount;
     }
+
     @Inject(method = "damage", at = @At("HEAD"))
     private void damageFirst(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-            if (source.getAttacker() instanceof NewCriticalOverhaul newCriticalOverhaul && source.getSource() instanceof PersistentProjectileEntity projectile) {
-                CombatUtils.applyParticle(source.getSource());
-                newCriticalOverhaul.setCritical(projectile.isCritical());
-            }
+        if (source.getAttacker() instanceof NewCriticalOverhaul newCriticalOverhaul && source.getSource() instanceof PersistentProjectileEntity projectile) {
+            CombatUtils.applyParticle(source.getSource());
+            newCriticalOverhaul.setCritical(projectile.isCritical());
+        }
     }
 
     @Inject(method = "damage", at = @At("RETURN"))
     private void handleCrit(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-            if (source.getAttacker() instanceof NewCriticalOverhaul newCriticalOverhaul) {
-                if (!this.getWorld().isClient())
-                    CombatUtils.applyParticle(this);
-                newCriticalOverhaul.setCritical(false); //return the flag
-            }
+        if (source.getAttacker() instanceof NewCriticalOverhaul newCriticalOverhaul) {
+            if (!this.getWorld().isClient() && this.isCritical())
+                CombatUtils.applyParticle(this);
+            newCriticalOverhaul.setCritical(false); //return the flag
+        }
     }
 
     @Override

@@ -48,7 +48,7 @@ public abstract class LivingEntityMixin {
         DamageSource source = this.getRecentDamageSource();
 
         assert source != null;
-        if (oldHealth != newHealth && Math.abs(damage) != entity.getMaxHealth() && damage >= 0) {
+        if (oldHealth != newHealth && Math.abs(damage) != entity.getMaxHealth() && damage >= 0 && source != null) {
             previousHealth = newHealth;
             String health = String.format("%.2f", damage);
             if (source.isIn(ModDamageTags.MELEE_DAMAGE) || source.isIn(ModDamageTags.PROJECTILE_DAMAGE) || source.isIn(ModDamageTags.PHYSICAL_DAMAGE))
