@@ -25,7 +25,6 @@ public class LevelSystem {
 
     public void addExperience(int amount) {
         if (level >= MAX_LEVEL) {
-            // Optionally, handle the case where XP is added but the level cap is reached
             return;
         }
         xp += amount;
@@ -37,7 +36,7 @@ public class LevelSystem {
         if (amount < 0) {
             throw new IllegalArgumentException("Amount to subtract cannot be negative");
         }
-        xp = Math.max(0, xp - amount); // Ensure XP doesn't go below 0// Handle level adjustment if necessarywhile (xp < xpToNextLevel && level > 1) {
+        xp = Math.max(0, xp - amount);
     }
     public void setXp(int xp) {
         this.xp = xp;
@@ -45,7 +44,7 @@ public class LevelSystem {
 
     private void levelUp() {
         if (level >= MAX_LEVEL) {
-            return; // Prevent leveling up if at max level
+            return;
         }
         xp -= xpToNextLevel;
         level++;
