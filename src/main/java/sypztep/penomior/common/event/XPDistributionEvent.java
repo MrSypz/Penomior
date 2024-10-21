@@ -13,6 +13,7 @@ import sypztep.penomior.ModConfig;
 import sypztep.penomior.common.component.UniqueStatsComponent;
 import sypztep.penomior.common.data.MobStatsEntry;
 import sypztep.penomior.common.init.ModEntityComponents;
+import sypztep.penomior.common.stats.LevelSystem;
 import sypztep.penomior.common.util.XPDistributionUtil;
 
 import java.util.Map;
@@ -25,12 +26,15 @@ public class XPDistributionEvent implements ServerLivingEntityEvents.AfterDeath 
         //ตาย
         if (entity instanceof PlayerEntity player) {
             stats = ModEntityComponents.UNIQUESTATS.get(player);
-            Text message = Text.literal("You have lose :")
+
+            int lostXP = getNewXP(stats);
+            Text message = Text.literal("You have lost: ")
                     .formatted(Formatting.GOLD)
-                    .append(Text.literal(getNewXP(stats) + " XP").formatted(Formatting.RED));
+                    .append(Text.literal(lostXP + " XP").formatted(Formatting.RED));
             if (ModConfig.lossxpnotify)
                 player.sendMessage(message, false);
-            stats.getLivingStats().getLevelSystem().subtractExperience(getNewXP(stats));
+            LevelSystem levelSystem = stats.getLivingStats().getLevelSystem();
+            levelSystem.subtractExperience(lostXP);
         }
         //ฆ่า
         if (damageSource.getSource() instanceof ServerPlayerEntity) {
@@ -51,10 +55,7 @@ public class XPDistributionEvent implements ServerLivingEntityEvents.AfterDeath 
 
     private static int getNewXP(UniqueStatsComponent stats) {
         int currentXP = stats.getXp();
-        int maxXP = stats.getNextXpLevel();
-        int totalExperience = currentXP + maxXP;
-        int xpLoss = (int) (totalExperience * 0.05f);
-        return Math.max(0, xpLoss);
+        return (int) (currentXP * 0.05);
     }
     private void distributeXP(MobStatsEntry data) {
         int baseXP = data.exp();

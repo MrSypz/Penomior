@@ -33,6 +33,9 @@ public class LevelSystem {
         }
     }
     public void subtractExperience(int amount) {
+        if (level >= MAX_LEVEL) { // if reach to cap level
+            return;
+        }
         if (amount < 0) {
             throw new IllegalArgumentException("Amount to subtract cannot be negative");
         }
