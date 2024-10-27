@@ -78,7 +78,7 @@ public abstract class ServerWorldMixin {
             }
 
             living.setHealth(living.getMaxHealth());
-            uniqueStatsComponent.getLivingStats().getLevelSystem().setLevel(baseMobStatsEntry.lvl() + meanLevel);
+            livingStats.getLevelSystem().setLevel(baseMobStatsEntry.lvl() + meanLevel);
         }
     }
 }
