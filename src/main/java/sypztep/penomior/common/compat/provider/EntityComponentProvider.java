@@ -14,16 +14,22 @@ public enum EntityComponentProvider implements IEntityComponentProvider {
     INSTANCE;
     @Override
     public void appendTooltip(ITooltip iTooltip, EntityAccessor entityAccessor, IPluginConfig iPluginConfig) {
-        var component = ModEntityComponents.STATS.getNullable(entityAccessor.getEntity());
-        var user = ModEntityComponents.STATS.getNullable(entityAccessor.getPlayer());
+        var target = ModEntityComponents.STATS.getNullable(entityAccessor.getEntity());
+        var attacker = ModEntityComponents.STATS.getNullable(entityAccessor.getPlayer());
+        var targetStats = ModEntityComponents.UNIQUESTATS.getNullable(entityAccessor.getPlayer());
+        var attackerStats = ModEntityComponents.UNIQUESTATS.getNullable(entityAccessor.getEntity());
 
-        if (component != null && user != null) {
-            int evasion = component.getEvasion();
-            int accuracy = component.getAccuracy();
-            double hitChance = CombatUtils.calculateHitRate(user.getAccuracy(), evasion);
+        if (target != null && attacker != null && attackerStats != null && targetStats != null) {
+            int attackerAccuracy = attacker.getAccuracy();
+            int targetEvasion = target.getEvasion();
 
-            iTooltip.add(Text.translatable("penomior.evasion.point", evasion));
-            iTooltip.add(Text.translatable("penomior.accuracy.point", accuracy));
+            double hitRate = CombatUtils.hitRate(attackerStats, targetStats, attackerAccuracy, targetEvasion);
+
+            double fleeRate = CombatUtils.fleeRate(attackerStats, targetStats, targetEvasion, attackerAccuracy, 1);
+
+            double hitChance = CombatUtils.calculateHitRate(hitRate, fleeRate);
+
+
             iTooltip.add(Text.translatable("penomior.hitchance", String.format("%.2f", hitChance)));
         }
     }
