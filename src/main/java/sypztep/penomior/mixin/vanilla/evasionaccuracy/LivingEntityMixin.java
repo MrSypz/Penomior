@@ -27,13 +27,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import sypztep.penomior.Penomior;
 import sypztep.penomior.client.payload.AddTextParticlesPayload;
+import sypztep.penomior.common.component.UniqueStatsComponent;
 import sypztep.penomior.common.util.interfaces.MissingAccessor;
 import sypztep.penomior.common.component.StatsComponent;
 import sypztep.penomior.common.data.PenomiorData;
 import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.penomior.common.util.CombatUtils;
 import sypztep.penomior.common.util.RefineUtil;
-import sypztep.penomior.common.util.interfaces.NewCriticalOverhaul;
 
 import java.util.*;
 import java.util.List;
@@ -63,10 +63,12 @@ public abstract class LivingEntityMixin extends Entity implements MissingAccesso
         if (attacker instanceof LivingEntity livingAttacker) {
             StatsComponent targetStats = ModEntityComponents.STATS.getNullable(target); // who take damage
             StatsComponent attackerStats = ModEntityComponents.STATS.getNullable(livingAttacker); // who attack?
+            UniqueStatsComponent targetUnique = ModEntityComponents.UNIQUESTATS.getNullable(target);
+            UniqueStatsComponent attackerUnique = ModEntityComponents.UNIQUESTATS.getNullable(attacker);
 
-            if (targetStats == null || attackerStats == null) return;
+            if (targetStats == null || attackerStats == null || targetUnique == null || attackerUnique == null) return;
 
-            isMissing = CombatUtils.isMissingHits(attackerStats, targetStats);
+            isMissing = CombatUtils.isMissingHits(attackerStats, targetStats, targetUnique, attackerUnique);
             penomior$setMissing(isMissing);
 
             if (isMissing) {// missing attack
