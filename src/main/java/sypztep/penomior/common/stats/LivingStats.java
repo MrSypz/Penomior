@@ -33,9 +33,9 @@ public class LivingStats {
         int perPoint = this.getStat(types).getIncreasePerPoint();
         int statPoints = this.getLevelSystem().getStatPoints();
 
-        if (statPoints >= perPoint * points) { // Check if the player has enough points
-            this.getLevelSystem().subtractStatPoints(perPoint * points); // Subtract the required points
-            allocatePoints(types, points); // Increase the stat by the specified points
+        if (statPoints >= perPoint * points) {
+            this.getLevelSystem().subtractStatPoints(perPoint * points);
+            allocatePoints(types, points);
         }
     }
     public void resetStats(ServerPlayerEntity player) {
