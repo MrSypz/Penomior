@@ -8,9 +8,9 @@ public class LevelSystem {
     private int xp;
     private int xpToNextLevel;
     private int statPoints;
-    private static final int BASE_XP = ModConfig.baseExp; // Base XP for level 1
-    private static final double EXPONENT = ModConfig.exponentExp; // Exponent for XP curve
-    private static final int MAX_LEVEL = ModConfig.maxLevel; // Maximum level cap
+    private static final int BASE_XP = ModConfig.baseExp;
+    private static final double EXPONENT = ModConfig.exponentExp;
+    private static final int MAX_LEVEL = ModConfig.maxLevel;
 
     public LevelSystem() {
         this.level = 1;
@@ -36,7 +36,7 @@ public class LevelSystem {
     }
 
     public void subtractExperience(int amount) {
-        if (level >= MAX_LEVEL) // if reach to cap level
+        if (level >= MAX_LEVEL)
             return;
         if (amount < 0)
             throw new IllegalArgumentException("Amount to subtract cannot be negative");
@@ -88,7 +88,7 @@ public class LevelSystem {
     }
     public double getXpPercentage() {
         if (this.xpToNextLevel == 0) {
-            return 0; // To avoid division by zero
+            return 0;
         }
         return ((double) this.xp / this.xpToNextLevel) * 100;
     }
