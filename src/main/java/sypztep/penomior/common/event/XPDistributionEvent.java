@@ -22,10 +22,9 @@ public class XPDistributionEvent implements ServerLivingEntityEvents.AfterDeath 
 
     @Override
     public void afterDeath(LivingEntity entity, DamageSource damageSource) {
-        UniqueStatsComponent stats;
         //ตาย
         if (entity instanceof PlayerEntity player) {
-            stats = ModEntityComponents.UNIQUESTATS.get(player);
+            UniqueStatsComponent stats = ModEntityComponents.UNIQUESTATS.get(player);
 
             int lostXP = getNewXP(stats);
             Text message = Text.literal("You have lost: ")
@@ -54,8 +53,7 @@ public class XPDistributionEvent implements ServerLivingEntityEvents.AfterDeath 
     }
 
     private static int getNewXP(UniqueStatsComponent stats) {
-        int currentXP = stats.getXp();
-        return (int) (currentXP * 0.05);
+        return (int) Math.floor((stats.getXp() * ModConfig.xpLossPercentage));
     }
     private void distributeXP(MobStatsEntry data) {
         int baseXP = data.exp();

@@ -66,6 +66,8 @@ public class ModConfig implements ConfigData {
     public static boolean mobEvasion = true;
 
     @ConfigEntry.Category("statconfig")
+    public static float xpLossPercentage = 0.05f;
+    @ConfigEntry.Category("statconfig")
     public static RenderStyle renderStyle = RenderStyle.SLATE;
     @ConfigEntry.Category("statconfig_gameplay")
     public static int[] statPointLadder = new int[] {
