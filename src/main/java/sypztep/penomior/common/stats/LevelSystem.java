@@ -25,13 +25,16 @@ public class LevelSystem {
 
     public void addExperience(int amount) {
         if (level >= MAX_LEVEL && xp >= xpToNextLevel) {
+            xp = xpToNextLevel;
             return;
         }
         xp += amount;
-        while (xp >= xpToNextLevel && level < MAX_LEVEL) {
+        while (xp >= xpToNextLevel && level < MAX_LEVEL)
             levelUp();
-        }
+        if (level >= MAX_LEVEL)
+            xp = Math.min(xp, xpToNextLevel);
     }
+
     public void subtractExperience(int amount) {
         if (level >= MAX_LEVEL) // if reach to cap level
             return;
