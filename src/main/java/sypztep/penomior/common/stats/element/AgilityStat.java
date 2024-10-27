@@ -20,17 +20,17 @@ public class AgilityStat extends Stat {
     }
 
     @Override
-    public void applyPrimaryEffect(LivingEntity player) {
-        applyEffect(player, EntityAttributes.GENERIC_ATTACK_SPEED, getPrimaryId(), EntityAttributeModifier.Operation.ADD_VALUE,
+    public void applyPrimaryEffect(LivingEntity living) {
+        applyEffect(living, EntityAttributes.GENERIC_ATTACK_SPEED, getPrimaryId(), EntityAttributeModifier.Operation.ADD_VALUE,
                 baseValue -> (0.01 * this.currentValue));
     }
 
     @Override
-    public void applySecondaryEffect(LivingEntity player) {
-        var evasion = ModEntityComponents.STATS.get(player);
+    public void applySecondaryEffect(LivingEntity living) {
+        var evasion = ModEntityComponents.STATS.get(living);
         evasion.addExtraEvasion(1);
 
-        applyEffect(player, ModEntityAttributes.GENERIC_PLAYER_DRAWSPEED, getSecondaryId(), EntityAttributeModifier.Operation.ADD_VALUE,
+        applyEffect(living, ModEntityAttributes.GENERIC_PLAYER_DRAWSPEED, getSecondaryId(), EntityAttributeModifier.Operation.ADD_VALUE,
                 baseValue -> (0.005 * this.currentValue));
     }
 

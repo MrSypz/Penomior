@@ -22,13 +22,13 @@ public class DexterityStat extends Stat {
     }
 
     @Override
-    public void applyPrimaryEffect(LivingEntity player) {
-        var accuracy = ModEntityComponents.STATS.get(player);
+    public void applyPrimaryEffect(LivingEntity living) {
+        var accuracy = ModEntityComponents.STATS.get(living);
         accuracy.addExtraAccuracy(1);
     }
 
     @Override
-    public void applySecondaryEffect(LivingEntity  player) {
+    public void applySecondaryEffect(LivingEntity living) {
         List<AttributeModification> modifications = List.of(
                 new AttributeModification(
                         ModEntityAttributes.GENERIC_PROJECTILE_ATTACK_DAMAGE,
@@ -44,7 +44,7 @@ public class DexterityStat extends Stat {
                 )
         );
 
-        applyEffects(player, modifications);
+        applyEffects(living, modifications);
     }
     @Override
     public List<Text> getEffectDescription(int additionalPoints) {

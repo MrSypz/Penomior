@@ -21,9 +21,9 @@ public class VitalityStat extends Stat {
     }
 
     @Override
-    public void applyPrimaryEffect(LivingEntity player) {
+    public void applyPrimaryEffect(LivingEntity living) {
         applyEffect(
-                player,
+                living,
                 EntityAttributes.GENERIC_MAX_HEALTH,
                 getPrimaryId(),
                 EntityAttributeModifier.Operation.ADD_VALUE,
@@ -32,7 +32,7 @@ public class VitalityStat extends Stat {
     }
 
     @Override
-    public void applySecondaryEffect(LivingEntity player) {
+    public void applySecondaryEffect(LivingEntity living) {
         List<AttributeModification> modifications = List.of(
                 new AttributeModification(
                         ModEntityAttributes.GENERIC_HEALTH_REGEN,
@@ -47,7 +47,7 @@ public class VitalityStat extends Stat {
                         baseValue -> (0.005 * this.currentValue)
                 )
         );
-        applyEffects(player, modifications);
+        applyEffects(living, modifications);
     }
     @Override
     public List<Text> getEffectDescription(int additionalPoints) {

@@ -21,8 +21,8 @@ public class StrengthStat extends Stat {
 
 
     @Override
-    public void applyPrimaryEffect(LivingEntity player) {
-        applyEffect(player,
+    public void applyPrimaryEffect(LivingEntity living) {
+        applyEffect(living,
                 ModEntityAttributes.GENERIC_MELEE_ATTACK_DAMAGE,
                 getPrimaryId(),
                 EntityAttributeModifier.Operation.ADD_VALUE,
@@ -31,7 +31,7 @@ public class StrengthStat extends Stat {
     }
 
     @Override
-    public void applySecondaryEffect(LivingEntity player) {
+    public void applySecondaryEffect(LivingEntity living) {
         List<AttributeModification> modifications = List.of(
                 new AttributeModification(
                         ModEntityAttributes.GENERIC_CRIT_CHANCE,
@@ -47,7 +47,7 @@ public class StrengthStat extends Stat {
                 )
         );
 
-        applyEffects(player, modifications);
+        applyEffects(living, modifications);
     }
     @Override
     public List<Text> getEffectDescription(int additionalPoints) {

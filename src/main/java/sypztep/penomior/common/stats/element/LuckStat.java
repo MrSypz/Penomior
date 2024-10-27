@@ -7,6 +7,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import sypztep.penomior.Penomior;
+import sypztep.penomior.common.component.StatsComponent;
 import sypztep.penomior.common.init.ModEntityAttributes;
 import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.penomior.common.stats.Stat;
@@ -21,8 +22,8 @@ public class LuckStat extends Stat {
     }
 
     @Override
-    public void applyPrimaryEffect(LivingEntity player) {
-        applyEffect(player,
+    public void applyPrimaryEffect(LivingEntity living) {
+        applyEffect(living,
                 ModEntityAttributes.GENERIC_CRIT_CHANCE,
                 getPrimaryId(),
                 EntityAttributeModifier.Operation.ADD_VALUE,
@@ -31,7 +32,7 @@ public class LuckStat extends Stat {
     }
 
     @Override
-    public void applySecondaryEffect(LivingEntity player) {
+    public void applySecondaryEffect(LivingEntity living) {
         List<AttributeModification> modifications = List.of(
                 new AttributeModification(
                         ModEntityAttributes.GENERIC_MAGIC_ATTACK_DAMAGE,
@@ -46,10 +47,10 @@ public class LuckStat extends Stat {
                         baseValue -> (0.002 * this.currentValue)
                 )
         );
-        var statsComponent = ModEntityComponents.STATS.get(player);
+        StatsComponent statsComponent = ModEntityComponents.STATS.get(living);
         if (this.currentValue % 3 == 0) statsComponent.addExtraAccuracy(1);
         if (this.currentValue % 5 == 0) statsComponent.addExtraEvasion(1);
-        applyEffects(player, modifications);
+        applyEffects(living, modifications);
     }
     @Override
     public List<Text> getEffectDescription(int additionalPoints) {
