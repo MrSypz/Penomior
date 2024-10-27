@@ -26,7 +26,7 @@ public class LuckStat extends Stat {
                 ModEntityAttributes.GENERIC_CRIT_CHANCE,
                 getPrimaryId(),
                 EntityAttributeModifier.Operation.ADD_VALUE,
-                baseValue -> (0.01 * this.currentValue)
+                baseValue -> (0.0025 * this.currentValue) // every 4 point gain 1 chance
         );
     }
 
