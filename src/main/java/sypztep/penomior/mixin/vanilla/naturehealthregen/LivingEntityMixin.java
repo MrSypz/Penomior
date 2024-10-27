@@ -32,7 +32,7 @@ public abstract class LivingEntityMixin extends Entity {
     private void natureHealthRegen(CallbackInfo ci) {
         float natureHealthRegen = (float) this.getAttributeValue(ModEntityAttributes.GENERIC_HEALTH_REGEN);
         Penomior.LOGGER.info(String.valueOf(this.damageTracker.getTimeSinceLastAttack()));
-        if (natureHealthRegen > 0.00f && this.age % 20 == 0 && this.damageTracker.getTimeSinceLastAttack() > 300) { // 16
+        if (natureHealthRegen > 0.00f && this.age % 60 == 0 && this.damageTracker.getTimeSinceLastAttack() > 300) { // 16 thing? and 3 sec
             this.heal(natureHealthRegen);
         }
     }
