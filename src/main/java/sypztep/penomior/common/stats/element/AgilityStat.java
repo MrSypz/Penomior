@@ -26,7 +26,7 @@ public class AgilityStat extends Stat {
     }
 
     @Override
-    public void applySecondaryEffect(LivingEntity  player) {
+    public void applySecondaryEffect(LivingEntity player) {
         var evasion = ModEntityComponents.STATS.get(player);
         evasion.addExtraEvasion(1);
 
