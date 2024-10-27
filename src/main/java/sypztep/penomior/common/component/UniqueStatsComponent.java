@@ -31,6 +31,11 @@ public class UniqueStatsComponent implements AutoSyncedComponent {
         tag.putInt("Failstack", failstack);
         livingStats.writeToNbt(tag);
     }
+
+    public LivingEntity getObj() {
+        return obj;
+    }
+
     public LivingStats getLivingStats() {
         return livingStats;
     }
