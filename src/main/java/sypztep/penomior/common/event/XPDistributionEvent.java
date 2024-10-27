@@ -11,7 +11,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import sypztep.penomior.ModConfig;
 import sypztep.penomior.common.component.UniqueStatsComponent;
-import sypztep.penomior.common.data.MobStatsEntry;
+import sypztep.penomior.common.data.BaseMobStatsEntry;
 import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.penomior.common.stats.LevelSystem;
 import sypztep.penomior.common.util.XPDistributionUtil;
@@ -39,9 +39,9 @@ public class XPDistributionEvent implements ServerLivingEntityEvents.AfterDeath 
         if (damageSource.getSource() instanceof ServerPlayerEntity) {
             if (entity instanceof MobEntity living) {
                 EntityType<?> mobEntityType = living.getType();
-                for (EntityType<?> entityType : MobStatsEntry.MOBSTATS_MAP.keySet()) {
+                for (EntityType<?> entityType : BaseMobStatsEntry.BASEMOBSTATS_MAP.keySet()) {
                     if (mobEntityType.equals(entityType)) {
-                        MobStatsEntry entry = MobStatsEntry.MOBSTATS_MAP.get(entityType);
+                        BaseMobStatsEntry entry = BaseMobStatsEntry.BASEMOBSTATS_MAP.get(entityType);
                         if (entry == null)
                             continue;
                         distributeXP(entry);
@@ -55,7 +55,7 @@ public class XPDistributionEvent implements ServerLivingEntityEvents.AfterDeath 
     private static int getNewXP(UniqueStatsComponent stats) {
         return (int) Math.floor((stats.getXp() * ModConfig.xpLossPercentage));
     }
-    private void distributeXP(MobStatsEntry data) {
+    private void distributeXP(BaseMobStatsEntry data) {
         int baseXP = data.exp();
         Map<ServerPlayerEntity, Integer> damageMap = XPDistributionUtil.damageMap;
 

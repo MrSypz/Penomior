@@ -48,8 +48,9 @@ public class BaseMobStatsReloadListener implements SimpleSynchronousResourceRelo
                     int anInt = basestat.get("int").getAsInt();
                     int luk = basestat.get("luk").getAsInt();
                     int lvl = basestat.get("lvl").getAsInt();
+                    int exp = basestat.get("exp").getAsInt();
 
-                    BaseMobStatsEntry.BASEMOBSTATS_MAP.put(entityType, new BaseMobStatsEntry(str, agi,dex,vit,anInt,luk,lvl));
+                    BaseMobStatsEntry.BASEMOBSTATS_MAP.put(entityType, new BaseMobStatsEntry(str, agi, dex, vit, anInt, luk, lvl, exp));
                 } catch (Exception e) {
                     Penomior.LOGGER.error("Failed to load base mob stats from '{}': {}", identifier, e.getMessage());
                     Penomior.LOGGER.error("Exception details: ", e);
