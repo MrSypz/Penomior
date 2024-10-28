@@ -15,15 +15,6 @@ body:
       description: Please do not put "latest,", "newest," or some other vague indicator.
     validations:
       required: true
-  - type: dropdown
-    attributes:
-      label: Mod Name
-      description: This repo contains all the mod reports. I need to know which mod you are reporting.
-      options:
-        - Penomior
-        - SypWid
-    validations:
-      required: true
   - type: textarea
     attributes:
       label: A description of the issue
