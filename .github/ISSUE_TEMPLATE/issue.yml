@@ -16,7 +16,7 @@ body:
     validations:
       required: true
   - type: input
-    attibutes:
+    attributes:
       label: Minecaft Version
       description: Please do not put "latest,", "newest," or some other vague indicator.
     validations:
