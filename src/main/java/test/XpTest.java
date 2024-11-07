@@ -5,7 +5,7 @@ import sypztep.penomior.common.stats.LevelSystem;
 public class XpTest {
     public static void main(String[] args) {
 //        testDeathSystem();
-        testLevelSystem();
+//        testLevelSystem();
     }
 
     private static void testDeathSystem() { // pass
