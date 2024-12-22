@@ -8,9 +8,9 @@ public class LevelSystem {
     private int xp;
     private int xpToNextLevel;
     private int statPoints;
-    private static final int BASE_XP = ModConfig.baseExp; // Base XP for level 1
-    private static final double EXPONENT = ModConfig.exponentExp; // Exponent for XP curve
-    private static final int MAX_LEVEL = ModConfig.maxLevel; // Maximum level cap
+    private static final int BASE_XP = ModConfig.baseExp;
+    private static final double EXPONENT = ModConfig.exponentExp;
+    private static final int MAX_LEVEL = ModConfig.maxLevel;
 
     public LevelSystem() {
         this.level = 1;
@@ -24,20 +24,23 @@ public class LevelSystem {
     }
 
     public void addExperience(int amount) {
-        if (level >= MAX_LEVEL) {
-            // Optionally, handle the case where XP is added but the level cap is reached
+        if (level >= MAX_LEVEL && xp >= xpToNextLevel) {
+            xp = xpToNextLevel;
             return;
         }
         xp += amount;
-        while (xp >= xpToNextLevel && level < MAX_LEVEL) {
+        while (xp >= xpToNextLevel && level < MAX_LEVEL)
             levelUp();
-        }
+        if (level >= MAX_LEVEL)
+            xp = Math.min(xp, xpToNextLevel);
     }
+
     public void subtractExperience(int amount) {
-        if (amount < 0) {
+        if (level >= MAX_LEVEL)
+            return;
+        if (amount < 0)
             throw new IllegalArgumentException("Amount to subtract cannot be negative");
-        }
-        xp = Math.max(0, xp - amount); // Ensure XP doesn't go below 0// Handle level adjustment if necessarywhile (xp < xpToNextLevel && level > 1) {
+        xp = Math.max(0, xp - amount);
     }
     public void setXp(int xp) {
         this.xp = xp;
@@ -45,7 +48,7 @@ public class LevelSystem {
 
     private void levelUp() {
         if (level >= MAX_LEVEL) {
-            return; // Prevent leveling up if at max level
+            return;
         }
         xp -= xpToNextLevel;
         level++;
@@ -85,7 +88,7 @@ public class LevelSystem {
     }
     public double getXpPercentage() {
         if (this.xpToNextLevel == 0) {
-            return 0; // To avoid division by zero
+            return 0;
         }
         return ((double) this.xp / this.xpToNextLevel) * 100;
     }

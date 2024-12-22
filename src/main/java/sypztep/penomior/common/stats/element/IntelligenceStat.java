@@ -18,9 +18,9 @@ public class IntelligenceStat extends Stat {
     }
 
     @Override
-    public void applyPrimaryEffect(LivingEntity player) {
+    public void applyPrimaryEffect(LivingEntity living) {
         applyEffect(
-                player,
+                living,
                 ModEntityAttributes.GENERIC_MAGIC_ATTACK_DAMAGE,
                 getPrimaryId(),
                 EntityAttributeModifier.Operation.ADD_VALUE,
@@ -29,9 +29,9 @@ public class IntelligenceStat extends Stat {
     }
 
     @Override
-    public void applySecondaryEffect(LivingEntity  player) {
+    public void applySecondaryEffect(LivingEntity living) {
         applyEffect(
-                player,
+                living,
                 ModEntityAttributes.GENERIC_MAGIC_RESISTANCE,
                 getPrimaryId(),
                 EntityAttributeModifier.Operation.ADD_VALUE,
