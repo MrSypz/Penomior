@@ -1,9 +1,8 @@
 package sypztep.penomior.common.component;
 
+import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.RegistryWrapper;
-import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import sypztep.penomior.common.init.ModEntityComponents;
 import sypztep.penomior.common.stats.LevelSystem;
 import sypztep.penomior.common.stats.LivingStats;
@@ -21,13 +20,13 @@ public class UniqueStatsComponent implements AutoSyncedComponent {
     }
 
     @Override
-    public void readFromNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
+    public void readFromNbt(NbtCompound tag) {
         failstack = tag.getInt("Failstack");
         livingStats.readFromNbt(tag);
     }
 
     @Override
-    public void writeToNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
+    public void writeToNbt(NbtCompound tag) {
         tag.putInt("Failstack", failstack);
         livingStats.writeToNbt(tag);
     }
