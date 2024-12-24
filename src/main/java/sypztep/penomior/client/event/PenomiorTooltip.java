@@ -1,9 +1,8 @@
 package sypztep.penomior.client.event;
 
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
-import net.minecraft.item.Item;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import sypztep.penomior.common.init.ModDataComponents;
@@ -12,9 +11,13 @@ import sypztep.penomior.common.util.RefineUtil;
 import java.util.List;
 
 public final class PenomiorTooltip implements ItemTooltipCallback {
+
     @Override
-    public void getTooltip(ItemStack stack, Item.TooltipContext tooltipContext, TooltipType tooltipType, List<Text> lines) {
-        if (stack.get(ModDataComponents.PENOMIOR) != null) {
+    public void getTooltip(ItemStack stack, TooltipContext context, List<Text> lines) {
+//        if (stack.get(ModDataComponents.PENOMIOR) != null) {
+//        โค้ดเก่า TODO: หาวิธี ทำให้มี Component แยกเป็นของตัวเอง
+
+            if (stack.getNbt() != null) {
             if (RefineUtil.isBroken(stack))
                 lines.add(Text.literal("Broken ✗").formatted(Formatting.RED));
             else lines.add(Text.literal("Can Refine ✔").formatted(Formatting.GREEN));
