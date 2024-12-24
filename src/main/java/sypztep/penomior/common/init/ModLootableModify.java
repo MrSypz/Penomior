@@ -12,7 +12,6 @@ import net.minecraft.loot.provider.number.UniformLootNumberProvider;
 import net.minecraft.registry.RegistryKey;
 
 import java.util.List;
-import java.util.Set;
 
 public class ModLootableModify {
     public static void init() {
