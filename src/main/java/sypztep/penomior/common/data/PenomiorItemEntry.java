@@ -31,7 +31,7 @@ public record PenomiorItemEntry(
         return Optional.ofNullable(PENOMIOR_ITEM_ENTRY_MAP.get(itemEntry));
     }
     public static Optional<PenomiorItemEntry> getPenomiorItemData(String itemID) {
-        Identifier itemIdentifier = Identifier.of(itemID);
+        Identifier itemIdentifier = Identifier.of("minecraft", itemID);
         RegistryEntry<Item> itemEntry = Registries.ITEM.getEntry(itemIdentifier).orElse(null);
         return Optional.ofNullable(PENOMIOR_ITEM_ENTRY_MAP.get(itemEntry));
     }
