@@ -1,9 +1,8 @@
 package sypztep.penomior.common.component;
 
+import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.RegistryWrapper;
-import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import sypztep.penomior.common.init.ModEntityComponents;
 
 public class StatsComponent implements AutoSyncedComponent {
@@ -16,7 +15,7 @@ public class StatsComponent implements AutoSyncedComponent {
     }
 
     @Override
-    public void readFromNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
+    public void readFromNbt(NbtCompound tag) {
         accuracy = tag.getInt("Accuracy");
         evasion = tag.getInt("Evasion");
         extraEvasion = tag.getInt("Extra Evasion");
@@ -24,7 +23,7 @@ public class StatsComponent implements AutoSyncedComponent {
     }
 
     @Override
-    public void writeToNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
+    public void writeToNbt(NbtCompound tag) {
         tag.putInt("Accuracy", accuracy);
         tag.putInt("Evasion", evasion);
         tag.putInt("Extra Evasion", extraEvasion);
