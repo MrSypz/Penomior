@@ -1,6 +1,5 @@
 package sypztep.penomior.common.init;
 
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import sypztep.penomior.client.payload.*;
 import sypztep.penomior.common.payload.IncreaseStatsPayloadC2S;
 import sypztep.penomior.common.payload.RefineButtonPayloadC2S;
