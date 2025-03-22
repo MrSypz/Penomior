@@ -1,3 +1,5 @@
+# Moving to Dominatus this repo no longer active
+
 # Minecraft Mod: Evasion, Accuracy, and Refinement Features
 
 ## Overview
